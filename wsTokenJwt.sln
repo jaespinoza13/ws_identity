@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wsTokenJwt", "wsTokenJwt\wsTokenJwt.csproj", "{C69CFA2F-AB6E-4057-B3E0-F39548180F58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wsTokenJwt.Neg", "wsTokenJwt.Neg\wsTokenJwt.Neg.csproj", "{FA5C8AD2-3F75-4891-B192-AE59EE1A428D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wsTokenJwt.Model", "wsTokenJwt.Model\wsTokenJwt.Model.csproj", "{BB210C5C-91D0-41D1-B79F-5ED5146D755B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wsTokenJwt.Dto", "wsTokenJwt.Dto\wsTokenJwt.Dto.csproj", "{BE2F9DF4-97CF-4063-8FC2-44D900CD2187}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wsTokenJwt.Dat", "wsTokenJwt.Dat\wsTokenJwt.Dat.csproj", "{F5912F4A-FE5A-4E66-953D-D194E9459276}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C69CFA2F-AB6E-4057-B3E0-F39548180F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C69CFA2F-AB6E-4057-B3E0-F39548180F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C69CFA2F-AB6E-4057-B3E0-F39548180F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C69CFA2F-AB6E-4057-B3E0-F39548180F58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5C8AD2-3F75-4891-B192-AE59EE1A428D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5C8AD2-3F75-4891-B192-AE59EE1A428D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5C8AD2-3F75-4891-B192-AE59EE1A428D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5C8AD2-3F75-4891-B192-AE59EE1A428D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB210C5C-91D0-41D1-B79F-5ED5146D755B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB210C5C-91D0-41D1-B79F-5ED5146D755B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB210C5C-91D0-41D1-B79F-5ED5146D755B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB210C5C-91D0-41D1-B79F-5ED5146D755B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2F9DF4-97CF-4063-8FC2-44D900CD2187}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2F9DF4-97CF-4063-8FC2-44D900CD2187}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2F9DF4-97CF-4063-8FC2-44D900CD2187}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2F9DF4-97CF-4063-8FC2-44D900CD2187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5912F4A-FE5A-4E66-953D-D194E9459276}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5912F4A-FE5A-4E66-953D-D194E9459276}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5912F4A-FE5A-4E66-953D-D194E9459276}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5912F4A-FE5A-4E66-953D-D194E9459276}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {819C4A97-D929-45DA-810C-CCB17B4D543E}
+	EndGlobalSection
+EndGlobal
