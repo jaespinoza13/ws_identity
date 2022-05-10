@@ -46,9 +46,9 @@ pipeline {
                         --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
                         -e SettingsJwt__SecretKey=${SECRETKEY} \
-                        -e SettingsApi__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
-                        -e SettingsApi__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                        -e SettingsApi__BasicAuth__auth_ws_token_jwt=${AUTH_WS_TOKEN_JWT} \
+                        -e ServiceSettings__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
+                        -e ServiceSettings__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
+                        -e ServiceSettings__BasicAuth__auth_ws_token_jwt=${AUTH_WS_TOKEN_JWT} \
                         -v /app/wsTokenJwt:/app/Logs/ ws_token_jwt:${VERSION_PRODUCCION}
                     '''
             }
