@@ -7,10 +7,10 @@ pipeline {
     }
 
     environment {
-        VERSION_PRODUCCION  = '1.0.0'
+        VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-token-jwt-des'
-        NOMBRE_IMAGEN       = 'ws_token_jwt'
+        NOMBRE_CONTENEDOR   = 'servicio-identity-des'
+        NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '8016'
         PUERTO_CONTENEDOR   = '80'
     }
@@ -45,11 +45,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-                        -e SettingsJwt__SecretKey=${SECRETKEY} \
-                        -e ServiceSettings__Endpoints__servicio_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
-                        -e ServiceSettings__Endpoints__servicio_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
-                        -e ServiceSettings__BasicAuth__auth_ws_token_jwt=${AUTH_WS_TOKEN_JWT} \
-                        -v /app/wsTokenJwt:/app/Logs/ ws_token_jwt:${VERSION_PRODUCCION}
+                        -v /app/wsIdentity:/app/Logs/ ws_acceso:${VERSION_PRODUCCION}
                     '''
             }
         }
