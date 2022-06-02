@@ -13,17 +13,24 @@ public static class ConfigureInfrastructure
 {
     public static IServiceCollection AddInfrastructureServices ( this IServiceCollection services )
     {
-        services.AddTransient<ParametersInMemory> ();
-        services.AddTransient<ILogs, LogsService> ();
-        services.AddTransient<IMongoDat, LogsMongoDat> ();
-        services.AddTransient<IDailyRequest, DailyRequest> ();
-        services.AddTransient<IParametersInMemory, ParametersInMemory> ();
+        //INFRAESTRUCTURA
+        services.AddTransient<ParametersInMemory>( );
+        services.AddTransient<ILogs, LogsService>( );
+        services.AddTransient<IMongoDat, LogsMongoDat>( );
+        services.AddTransient<IDailyRequest, DailyRequest>( );
+        services.AddTransient<IParametersInMemory, ParametersInMemory>( );
         services.AddTransient<IParametrosDat, ParametrosDat>( );
-        services.AddTransient<IHttpService, HttpService> ();
-        services.AddTransient<IOtpDat, OtpDat> ();
-        services.AddTransient<IWsOtp, WsOtp> ();
-        services.AddTransient<IAutenticarseDat, AutenticarseDat> ();
-        services.AddTransient<IEncryptMego, EncryptMego> ();
+        services.AddTransient<IHttpService, HttpService>( );
+        services.AddTransient<IOtpDat, OtpDat>( );
+        services.AddTransient<IWsOtp, WsOtp>( );
+        services.AddTransient<IAutenticarseDat, AutenticarseDat>( );
+        services.AddTransient<IEncryptMego, EncryptMego>( );
+
+        //CASOS DE USO
+        services.AddTransient<IEncryptMego, EncryptMego>( );
+        services.AddTransient<IAccesoDat, RecuperarContraseniaDat>( );
+
+
         return services;
     }
 }

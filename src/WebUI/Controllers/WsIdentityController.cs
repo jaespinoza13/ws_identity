@@ -1,6 +1,7 @@
 ﻿using WebUI.Filters;
 using Application.LogIn;
 using Microsoft.AspNetCore.Mvc;
+using Application.Acceso.RecuperarContrasenia;
 
 namespace WebUI.Controllers
 {
@@ -19,6 +20,12 @@ namespace WebUI.Controllers
         public async Task<ResAutenticarse> LogIn ( ReqAutenticarse reqAutenticarse )
         {
             return await Mediator.Send(reqAutenticarse);
+        }
+
+        [HttpPost("VALIDAR_INFO_RECUPERACION")]
+        public async Task<ResValidaInfo> ValidaInfoRecuperacion ( ReqValidaInfo reqValidaInfo )
+        {
+            return await Mediator.Send(reqValidaInfo);
         }
     }
 }

@@ -1,41 +1,41 @@
 ﻿using WebUI.Middleware;
 
-var builder = WebApplication.CreateBuilder (args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddInfrastructureServices ();
-builder.Services.AddApplicationServices ();
-builder.Services.AddWebUIServices (builder.Configuration);
+builder.Services.AddInfrastructureServices( );
+builder.Services.AddApplicationServices( );
+builder.Services.AddWebUIServices(builder.Configuration);
 
 
 var AllowSpecificOrigins = "_AllowSpecificOrigins";
 
-builder.Services.AddCors (options =>
- {
-     options.AddPolicy (
-         AllowSpecificOrigins,
-             builder =>
-             {
-                 builder.WithOrigins ().WithMethods ("POST").AllowAnyHeader ();
-             });
- });
-
-
-var app = builder.Build ();
-
-if (app.Environment.IsDevelopment ())
+builder.Services.AddCors(options =>
 {
-    app.UseSwagger ();
-    app.UseSwaggerUI ();
+    options.AddPolicy(
+        AllowSpecificOrigins,
+            builder =>
+            {
+                builder.WithOrigins( ).WithMethods("POST").AllowAnyHeader( );
+            });
+});
+
+
+var app = builder.Build( );
+
+if (app.Environment.IsDevelopment( ))
+{
+    app.UseSwagger( );
+    app.UseSwaggerUI( );
 }
 
-app.UseCors (AllowSpecificOrigins);
+app.UseCors(AllowSpecificOrigins);
 
-app.UseAuthotizationMego ();
+app.UseAuthotizationMego( );
 
-app.UseAuthorization ();
+app.UseAuthorization( );
 
-app.UseHttpsRedirection ();
+app.UseHttpsRedirection( );
 
-app.MapControllers ();
+app.MapControllers( );
 
-app.Run ();
+app.Run( );
