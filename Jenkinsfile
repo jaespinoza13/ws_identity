@@ -11,7 +11,7 @@ pipeline {
         VERSION_ACTUAL      = '1.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-identity-des'
         NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '8016'
+        PUERTO              = '5016'
         PUERTO_CONTENEDOR   = '80'
     }
 
@@ -45,7 +45,8 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-                        -v /app/wsIdentity:/app/Logs/ ws_acceso:${VERSION_PRODUCCION}
+                        -v /app/wsIdentity:/app/Logs/  \
+                        ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                     '''
             }
         }
