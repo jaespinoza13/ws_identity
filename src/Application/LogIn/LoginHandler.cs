@@ -60,7 +60,8 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosLogin.str_password_temp = datosLogin.str_password_temp!.Trim( );
 
                 // Validar clave
-                if (!String.IsNullOrEmpty(datosLogin.str_password) || !String.IsNullOrEmpty(datosLogin.str_password_temp))
+                //if (!String.IsNullOrEmpty(datosLogin.str_password) || !String.IsNullOrEmpty(datosLogin.str_password_temp))
+                if (true)
                 {
                     string str_concat_clave_usuario = reqAutenticarse.str_password + reqAutenticarse.str_login;
 

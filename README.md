@@ -1,5 +1,5 @@
 # wsIdentity
-# Clean Architecture 
+# Hexagonal Architecture  
 ## Overview
 ### Domain
 
