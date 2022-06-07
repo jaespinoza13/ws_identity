@@ -1,10 +1,8 @@
-﻿using Application.Common.ISO20022.Interfaces;
-using Application.Common.Validations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.ISO20022.Models
 {
-    public class Header : IHeader
+    public class Header
     {
         /// <summary>
         /// Id de log
@@ -13,55 +11,54 @@ namespace Application.Common.ISO20022.Models
         /// <summary>
         /// Enete del socio
         /// </summary>
-        public string? str_ente { get; set; }
+        [Required( ErrorMessage = "Ente es requerido" )]
+        public string str_ente { get; set; } = String.Empty;
         /// <summary>
         /// Nemonico del canal Ejm: CANBEEBOT
         /// </summary>
-        /// 
-        [Required]
-        //[ValidaCanalAttribute]
+        [Required( ErrorMessage = "Nemonico del canal es requerido" )]
         public string str_nemonico_canal { get; set; } = String.Empty;
         /// <summary>
         /// Id del sistema Ejm: 74
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Id de sistema es requerido" )]
         public string str_id_sistema { get; set; } = String.Empty;
         /// <summary>
         /// Nombre de la app Ejm: MEGONLINE
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Nombre de App es requerido" )]
         public string str_app { get; set; } = String.Empty;
         /// <summary>
         /// Id del servicio web Ejm: REQ_VALIDAR_USUARIO
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Id del servicio es requerido" )]
         public string str_id_servicio { get; set; } = String.Empty;
         /// <summary>
         /// Versión del servicio web Ejm: 1.0
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Se requeriere versionamiento" )]
         public string str_version_servicio { get; set; } = String.Empty;
         /// <summary>
         /// Id del usuario para ley protección de datos.
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "El id del usuario es requerido " )]
         public string str_id_usuario { get; set; } = String.Empty;
         /// <summary>
         /// Dirección física
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Parametro requerido" )]
         public string str_mac_dispositivo { get; set; } = String.Empty;
         /// <summary>
         /// Dirección Ip
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Ip requerida" )]
         public string str_ip_dispositivo { get; set; } = String.Empty;
         /// <summary>
         /// Remitente Ejm: RED_SOCIAL_FACEBOOK
@@ -79,7 +76,7 @@ namespace Application.Common.ISO20022.Models
         /// Tipo de petición REQ o RES
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Especificar el tipo de petición" )]
         public string str_tipo_peticion { get; set; } = String.Empty;
         /// <summary>
         /// Id mensaje formato yyMMddHHmmssffff
@@ -101,19 +98,19 @@ namespace Application.Common.ISO20022.Models
         /// Login de usuario
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Login es requerido" )]
         public string str_login { get; set; } = String.Empty;
         /// <summary>
         /// Latitud
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Parametro requerido" )]
         public string str_latitud { get; set; } = String.Empty;
         /// <summary>
         /// Longitud
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Parametro requerido" )]
         public string str_longitud { get; set; } = String.Empty;
         /// <summary>
         /// Firma digital
@@ -131,13 +128,13 @@ namespace Application.Common.ISO20022.Models
         /// País
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Especificar el pais" )]
         public string str_pais { get; set; } = String.Empty;
         /// <summary>
         /// Sesión
         /// </summary>
         /// 
-        [Required]
+        [Required( ErrorMessage = "Sesion requerida" )]
         public string str_sesion { get; set; } = String.Empty;
         /// <summary>
         /// Id de Oficina
@@ -147,30 +144,6 @@ namespace Application.Common.ISO20022.Models
         /// <summary>
         /// Id de Perfil
         /// </summary>
-        /// 
         public string str_id_perfil { get; set; } = String.Empty;
-
-        public void LlenarResHeader(Header requerimiento)
-        {
-            str_nemonico_canal = requerimiento.str_nemonico_canal;
-            str_app = requerimiento.str_app;
-            str_id_servicio = requerimiento.str_id_servicio != null ? requerimiento.str_id_servicio.Replace("REQ", "RES") : String.Empty;
-            str_version_servicio = requerimiento.str_version_servicio;
-            str_mac_dispositivo = requerimiento.str_mac_dispositivo;
-            str_ip_dispositivo = requerimiento.str_ip_dispositivo;
-            str_remitente = requerimiento.str_receptor;
-            str_receptor = requerimiento.str_remitente;
-            str_tipo_peticion = "RES";
-            str_id_msj = DateTime.Now.ToString("yyMMddHHmmssffff");
-            dt_fecha_operacion = DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null);
-            bl_posible_duplicado = requerimiento.bl_posible_duplicado;
-            str_prioridad = requerimiento.str_prioridad;
-            str_login = requerimiento.str_login;
-            str_latitud = requerimiento.str_latitud;
-            str_longitud = requerimiento.str_longitud;
-            str_firma_digital = requerimiento.str_firma_digital;
-            str_num_sim = requerimiento.str_num_sim;
-            str_clave_secreta = requerimiento.str_clave_secreta;
-        }
     }
 }
