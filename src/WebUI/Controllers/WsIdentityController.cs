@@ -2,6 +2,8 @@
 using Application.LogIn;
 using Microsoft.AspNetCore.Mvc;
 using Application.Acceso.RecuperarContrasenia;
+using Application.LoginSoporte;
+using Application.Common.ISO20022.Models;
 
 namespace WebUI.Controllers
 {
@@ -26,6 +28,12 @@ namespace WebUI.Controllers
         public async Task<ResValidaInfo> ValidaInfoRecuperacion ( ReqValidaInfo reqValidaInfo )
         {
             return await Mediator.Send(reqValidaInfo);
+        }
+
+        [HttpPost("AUTENTICARSE_SOPORTE")]
+        public Task<ResAutenticarseSoporte> AutenticarseSoporte ( Header header )
+        {
+            return Mediator.Send(new AutenticarseSoporteCommand(header));
         }
     }
 }
