@@ -62,7 +62,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 // Validar clave
                 if (!String.IsNullOrEmpty(datosLogin.str_password) || !String.IsNullOrEmpty(datosLogin.str_password_temp))
                 {
-                    string str_concat_clave_usuario = reqAutenticarse.str_password + reqAutenticarse.str_ente;
+                    string str_concat_clave_usuario = reqAutenticarse.str_password + datosSocio.int_ente;
 
                     bln_clave_valida = !String.IsNullOrEmpty(datosLogin.str_password) ?
                                         ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
