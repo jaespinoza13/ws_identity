@@ -11,7 +11,6 @@ namespace Application.Common.ISO20022.Models
         /// <summary>
         /// Enete del socio
         /// </summary>
-        [Required( ErrorMessage = "Ente es requerido" )]
         public string str_ente { get; set; } = String.Empty;
         /// <summary>
         /// Nemonico del canal Ejm: CANBEEBOT
@@ -134,7 +133,6 @@ namespace Application.Common.ISO20022.Models
         /// Sesión
         /// </summary>
         /// 
-        [Required( ErrorMessage = "Sesion requerida" )]
         public string str_sesion { get; set; } = String.Empty;
         /// <summary>
         /// Id de Oficina

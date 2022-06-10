@@ -48,7 +48,6 @@ internal class GenerarToken : IGenerarToken
                 {
                         new Claim( ClaimTypes.Role,  Rol.Socio),
                         new Claim( ClaimTypes.NameIdentifier,  header.str_id_usuario),
-                        new Claim( ClaimTypes.Hash,  header.str_login),
                         new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString( "N" ) )
                     }),
 
