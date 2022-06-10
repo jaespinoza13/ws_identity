@@ -14,7 +14,7 @@ namespace Application.Jwt;
 
 public interface IGenerarToken
 {
-    Task<string> ConstruirToken ( Header req_generar_token, string str_operacion );
+    Task<string> ConstruirToken ( Header header, string str_operacion );
 }
 
 
@@ -33,38 +33,32 @@ internal class GenerarToken : IGenerarToken
     }
 
 
-    public async Task<string> ConstruirToken ( Header req_generar_token, string str_operacion )
+    public async Task<string> ConstruirToken ( Header header, string str_operacion )
     {
         var respuesta = new ResComun( );
-        respuesta.LlenarResHeader(req_generar_token);
-        await _logs.SaveHeaderLogs(req_generar_token, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+        respuesta.LlenarResHeader(header);
+        await _logs.SaveHeaderLogs(header, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
         try
         {
-
-            Double double_time_token = Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + req_generar_token.str_nemonico_canal).str_valor_ini);
-
-            var encryptIpDispositivo = BCrypt.Net.BCrypt.HashPassword(req_generar_token.str_ip_dispositivo);
-
-            var jwtTokenHandler = new JwtSecurityTokenHandler( );
-
+            Double double_time_token = Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + header.str_nemonico_canal).str_valor_ini);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                        new Claim( "str_ip_dispositivo",  encryptIpDispositivo),
-                        new Claim( "str_mac_dispositivo", BCrypt.Net.BCrypt.HashPassword( req_generar_token.str_mac_dispositivo )),
-                        new Claim( "str_login", BCrypt.Net.BCrypt.HashPassword( req_generar_token.str_login )),
+                        new Claim( ClaimTypes.Role,  Rol.Socio),
+                        new Claim( ClaimTypes.NameIdentifier,  header.str_id_usuario),
+                        new Claim( ClaimTypes.Hash,  header.str_login),
                         new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString( "N" ) )
                     }),
 
                 Expires = DateTime.UtcNow.AddMinutes(double_time_token),
-                Audience = encryptIpDispositivo,
-                Issuer = encryptIpDispositivo,
+                Issuer = "CoopMego",
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(str_key), SecurityAlgorithms.HmacSha256Signature),
                 IssuedAt = DateTime.UtcNow,
             };
 
+            var jwtTokenHandler = new JwtSecurityTokenHandler( );
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
@@ -74,7 +68,7 @@ internal class GenerarToken : IGenerarToken
         catch (Exception exception)
         {
             await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
-            throw new ArgumentException(req_generar_token.str_id_transaccion);
+            throw new ArgumentException(header.str_id_transaccion);
         }
     }
 }

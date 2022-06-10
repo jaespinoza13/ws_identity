@@ -10,7 +10,6 @@ namespace WebUI.Controllers
     [Route("api/wsIdentity")]
     [ApiController]
     [ServiceFilter(typeof(RequestControl))]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
