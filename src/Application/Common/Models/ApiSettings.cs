@@ -52,5 +52,7 @@
 
         public bool valor_encriptar { get; set; }
 
+        public int mostrar_descripcion_badrequest { get; set; }
+
     }
 }

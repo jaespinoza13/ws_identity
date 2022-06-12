@@ -1,6 +1,9 @@
 ﻿using Application.Common.Behaviours;
 using Application.Common.Models;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using WebUI.Filters;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -9,12 +12,28 @@ public static class ConfigureServices
 {
     public static IServiceCollection AddWebUIServices ( this IServiceCollection services, IConfiguration configuration )
     {
-        //services.AddControllersWithViews(options => options.Filters.Add<ApiExceptionFilterAttribute>( ));
-        services.AddControllers( );
+        // CUSTOMISE API EXCEPTIONS BEHAVIOUR
+        services.AddControllersWithViews(options => options.Filters.Add<ApiExceptionFilterAttribute>( ))
+                .AddFluentValidation(x => x.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly( )));
+
+        // CUSTOMISE DEFAULT API BEHAVIOUR
+        services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
+
+        //CORS
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins( ).WithMethods("POST").AllowAnyHeader( );
+                    });
+        });
+
         //SERVICES
         services.AddDataProtection( );
         services.AddMemoryCache( );
         services.AddOptions( );
+
 
 
         //FILTERS
@@ -44,6 +63,7 @@ public static class ConfigureServices
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:HttpSettings"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:Endpoints"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:EndpointsAuth"));
+        services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:ControlExcepciones"));
         services.Configure<SecurityKeys>(configuration.GetSection("SecurityKeys"));
 
         return services;

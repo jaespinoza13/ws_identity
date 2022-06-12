@@ -18,17 +18,17 @@ public class RequestControl : IActionFilter
     void IActionFilter.OnActionExecuting ( ActionExecutingContext context )
     {
         //VALIDACIÓN DE PARAMETROS
-        _parameters.ValidaParametros ();
+        _parameters.ValidaParametros( );
 
         //CONTROL DE PETICIONES DIARIAS
         var endpoint = context.HttpContext.Request.Path;
-        string[] operacion = endpoint.Value!.Split ("/");
-        _dailyRequest.controlPeticionesDiaras (operacion[3].ToUpper ());
+        string[] operacion = endpoint.Value!.Split("/");
+        _dailyRequest.controlPeticionesDiaras(operacion[3].ToUpper( ));
     }
 
     void IActionFilter.OnActionExecuted ( ActionExecutedContext context )
     {
-        _logger.LogInformation ("Despues de la peticion");
+        _logger.LogInformation("");
     }
 
 }

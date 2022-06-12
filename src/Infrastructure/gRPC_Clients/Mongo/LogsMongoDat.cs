@@ -29,7 +29,7 @@ public class LogsMongoDat : IMongoDat
 
     }
 
-    public async Task GuardarCabeceraMongo(Header cabecera)
+    public async Task GuardarCabeceraMongo(dynamic cabecera)
     {
         var ds = new DatosSolicitud();
         try
@@ -49,7 +49,7 @@ public class LogsMongoDat : IMongoDat
     }
 
 
-    public async Task GuardarRespuestaMongo(ResComun ObjRespPeticion)
+    public async Task GuardarRespuestaMongo(dynamic ObjRespPeticion)
     {
 
         var ds = new DatosSolicitud();
