@@ -11,6 +11,7 @@ public static class ConfigureApplication
 
         services.AddTransient<IGenerarToken, GenerarToken> ();
         services.AddMediatR(Assembly.GetExecutingAssembly( ));
+        services.AddTransient<GenerarToken>();
 
         return services;
     }
