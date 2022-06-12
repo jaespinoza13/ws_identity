@@ -1,13 +1,16 @@
 ﻿
+using Application.Common.Behaviours;
 using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Jwt;
 using MediatR;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Security.Claims;
+using System.Text;
 
 namespace Application.Acceso.RecuperarContrasenia;
 
@@ -21,14 +24,14 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
     private readonly IParametersInMemory _parametersInMemory;
     private readonly byte[] str_key;
 
-    public ValidaInfoHandler ( ILogs logs, IAccesoDat accesoDat, IWsOtp wsOtp, IParametersInMemory parametersInMemory )
+    public ValidaInfoHandler ( ILogs logs, IAccesoDat accesoDat, IWsOtp wsOtp, IParametersInMemory parametersInMemory, IOptionsMonitor<SecurityKeys> options )
     {
         _logs = logs;
         _accesoDat = accesoDat;
         _clase = GetType( ).Name;
         _wsOtp = wsOtp;
         _parametersInMemory = parametersInMemory;
-        this.str_key = Encoding.ASCII.GetBytes(option.CurrentValue.key_canbvi);
+        this.str_key = Encoding.ASCII.GetBytes(options.CurrentValue.key_canbvi);
     }
 
     public async Task<ResValidaInfo> Handle ( ReqValidaInfo reqValidaInfo, CancellationToken cancellationToken )
@@ -53,7 +56,6 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 respuesta.datos_recuperacion.bl_requiere_otp = _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result.codigo.Equals("1009");
                 respuesta.str_res_estado_transaccion = "OK";
 
-                
 
                 Double double_time_token = Convert.ToDouble(_parametersInMemory.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal).str_valor_ini);
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -72,10 +74,8 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 };
 
                 var jwtTokenHandler = new JwtSecurityTokenHandler( );
-                var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-                await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
-
-                return jwtTokenHandler.WriteToken(token);
+                var tokenDescrp = jwtTokenHandler.CreateToken(tokenDescriptor);
+                token = jwtTokenHandler.WriteToken(tokenDescrp);
 
             }
             else
