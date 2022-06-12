@@ -54,7 +54,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
-                datosSocio.str_ultimo_acceso = datosLogin.str_ultimo_acceso;
+                //datosSocio.str_ultimo_acceso = datosLogin.str_ultimo_acceso;
 
                 datosLogin.str_password = datosLogin.str_password!.Trim( );
                 datosLogin.str_password_temp = datosLogin.str_password_temp!.Trim( );
