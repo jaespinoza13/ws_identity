@@ -41,14 +41,11 @@
 
 
         public string servicio_ws_otp { get; set; } = String.Empty;
-        public string servicio_ws_alfresco { get; set; } = String.Empty;
-        public string servicio_ws_notificador { get; set; } = String.Empty;
         public string servicio_encrypt { get; set; } = String.Empty;
 
 
         public string auth_ws_identity { get; set; } = String.Empty;
         public string auth_ws_otp { get; set; } = String.Empty;
-        public string auth_ws_notificador { get; set; } = String.Empty;
 
         public bool valor_encriptar { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Application.Jwt;
-public static class Rol
+public class Rol
 {
-    public const string Socio = "Socio";
-    public const string Usuario = "Usuario";
+    public string? Socio { get; set; }
+    public string? Usuario { get; set; }
 }

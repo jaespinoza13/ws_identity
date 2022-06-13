@@ -56,7 +56,7 @@ namespace WebUI.Middleware
             httpContext.Response.StatusCode = statusCode;
 
             respuesta.str_res_id_servidor = str_res_id_servidor;
-            respuesta.str_res_codigo = "001";
+            respuesta.str_res_codigo = "401";
             respuesta.dt_res_fecha_msj_crea = DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null);
             respuesta.str_res_estado_transaccion = "ERR";
             respuesta.str_res_info_adicional = infoAdicional;

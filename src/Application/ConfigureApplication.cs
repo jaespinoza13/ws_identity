@@ -15,8 +15,7 @@ public static class ConfigureApplication
         services.AddMediatR(Assembly.GetExecutingAssembly( ));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
-        services.AddTransient<IGenerarToken, GenerarToken> ();
-        services.AddTransient<GenerarToken>();
+        services.AddTransient<IGenerarToken, GenerarToken>( );
 
         return services;
     }

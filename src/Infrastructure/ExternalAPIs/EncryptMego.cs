@@ -1,5 +1,4 @@
 ﻿
-
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Infrastructure.Common.Behaviours;
@@ -27,9 +26,9 @@ internal class EncryptMego : IEncryptMego
             str_password = str_password
         };
 
-        string str_data = JsonSerializer.Serialize (objData);
+        string str_data = JsonSerializer.Serialize(objData);
 
-        HashCobis hashCobis =  await _httpService.PostRestServiceDataAsync<HashCobis>(str_data, _settings.servicio_encrypt, String.Empty, String.Empty, String.Empty, str_id_transaccion);
+        HashCobis hashCobis = await _httpService.PostRestServiceDataAsync<HashCobis>(str_data, _settings.servicio_encrypt, String.Empty, String.Empty, String.Empty, str_id_transaccion);
         return hashCobis.str_hash_password!;
     }
 }

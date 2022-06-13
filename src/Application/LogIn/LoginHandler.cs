@@ -5,9 +5,9 @@ using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Jwt;
-
 using Domain.Models;
 using System.Reflection;
+using Microsoft.Extensions.Options;
 
 namespace Application.LogIn;
 
@@ -19,8 +19,15 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     private readonly IEncryptMego _encrypt;
     private readonly IGenerarToken _generarToken;
     private readonly IParametersInMemory _parameters;
+    private readonly Roles _roles;
 
-    public LoginHandler ( ILogs logsService, IAutenticarseDat autenticarseDat, IEncryptMego encrypt, IGenerarToken generarToken, IParametersInMemory parameters )
+    public LoginHandler ( ILogs logsService,
+                            IAutenticarseDat autenticarseDat,
+                            IEncryptMego encrypt,
+                            IGenerarToken generarToken,
+                            IParametersInMemory parameters,
+                            IOptionsMonitor<Roles> options
+                         )
     {
         _logsService = logsService;
         str_clase = GetType( ).FullName!;
@@ -28,6 +35,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         _encrypt = encrypt;
         _generarToken = generarToken;
         _parameters = parameters;
+        _roles = options.CurrentValue;
     }
 
     public async Task<ResAutenticarse> Handle ( ReqAutenticarse reqAutenticarse, CancellationToken cancellationToken )
@@ -54,7 +62,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
-                //datosSocio.str_ultimo_acceso = datosLogin.str_ultimo_acceso;
 
                 datosLogin.str_password = datosLogin.str_password!.Trim( );
                 datosLogin.str_password_temp = datosLogin.str_password_temp!.Trim( );
@@ -72,8 +79,11 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 if (bln_clave_valida)
                 {
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
-
-                    token = await _generarToken.ConstruirToken(reqAutenticarse, str_operacion);
+                    token = await _generarToken.ConstruirToken(reqAutenticarse,
+                                                            str_operacion,
+                                                            _roles.Socio,
+                                                            Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqAutenticarse.str_nemonico_canal.ToUpper( )).str_valor_ini)
+                                                            );
                     respuesta.objSocio = datosSocio;
                 }
                 else
@@ -92,7 +102,11 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
                 datosSocio.int_id_usuario = datosLogin.int_id_usuario;
-                token = await _generarToken.ConstruirToken(reqAutenticarse, str_operacion);
+                token = await _generarToken.ConstruirToken(reqAutenticarse,
+                                                            str_operacion,
+                                                            _roles.Socio,
+                                                            Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqAutenticarse.str_nemonico_canal.ToUpper( )).str_valor_ini)
+                                                            );
                 respuesta.objSocio = datosSocio;
                 respuesta.str_res_codigo = "000";
 
@@ -117,7 +131,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         catch (Exception exception)
         {
             await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
-            throw new Exception(reqAutenticarse.str_id_transaccion)!;
+            throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }
     }
     public static bool ValidarClave ( string claveUsuario, string claveBase )

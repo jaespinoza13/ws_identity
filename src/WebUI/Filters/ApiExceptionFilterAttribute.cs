@@ -179,7 +179,7 @@ namespace WebUI.Filters
         private static void ResExceptionHandler ( ResException resException, string httpStatusCode )
         {
             resException.dt_res_fecha_msj_crea = dateTime;
-            resException.str_res_codigo = "001";
+            resException.str_res_codigo = "500";
             resException.str_res_id_servidor = httpStatusCode;
             resException.str_res_estado_transaccion = "ERR";
             resException.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
@@ -188,7 +188,7 @@ namespace WebUI.Filters
         private static void ResBadRequestExceptionHandler ( ResBadRequestException resBadRequestException )
         {
             resBadRequestException.dt_res_fecha_msj_crea = dateTime;
-            resBadRequestException.str_res_codigo = "001";
+            resBadRequestException.str_res_codigo = "400";
             resBadRequestException.str_res_id_servidor = System.Net.HttpStatusCode.BadRequest.ToString( );
             resBadRequestException.str_res_estado_transaccion = "ERR";
             resBadRequestException.str_res_info_adicional = "Petición Inválida";

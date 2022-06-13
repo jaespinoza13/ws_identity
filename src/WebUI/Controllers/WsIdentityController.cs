@@ -2,8 +2,8 @@
 using Application.LogIn;
 using Microsoft.AspNetCore.Mvc;
 using Application.Acceso.RecuperarContrasenia;
-using Application.LoginSoporte;
 using Application.Common.ISO20022.Models;
+using Application.LoginInvitado;
 
 namespace WebUI.Controllers
 {
@@ -17,7 +17,7 @@ namespace WebUI.Controllers
     public class WsIdentityController : ApiControllerBase
     {
 
-        [HttpPost("AUTENTICARSE")]
+        [HttpPost("autenticarse")]
         public async Task<ResAutenticarse> LogIn ( ReqAutenticarse reqAutenticarse )
         {
             return await Mediator.Send(reqAutenticarse);
@@ -29,10 +29,10 @@ namespace WebUI.Controllers
             return await Mediator.Send(reqValidaInfo);
         }
 
-        [HttpPost("AUTENTICARSE_SOPORTE")]
-        public Task<ResAutenticarseSoporte> AutenticarseSoporte ( Header header )
+        [HttpPost("autenticarseInvitado")]
+        public Task<ResAutenticarseInvitado> AutenticarseWallet ( Header header )
         {
-            return Mediator.Send(new AutenticarseSoporteCommand(header));
+            return Mediator.Send(new AutenticarseInvitadoCommand(header));
         }
     }
 }

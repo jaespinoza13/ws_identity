@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebUI.Filters;
 
@@ -17,13 +18,20 @@ public class RequestControl : IActionFilter
 
     void IActionFilter.OnActionExecuting ( ActionExecutingContext context )
     {
-        //VALIDACIÓN DE PARAMETROS
-        _parameters.ValidaParametros( );
+        if (context.ModelState.IsValid)
+        {
+            //VALIDACIÓN DE PARAMETROS
+            _parameters.ValidaParametros( );
 
-        //CONTROL DE PETICIONES DIARIAS
-        var endpoint = context.HttpContext.Request.Path;
-        string[] operacion = endpoint.Value!.Split("/");
-        _dailyRequest.controlPeticionesDiaras(operacion[3].ToUpper( ));
+            //CONTROL DE PETICIONES DIARIAS
+            var endpoint = context.HttpContext.Request.Path;
+            string[] operacion = endpoint.Value!.Split("/");
+            _dailyRequest.controlPeticionesDiaras(operacion[3].ToUpper( ));
+        }
+        else
+        {
+            throw new ValidationException( );
+        }
     }
 
     void IActionFilter.OnActionExecuted ( ActionExecutedContext context )

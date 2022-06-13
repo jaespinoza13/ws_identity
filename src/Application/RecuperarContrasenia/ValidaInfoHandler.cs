@@ -1,37 +1,34 @@
-﻿
-using Application.Common.Behaviours;
-using Application.Common.Converting;
+﻿using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Jwt;
 using MediatR;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace Application.Acceso.RecuperarContrasenia;
 
 public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
 {
 
+    private readonly string _clase;
+    private readonly Roles _rol;
     private readonly ILogs _logs;
     private readonly IAccesoDat _accesoDat;
-    private readonly string _clase;
     private readonly IWsOtp _wsOtp;
-    private readonly IParametersInMemory _parametersInMemory;
-    private readonly byte[] str_key;
+    private readonly IParametersInMemory _parameters;
+    private readonly IGenerarToken _generarToken;
 
-    public ValidaInfoHandler ( ILogs logs, IAccesoDat accesoDat, IWsOtp wsOtp, IParametersInMemory parametersInMemory, IOptionsMonitor<SecurityKeys> options )
+    public ValidaInfoHandler ( ILogs logs, IAccesoDat accesoDat, IWsOtp wsOtp, IParametersInMemory parametersInMemory, IOptionsMonitor<Roles> options, IGenerarToken generarToken )
     {
         _logs = logs;
         _accesoDat = accesoDat;
         _clase = GetType( ).Name;
         _wsOtp = wsOtp;
-        _parametersInMemory = parametersInMemory;
-        this.str_key = Encoding.ASCII.GetBytes(options.CurrentValue.key_canbvi);
+        _parameters = parametersInMemory;
+        _rol = options.CurrentValue;
+        _generarToken = generarToken;
     }
 
     public async Task<ResValidaInfo> Handle ( ReqValidaInfo reqValidaInfo, CancellationToken cancellationToken )
@@ -49,34 +46,11 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
             if (resTran.codigo.Equals("000"))
             {
                 respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<DatosRecuperacion>((ConjuntoDatos)resTran.cuerpo, 0)!;
-
                 reqValidaInfo.str_ente = respuesta.datos_recuperacion.int_ente + String.Empty;
                 reqValidaInfo.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
-
-                respuesta.datos_recuperacion.bl_requiere_otp = _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result.codigo.Equals("1009");
+                respuesta.datos_recuperacion.bl_requiere_otp =  _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result.codigo.Equals("1009");
                 respuesta.str_res_estado_transaccion = "OK";
-
-
-                Double double_time_token = Convert.ToDouble(_parametersInMemory.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal).str_valor_ini);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim( ClaimTypes.Role,  Rol.Usuario),
-                        new Claim( ClaimTypes.NameIdentifier,  reqValidaInfo.str_id_usuario),
-                        new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString( "N" ) )
-                    }),
-
-                    Expires = DateTime.UtcNow.AddMinutes(double_time_token),
-                    Issuer = "CoopMego",
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(str_key), SecurityAlgorithms.HmacSha256Signature),
-                    IssuedAt = DateTime.UtcNow,
-                };
-
-                var jwtTokenHandler = new JwtSecurityTokenHandler( );
-                var tokenDescrp = jwtTokenHandler.CreateToken(tokenDescriptor);
-                token = jwtTokenHandler.WriteToken(tokenDescrp);
-
+                token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, _rol.Socio, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
             }
             else
             {

@@ -1,16 +1,16 @@
-﻿using Application.Common.Converting;
+﻿using Domain.Types;
+
+using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 
-using Domain.Types;
-
 using Infrastructure.Common.Interfaces;
 using Infrastructure.Common.Models;
-using Infrastructure.Services;
 
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Infrastructure.Services;
 
 namespace Infrastructure.ExternalAPIs;
 
@@ -35,8 +35,8 @@ public class WsOtp : IWsOtp
         var cabecera = new
         {
 
-            int_id_sistema = Convert.ToInt32 (header.str_id_sistema),
-            int_id_usuario = Convert.ToInt32 (header.str_id_usuario),
+            int_id_sistema = Convert.ToInt32(header.str_id_sistema),
+            int_id_usuario = Convert.ToInt32(header.str_id_usuario),
             str_usuario = header.str_login,
             int_id_perfil = header.str_id_perfil,
             int_id_oficina = header.str_id_oficina,
@@ -58,8 +58,8 @@ public class WsOtp : IWsOtp
             cuerpo = cuerpo
         };
 
-        string str_data = JsonSerializer.Serialize (raw);
-        RespuestaTransaccion respuesta = await _httpservice.PostRestServiceDataAsync<RespuestaTransaccion> (
+        string str_data = JsonSerializer.Serialize(raw);
+        RespuestaTransaccion respuesta = await _httpservice.PostRestServiceDataAsync<RespuestaTransaccion>(
                                                     str_data,
                                                     _settings.servicio_ws_otp + "VALIDA_REQUIERE_OTP",
                                                     String.Empty,
@@ -67,7 +67,6 @@ public class WsOtp : IWsOtp
                                                     AuthorizationType.BASIC,
                                                     header.str_id_transaccion);
         return respuesta;
-
     }
 
 
@@ -75,34 +74,34 @@ public class WsOtp : IWsOtp
     /// Valida OTP
     /// </summary>
     /// <returns></returns>
-    public async Task<RespuestaTransaccion> ValidaOtp ( dynamic req_valida_otp )
+    public async Task<RespuestaTransaccion> ValidaOtp ( dynamic reqValidaOtp )
     {
 
-        RespuestaTransaccion res_datos_otp = _otpDat.get_datos_otp (req_valida_otp);
-        var datosOtp = Conversions.ConvertConjuntoDatosToClass<ConfiguracionOtp> ((ConjuntoDatos)res_datos_otp.cuerpo);
+        RespuestaTransaccion res_datos_otp = await _otpDat.GetDatosOtpDat(reqValidaOtp);
+        var datosOtp = Conversions.ConvertConjuntoDatosToClass<ConfiguracionOtp>((ConjuntoDatos)res_datos_otp.cuerpo);
 
         var cabecera = new
         {
-            int_id_sistema = Convert.ToInt32 (req_valida_otp.str_id_sistema),
-            int_id_usuario = Convert.ToInt32 (req_valida_otp.str_id_usuario),
-            str_usuario = req_valida_otp.str_login,
-            int_id_perfil = req_valida_otp.str_id_perfil,
-            int_id_oficina = req_valida_otp.str_id_oficina,
-            str_nombre_canal = req_valida_otp.str_app,
-            str_nemonico_canal = req_valida_otp.str_nemonico_canal,
-            str_ip = req_valida_otp.str_ip_dispositivo,
-            str_session = req_valida_otp.str_sesion,
-            str_mac = req_valida_otp.str_mac_dispositivo
+            int_id_sistema = Convert.ToInt32(reqValidaOtp.str_id_sistema),
+            int_id_usuario = Convert.ToInt32(reqValidaOtp.str_id_usuario),
+            str_usuario = reqValidaOtp.str_login,
+            int_id_perfil = reqValidaOtp.str_id_perfil,
+            int_id_oficina = reqValidaOtp.str_id_oficina,
+            str_nombre_canal = reqValidaOtp.str_app,
+            str_nemonico_canal = reqValidaOtp.str_nemonico_canal,
+            str_ip = reqValidaOtp.str_ip_dispositivo,
+            str_session = reqValidaOtp.str_sesion,
+            str_mac = reqValidaOtp.str_mac_dispositivo
         };
 
         var config_otp = new
         {
-            int_ente_socio = Convert.ToInt32 (req_valida_otp.str_ente),
+            int_ente_socio = Convert.ToInt32(reqValidaOtp.str_ente),
             str_celular = datosOtp!.str_celular,
-            str_canal = req_valida_otp.str_nemonico_canal,
-            str_proceso = req_valida_otp.str_app,
-            str_servicio = req_valida_otp.str_id_servicio,
-            str_clave = req_valida_otp.str_otp
+            str_canal = reqValidaOtp.str_nemonico_canal,
+            str_proceso = reqValidaOtp.str_app,
+            str_servicio = reqValidaOtp.str_id_servicio,
+            str_clave = reqValidaOtp.str_otp
         };
 
         var raw = new
@@ -112,15 +111,14 @@ public class WsOtp : IWsOtp
         };
 
 
-        string str_data = JsonSerializer.Serialize (raw);
+        string str_data = JsonSerializer.Serialize(raw);
         RespuestaTransaccion respuesta = await _httpservice.PostRestServiceDataAsync<RespuestaTransaccion>
                                                 (str_data,
                                                     _settings.servicio_ws_otp + "VALIDA_OTP",
                                                     String.Empty,
                                                     _settings.auth_ws_otp,
                                                     AuthorizationType.BASIC,
-                                                    req_valida_otp.str_id_transaccion);
+                                                    reqValidaOtp.str_id_transaccion);
         return respuesta;
     }
-
 }

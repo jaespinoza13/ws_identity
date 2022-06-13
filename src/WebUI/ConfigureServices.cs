@@ -1,5 +1,4 @@
-﻿using Application.Common.Behaviours;
-using Application.Common.Models;
+﻿using Application.Common.Models;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
@@ -64,7 +63,7 @@ public static class ConfigureServices
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:Endpoints"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:EndpointsAuth"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:ControlExcepciones"));
-        services.Configure<SecurityKeys>(configuration.GetSection("SecurityKeys"));
+        services.Configure<Roles>(configuration.GetSection("Roles"));
 
         return services;
     }
