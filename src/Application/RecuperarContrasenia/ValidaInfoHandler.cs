@@ -50,7 +50,7 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 reqValidaInfo.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
                 respuesta.datos_recuperacion.bl_requiere_otp =  _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result.codigo.Equals("1009");
                 respuesta.str_res_estado_transaccion = "OK";
-                token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, _rol.Socio, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
+                token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, _rol.Usuario, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
             }
             else
             {
