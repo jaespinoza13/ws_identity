@@ -79,6 +79,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 if (bln_clave_valida)
                 {
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
+                    datosSocio.int_id_perfil = datosLogin.int_id_perfil;
                     token = await _generarToken.ConstruirToken(reqAutenticarse,
                                                             str_operacion,
                                                             _roles.Socio,
@@ -98,10 +99,11 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             }
             else if (res_tran.codigo.Equals("1068"))
             {
-                //Credenciales validadas en SQLServer.    
+                //Credenciales validadas.    
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
                 datosSocio.int_id_usuario = datosLogin.int_id_usuario;
+                datosSocio.int_id_perfil = datosLogin.int_id_perfil;
                 token = await _generarToken.ConstruirToken(reqAutenticarse,
                                                             str_operacion,
                                                             _roles.Socio,
