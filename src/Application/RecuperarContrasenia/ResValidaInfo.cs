@@ -16,5 +16,6 @@ public class DatosRecuperacion
     public int int_id_usuario { get; set; }
     public int int_id_sol_rec { get; set; }
     public bool bl_requiere_otp { get; set; }
+    public bool bl_validar_imagen { get; set; }
 
 }
