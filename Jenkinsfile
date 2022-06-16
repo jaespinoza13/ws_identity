@@ -9,9 +9,9 @@ pipeline {
     environment {
         VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-identity-qa'
+        NOMBRE_CONTENEDOR   = 'api-identity-des'
         NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '9016'
+        PUERTO              = '5016'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsIdentity'
     }
@@ -27,8 +27,8 @@ pipeline {
                         -v ${RUTA_LOG}:/app/Logs/  \
                         -e TZ=${TZ} \
                         -e Key_canbvi=${SECRETKEY} \
-                        -e Key_bmo=${SECRETKEY} \
-                        -e Key_bim=${SECRETKEY} \
+                        -e Key_canbmo=${SECRETKEY} \
+                        -e Key_canbim=${SECRETKEY} \
                         -e Issuer=${ISSUER} \
                         -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE_QA} \
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
