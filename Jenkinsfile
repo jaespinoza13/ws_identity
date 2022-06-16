@@ -45,8 +45,8 @@ pipeline {
                         -v ${RUTA_LOG}:/app/Logs/  \
                         -e TZ=${TZ} \
                         -e Key_canbvi=${SECRETKEY} \
-                        -e Key_bmo=${SECRETKEY} \
-                        -e Key_bim=${SECRETKEY} \
+                        -e Key_canbmo=${SECRETKEY} \
+                        -e Key_canbim=${SECRETKEY} \
                         -e Issuer=${ISSUER} \
                         -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
