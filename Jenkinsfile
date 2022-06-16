@@ -9,9 +9,9 @@ pipeline {
     environment {
         VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-identity-des'
+        NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '9016'
+        PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsIdentity'
     }
