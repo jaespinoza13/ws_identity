@@ -18,6 +18,25 @@ pipeline {
 
     stages {
 
+        stage('Build') {
+            steps {
+                echo 'Building..'
+                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION} --no-cache .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+
+        stage('Clean') {
+            steps {
+                echo 'Cleaning..'
+                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
+            }
+        }
 
         stage('Deploy') {
             steps {
