@@ -105,6 +105,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
                 await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                throw new Exception(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
         }
