@@ -49,7 +49,7 @@ pipeline {
                         -e Key_canbmo=${SECRETKEY} \
                         -e Key_canbim=${SECRETKEY} \
                         -e Issuer=${ISSUER} \
-                        -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE_QA} \
+                        -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
                         -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
                         -e ApiSettings__Endpoints__servicio_encrypt=${ENDPOINT_ENCRYPT_COBIS} \
