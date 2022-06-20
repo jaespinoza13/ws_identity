@@ -17,7 +17,7 @@ pipeline {
     }
 
     stages {
-        
+
         stage('Build') {
             steps {
                 echo 'Building..'
@@ -30,6 +30,7 @@ pipeline {
                 echo 'Testing..'
             }
         }
+
         stage('Clean') {
             steps {
                 echo 'Cleaning..'
@@ -51,7 +52,7 @@ pipeline {
                         -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
                         -e ApiSettings__Endpoints__servicio_ws_otp=${ENDPOINT_WS_OTP} \
-                        -e ApiSettings__Endpoints__servicio_encrypt=${ENDPOINT_ENCRYPT_COBIS} \
+                        -e ApiSettings__Endpoints__servicio_encrypt=${ENDPOINT_WS_ENCRYPT} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_identity=${AUTH_WS_IDENTITY} \
                         ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
