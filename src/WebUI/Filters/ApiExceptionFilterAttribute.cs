@@ -170,10 +170,10 @@ namespace WebUI.Filters
         private static void ResArgumentExceptionHandler ( ResArgumentException resArgumentException )
         {
             resArgumentException.dt_res_fecha_msj_crea = dateTime;
-            resArgumentException.str_res_codigo = "001";
+            resArgumentException.str_res_codigo = "500";
             resArgumentException.str_res_id_servidor = System.Net.HttpStatusCode.InternalServerError.ToString( );
             resArgumentException.str_res_estado_transaccion = "ERR";
-            resArgumentException.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
+            resArgumentException.str_res_info_adicional = "Ocurrió un problema, intente nuevamente más tarde";
         }
 
         private static void ResExceptionHandler ( ResException resException, string httpStatusCode )
@@ -182,7 +182,7 @@ namespace WebUI.Filters
             resException.str_res_codigo = "500";
             resException.str_res_id_servidor = httpStatusCode;
             resException.str_res_estado_transaccion = "ERR";
-            resException.str_res_info_adicional = "Ocurrio un problema, intente nuevamente más tarde";
+            resException.str_res_info_adicional = "Ocurrió un problema, intente nuevamente más tarde";
         }
 
         private static void ResBadRequestExceptionHandler ( ResBadRequestException resBadRequestException )

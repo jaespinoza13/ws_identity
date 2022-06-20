@@ -68,6 +68,8 @@ public class RecuperarContraseniaDat : IAccesoDat
             respuesta.codigo = "001";
             respuesta.diccionario.Add("str_error", exception.ToString( ));
             await _logsService.SaveExcepcionDataBaseSybase(reqValidaInfo, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+            throw new ArgumentException(reqValidaInfo.str_id_transaccion)!;
+
         }
         return respuesta;
     }
