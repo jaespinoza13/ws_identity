@@ -44,7 +44,11 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
         respuesta.LlenarResHeader(reqAutenticarse);
+
+        string password = reqAutenticarse.str_password;
+        reqAutenticarse.str_password = String.Empty;
         await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+        reqAutenticarse.str_password = password;
 
         string token = String.Empty;
         Login? datosLogin;
