@@ -43,7 +43,7 @@ pipeline {
                 echo 'Deploying....'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
-                        -v ${RUTA_LOG}:/app/Logs/  \
+                        -v ${RUTA_LOGS}:/app/Logs/  \
                         -e TZ=${TZ} \
                         -e Key_canbvi=${SECRETKEY} \
                         -e Key_canbmo=${SECRETKEY} \
