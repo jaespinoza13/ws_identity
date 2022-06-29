@@ -34,5 +34,11 @@ namespace WebUI.Controllers
         {
             return Mediator.Send(new AutenticarseInvitadoCommand(header));
         }
+
+        [HttpPost("UTENTICARSE_INVITADO_EXT")]
+        public Task<ResAutenticarseInvitadoExt> AutenticarseInvitadoExterno ( Header header )
+        {
+            return Mediator.Send(new AutenticarseInvitadoExtCommand(header));
+        }
     }
 }
