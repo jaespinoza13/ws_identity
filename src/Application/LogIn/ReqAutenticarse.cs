@@ -9,5 +9,5 @@ public class ReqAutenticarse : Header, IRequest<ResAutenticarse>
 {
 
     [Required]
-    public string str_password { get; set; } = String.Empty;
+    public string str_password { get; set; } = String.Empty; 
 }

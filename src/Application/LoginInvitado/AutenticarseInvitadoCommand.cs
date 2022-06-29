@@ -27,7 +27,6 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoCommand, 
         var autenticarseSoporte = request.header;
         ResAutenticarseInvitado respuesta = new( );
         string operaion = "GENERAR_TOKEN_TEMPORAL";
-
         try
         {
             respuesta.LlenarResHeader(autenticarseSoporte);
