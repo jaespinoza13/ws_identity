@@ -38,10 +38,6 @@ internal class GenerarToken : IGenerarToken
         Double double_time_token = header.str_nemonico_canal.Equals("CANVEN") ? 1 : time;
         string KeyCanales = _configuration["key_" + header.str_nemonico_canal.ToLower( )];
         byte[] str_key = Encoding.ASCII.GetBytes(KeyCanales);
-
-
-        await _logs.SaveHeaderLogs(header, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
-
         try
         {
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -61,7 +57,6 @@ internal class GenerarToken : IGenerarToken
 
             var jwtTokenHandler = new JwtSecurityTokenHandler( );
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
             return jwtTokenHandler.WriteToken(token);
         }
         catch (Exception exception)
