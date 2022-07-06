@@ -4,8 +4,9 @@ using Application.Common.Models;
 using Application.Jwt;
 using MediatR;
 using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
-
+using System.Security.Claims;
 
 namespace Application.Acceso.RecuperarContrasenia;
 
@@ -50,7 +51,13 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 reqValidaInfo.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
                 respuesta.datos_recuperacion.bl_requiere_otp =  _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result.codigo.Equals("1009");
                 respuesta.str_res_estado_transaccion = "OK";
-                token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, _rol.Usuario, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
+                var claims = new ClaimsIdentity(new[]
+                      {
+                        new Claim( ClaimTypes.Role,  _rol.Usuario),
+                        new Claim( ClaimTypes.NameIdentifier,   reqValidaInfo.str_id_usuario),
+                        new Claim(  ClaimTypes.SerialNumber, reqValidaInfo.str_ente)
+                        });
+                token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, claims, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
             }
             else
             {

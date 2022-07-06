@@ -29,10 +29,10 @@ namespace WebUI.Controllers
             return await Mediator.Send(reqValidaInfo);
         }
 
-        [HttpPost("autenticarseInvitado")]
-        public Task<ResAutenticarseInvitado> AutenticarseWallet ( Header header )
+        [HttpPost("AUTENTICARSE_INVITADO_INT")]
+        public Task<ResAutenticarseInvitadoInt> AutenticarseInvitadoInterno ( Header header )
         {
-            return Mediator.Send(new AutenticarseInvitadoCommand(header));
+            return Mediator.Send(new AutenticarseInvitadoIntCommand(header));
         }
 
         [HttpPost("AUTENTICARSE_INVITADO_EXT")]

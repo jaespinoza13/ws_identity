@@ -4,6 +4,8 @@ using Application.Common.Models;
 using Application.Jwt;
 using MediatR;
 using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Application.LoginInvitado;
 
@@ -19,12 +21,12 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
     private readonly Roles _rol;
     private readonly IParametersInMemory _parameters;
 
-    public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters)
+    public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters )
     {
         _generarToken = generarToken;
         _rol = options.CurrentValue;
-    
-    _parameters = parameters;
+
+        _parameters = parameters;
     }
 
     public async Task<ResAutenticarseInvitadoExt> Handle ( AutenticarseInvitadoExtCommand request, CancellationToken cancellationToken )
@@ -36,9 +38,14 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
         try
         {
             respuesta.LlenarResHeader(autenticarInvitadoExterno);
+            var claims = new ClaimsIdentity(new[]
+                    {
+                        new Claim( ClaimTypes.Role, _rol.InvitadoExterno),
+                        new Claim( ClaimTypes.NameIdentifier,   autenticarInvitadoExterno.str_ente)
+                        });
             respuesta.str_token = await _generarToken.ConstruirToken(autenticarInvitadoExterno,
-                operaion, 
-                _rol.InvitadoExterno,
+                operaion,
+                claims,
                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
