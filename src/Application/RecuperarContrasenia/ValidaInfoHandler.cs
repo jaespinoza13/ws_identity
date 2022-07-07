@@ -54,8 +54,7 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 var claims = new ClaimsIdentity(new[]
                       {
                         new Claim( ClaimTypes.Role,  _rol.Usuario),
-                        new Claim( ClaimTypes.NameIdentifier,   reqValidaInfo.str_id_usuario),
-                        new Claim(  ClaimTypes.SerialNumber, reqValidaInfo.str_ente)
+                        new Claim( ClaimTypes.NameIdentifier, reqValidaInfo.str_ente)
                         });
                 token = await _generarToken.ConstruirToken(reqValidaInfo, str_operacion, claims, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqValidaInfo.str_nemonico_canal.ToUpper( )).str_valor_ini));
             }

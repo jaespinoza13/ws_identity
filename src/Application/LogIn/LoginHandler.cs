@@ -89,8 +89,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                     var claims = new ClaimsIdentity(new[]
                         {
                         new Claim( ClaimTypes.Role,  _roles.Socio),
-                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_id_usuario.ToString()),
-                        new Claim( ClaimTypes.SerialNumber,   datosSocio.int_ente.ToString())
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString())
                         });
 
                     token = await _generarToken.ConstruirToken(reqAutenticarse,
@@ -120,8 +119,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 var claims = new ClaimsIdentity(new[]
                        {
                         new Claim( ClaimTypes.Role,  _roles.Socio),
-                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_id_usuario.ToString()),
-                        new Claim(  ClaimTypes.SerialNumber,   datosSocio.int_ente.ToString())
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString()),
 
                         });
                 token = await _generarToken.ConstruirToken(reqAutenticarse,
