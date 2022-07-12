@@ -8,6 +8,8 @@ using Application.Jwt;
 using Domain.Models;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Application.LogIn;
 
@@ -79,14 +81,20 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                                         ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
 
                 }
-
+               
                 if (bln_clave_valida)
                 {
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
                     datosSocio.int_id_perfil = datosLogin.int_id_perfil;
+                    var claims = new ClaimsIdentity(new[]
+                        {
+                        new Claim( ClaimTypes.Role,  _roles.Socio),
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString())
+                        });
+
                     token = await _generarToken.ConstruirToken(reqAutenticarse,
                                                             str_operacion,
-                                                            _roles.Socio,
+                                                            claims,
                                                             Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqAutenticarse.str_nemonico_canal.ToUpper( )).str_valor_ini)
                                                             );
                     respuesta.objSocio = datosSocio;
@@ -108,9 +116,15 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
                 datosSocio.int_id_usuario = datosLogin.int_id_usuario;
                 datosSocio.int_id_perfil = datosLogin.int_id_perfil;
+                var claims = new ClaimsIdentity(new[]
+                       {
+                        new Claim( ClaimTypes.Role,  _roles.Socio),
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString()),
+
+                        });
                 token = await _generarToken.ConstruirToken(reqAutenticarse,
                                                             str_operacion,
-                                                            _roles.Socio,
+                                                            claims,
                                                             Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqAutenticarse.str_nemonico_canal.ToUpper( )).str_valor_ini)
                                                             );
                 respuesta.objSocio = datosSocio;
