@@ -13,27 +13,18 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class AutenticarseDat : IAutenticarseDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient objClienteDal;
+        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
 
-        public AutenticarseDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService )
+        public AutenticarseDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType( ).FullName!;
 
-            var handler = new SocketsHttpHandler
-            {
-                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
-                KeepAlivePingDelay = TimeSpan.FromSeconds(_settings.delayOutGrpcSybase),
-                KeepAlivePingTimeout = TimeSpan.FromSeconds(_settings.timeoutGrpcSybase),
-                EnableMultipleHttp2Connections = true
-            };
-
-            var canal = GrpcChannel.ForAddress(_settings.client_grpc_sybase!, new GrpcChannelOptions { HttpHandler = handler });
-            objClienteDal = new DALClient(canal);
+            _objClienteDal = objClienteDal;
         }
 
 
@@ -50,7 +41,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "get_login_autenticar";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = await objClienteDal.ExecuteDataSetAsync(ds);
+                var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
                 var lst_valores = new List<ParametroSalidaValores>( );
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);
@@ -88,7 +79,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "set_intentos_fallidos";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = objClienteDal.ExecuteDataSet(ds);
+                var resultado = _objClienteDal.ExecuteDataSet(ds);
                 var lst_valores = new List<ParametroSalidaValores>( );
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);

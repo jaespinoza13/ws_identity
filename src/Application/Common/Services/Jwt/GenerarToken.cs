@@ -12,7 +12,7 @@ namespace Application.Jwt;
 
 public interface IGenerarToken
 {
-    Task<string> ConstruirToken ( Header header, string str_operacion, string rol, Double time );
+    Task<string> ConstruirToken ( Header header, string str_operacion, ClaimsIdentity claims, Double time );
 }
 
 
@@ -30,31 +30,24 @@ internal class GenerarToken : IGenerarToken
         _configuration = configuration;
     }
 
-    public async Task<string> ConstruirToken ( Header header, string str_operacion, string rol, Double time )
+    public async Task<string> ConstruirToken ( Header header, string str_operacion, ClaimsIdentity claims, Double time )
     {
         ResComun respuesta = new( );
         respuesta.LlenarResHeader(header);
-
-        Double double_time_token = header.str_nemonico_canal.Equals("CANVEN") ? 1 : time;
         string KeyCanales = _configuration["key_" + header.str_nemonico_canal.ToLower( )];
         byte[] str_key = Encoding.ASCII.GetBytes(KeyCanales);
         try
         {
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                        new Claim( ClaimTypes.Role,  rol),
-                        new Claim( ClaimTypes.NameIdentifier,  header.str_id_usuario),
-                        new Claim( JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString( "N" ) )
-                    }),
-
-                Expires = DateTime.UtcNow.AddMinutes(double_time_token),
+                Subject = claims,
+                Expires = DateTime.UtcNow.AddMinutes(time),
                 Issuer = _configuration["Issuer"],
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(str_key), SecurityAlgorithms.HmacSha256Signature),
                 IssuedAt = DateTime.UtcNow,
             };
-
+            tokenDescriptor.Subject.AddClaim(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid( ).ToString("N")));
+            tokenDescriptor.Subject.AddClaim(new Claim(ClaimTypes.Name, header.str_nemonico_canal));
             var jwtTokenHandler = new JwtSecurityTokenHandler( );
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
