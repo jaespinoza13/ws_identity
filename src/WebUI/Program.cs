@@ -1,4 +1,4 @@
-﻿using WebUI.Middleware;
+using WebUI.Middleware;
 using static AccesoDatosGrpcAse.Neg.DAL;
 using static AccesoDatosGrpcMongo.Neg.DALMongo;
 
@@ -34,7 +34,7 @@ builder.Services.AddGrpcClient<DALMongoClient>(o =>
         PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
         KeepAlivePingDelay = TimeSpan.FromSeconds(20),
         KeepAlivePingTimeout = TimeSpan.FromSeconds(60),
-        EnableMultipleHttp2Connections = true
+        EnableMultipleHttp2Connections = false
     };
 });
 
