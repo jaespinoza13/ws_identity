@@ -14,20 +14,21 @@ public static class ConfigureInfrastructure
     public static IServiceCollection AddInfrastructureServices ( this IServiceCollection services )
     {
         //INFRAESTRUCTURA
-        services.AddSingleton<ParametersInMemory>( );
-        services.AddSingleton<ILogs, LogsService>( );
-        services.AddSingleton<IMongoDat, LogsMongoDat>( );
-        services.AddSingleton<IDailyRequest, DailyRequest>( );
-        services.AddSingleton<IParametersInMemory, ParametersInMemory>( );
-        services.AddSingleton<IParametrosDat, ParametrosDat>( );
+        services.AddTransient<ParametersInMemory>( );
+        services.AddTransient<ILogs, LogsService>( );
+        services.AddTransient<IMongoDat, LogsMongoDat>( );
+        services.AddTransient<IDailyRequest, DailyRequest>( );
+        services.AddTransient<IParametersInMemory, ParametersInMemory>( );
+        services.AddTransient<IParametrosDat, ParametrosDat>( );
         services.AddTransient<IHttpService, HttpService>( );
-        services.AddSingleton<IAutenticarseDat, AutenticarseDat>( );
+        services.AddTransient<IAutenticarseDat, AutenticarseDat>( );
         services.AddTransient<IEncryptMego, EncryptMego>( );
         services.AddTransient<IWsOtp, WsOtp>( );
-        services.AddSingleton<IOtpDat, OtpDat>( );
+        services.AddTransient<IOtpDat, OtpDat>( );
 
         //CASOS DE USO
-        services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
+        services.AddTransient<IEncryptMego, EncryptMego>( );
+        services.AddTransient<IAccesoDat, RecuperarContraseniaDat>( );
 
 
         return services;

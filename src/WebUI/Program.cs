@@ -14,10 +14,28 @@ var url_mongo = grpc.GetValue<string>("client_grpc_mongo");
 builder.Services.AddGrpcClient<DALClient>(o =>
 {
     o.Address = new Uri(url_sybase);
+}).ConfigureChannel(c =>
+{
+    c.HttpHandler = new SocketsHttpHandler
+    {
+        PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+        KeepAlivePingDelay = TimeSpan.FromSeconds(20),
+        KeepAlivePingTimeout = TimeSpan.FromSeconds(60),
+        EnableMultipleHttp2Connections = true
+    };
 });
 builder.Services.AddGrpcClient<DALMongoClient>(o =>
 {
     o.Address = new Uri(url_mongo);
+}).ConfigureChannel(c =>
+{
+    c.HttpHandler = new SocketsHttpHandler
+    {
+        PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan,
+        KeepAlivePingDelay = TimeSpan.FromSeconds(20),
+        KeepAlivePingTimeout = TimeSpan.FromSeconds(60),
+        EnableMultipleHttp2Connections = true
+    };
 });
 
 
