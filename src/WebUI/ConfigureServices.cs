@@ -51,7 +51,6 @@ public static class ConfigureServices
        });
 
         //CONFIGURATIONS
-        services.AddTransient<RequestControl>( );
 
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:DataBases"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:GrpcSettings"));
