@@ -51,12 +51,19 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string str_operacion = "AUTENTICARSE";
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
-        var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
-        if (Key != null)
-        {
-            reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-            reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-        }
+        //var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+        //if (Key != null)
+        //{
+        //    try
+        //    {
+        //        reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
+        //        reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw new ArgumentException("Error: Credenciales inválidas");
+        //    }
+        //}
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;
@@ -92,7 +99,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                                         ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
 
                 }
-               
+
                 if (bln_clave_valida)
                 {
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
