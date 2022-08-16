@@ -97,7 +97,6 @@ namespace Application.Common.ISO20022.Models
         /// Login de usuario
         /// </summary>
         /// 
-        [Required( ErrorMessage = "Login es requerido" )]
         public string str_login { get; set; } = String.Empty;
         /// <summary>
         /// Latitud

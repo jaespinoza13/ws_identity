@@ -10,6 +10,8 @@ using System.Reflection;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Extensions.Caching.Memory;
+using Application.ParametrosSeguridad;
 
 namespace Application.LogIn;
 
@@ -22,13 +24,15 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     private readonly IGenerarToken _generarToken;
     private readonly IParametersInMemory _parameters;
     private readonly Roles _roles;
+    private readonly IMemoryCache _memoryCache;
 
     public LoginHandler ( ILogs logsService,
                             IAutenticarseDat autenticarseDat,
                             IEncryptMego encrypt,
                             IGenerarToken generarToken,
                             IParametersInMemory parameters,
-                            IOptionsMonitor<Roles> options
+                            IOptionsMonitor<Roles> options,
+                             IMemoryCache memoryCache
                          )
     {
         _logsService = logsService;
@@ -37,6 +41,8 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         _encrypt = encrypt;
         _generarToken = generarToken;
         _parameters = parameters;
+        this._memoryCache = memoryCache;
+
         _roles = options.CurrentValue;
     }
 
@@ -46,7 +52,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
         respuesta.LlenarResHeader(reqAutenticarse);
-
+        //var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+        //if (Key != null) {
+        //    reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
+        //    reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
+        //}
+       
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;
         await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
