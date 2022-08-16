@@ -51,13 +51,13 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string str_operacion = "AUTENTICARSE";
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
+        var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+        if (Key != null)
+        {
+            reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
+            reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
+        }
         respuesta.LlenarResHeader(reqAutenticarse);
-        //var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
-        //if (Key != null) {
-        //    reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-        //    reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-        //}
-       
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;
         await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
