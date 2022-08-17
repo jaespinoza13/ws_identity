@@ -25,7 +25,6 @@ namespace Application.ParametrosSeguridad
                 {
                     str_modulo = doc.DocumentElement!.SelectSingleNode( "Modulus" )!.InnerText,
                     str_exponente = doc.DocumentElement!.SelectSingleNode( "Exponent" )!.InnerText,
-                    str_xml_pub = srt_llave_pub_xml,
                     str_xml_priv = srt_llave_priv_xml
 
                 };
@@ -53,6 +52,28 @@ namespace Application.ParametrosSeguridad
             using var rsa = RSA.Create(key);
 
             var bytes = rsa.Decrypt(
+                input,
+                RSAEncryptionPadding.Pkcs1);
+
+            return bytes;
+        }
+        public static string Encrypt ( string input, string key )
+        {
+            var stringReader = new StringReader(key);
+            var serializer = new XmlSerializer(typeof(RSAParameters));
+            var deskey = (RSAParameters)serializer.Deserialize(stringReader)!;
+
+            var bytes = Encrypt(
+                Encoding.UTF8.GetBytes(input),
+                deskey);
+
+            return Convert.ToBase64String(bytes);
+        }
+        public static byte[] Encrypt ( byte[] input, RSAParameters key )
+        {
+            using var rsa = RSA.Create(key);
+
+            var bytes = rsa.Encrypt(
                 input,
                 RSAEncryptionPadding.Pkcs1);
 

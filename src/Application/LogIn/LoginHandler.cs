@@ -58,7 +58,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
         if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
         {
-            var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+            var Key = _memoryCache.Get<DatosLlaveRsa>("Key_"+reqAutenticarse.str_nemonico_canal);
             if (Key != null)
                 try
                 {

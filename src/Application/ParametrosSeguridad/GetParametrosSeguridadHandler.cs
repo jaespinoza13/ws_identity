@@ -39,10 +39,10 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
             if (DateTime.Compare(DateTime.Now, date.AddHours(1)) > 0)
             {
                 var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqGetParametrosSeguridad.str_nemonico_canal);
-                _memoryCache.Set<DatosLlaveRsa>("Key", KeyCreate);
-                _memoryCache.Set<DateTime>("Date", DateTime.Now);
+                _memoryCache.Set<DatosLlaveRsa>("Key_"+reqGetParametrosSeguridad.str_nemonico_canal, KeyCreate);
+                _memoryCache.Set<DateTime>("Date_" + reqGetParametrosSeguridad.str_nemonico_canal, DateTime.Now);
             }
-            var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+            var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqGetParametrosSeguridad.str_nemonico_canal);
             respuesta.datos_llave.str_modulo = Key.str_modulo;
             respuesta.datos_llave.str_exponente = Key.str_exponente;
 
@@ -56,48 +56,6 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
             throw new ArgumentException( reqGetParametrosSeguridad.str_id_transaccion )!;
         }
     }
-    public static string Decrypt(string input, string key)
-    {
-        var stringReader = new StringReader( key );
-        var serializer = new XmlSerializer( typeof( RSAParameters ) );
-        var deskey = (RSAParameters)serializer.Deserialize( stringReader );
 
-        var bytes = Decrypt(
-            Convert.FromBase64String( input ),
-            deskey );
-
-        return Encoding.UTF8.GetString( bytes );
-    }
-    public static byte[] Decrypt(byte[] input, RSAParameters key)
-    {
-        using var rsa = RSA.Create( key );
-
-        var bytes = rsa.Decrypt(
-            input,
-            RSAEncryptionPadding.Pkcs1 );
-
-        return bytes;
-    }
-    public static string Encrypt(string input, string key)
-    {
-        var stringReader = new StringReader( key );
-        var serializer = new XmlSerializer( typeof( RSAParameters ) );
-        var deskey = (RSAParameters)serializer.Deserialize( stringReader );
-
-        var bytes = Encrypt(
-            Encoding.UTF8.GetBytes( input ),
-            deskey );
-
-        return Convert.ToBase64String( bytes );
-    }
-    public static byte[] Encrypt(byte[] input, RSAParameters key)
-    {
-        using var rsa = RSA.Create( key );
-
-        var bytes = rsa.Encrypt(
-            input,
-            RSAEncryptionPadding.Pkcs1);
-
-        return bytes;
-    }
+    
 }
