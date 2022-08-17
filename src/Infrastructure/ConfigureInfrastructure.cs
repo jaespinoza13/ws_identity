@@ -27,7 +27,6 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IOtpDat, OtpDat>( );
 
         //CASOS DE USO
-        services.AddSingleton<IEncryptMego, EncryptMego>( );
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
 
 

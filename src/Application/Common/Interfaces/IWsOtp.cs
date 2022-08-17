@@ -5,7 +5,7 @@ namespace Application.Common.Interfaces
 {
     public interface IWsOtp
     {
-        Task<RespuestaTransaccion> ValidaRequiereOtp(Header header, string str_operacion);
+        Task<Boolean> ValidaRequiereOtp ( Header header, string str_operacion );
         Task<RespuestaTransaccion> ValidaOtp(dynamic reqValidaOtp );
     }
 }

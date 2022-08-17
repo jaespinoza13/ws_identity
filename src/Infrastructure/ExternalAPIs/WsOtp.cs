@@ -30,7 +30,7 @@ public class WsOtp : IWsOtp
     /// Valida si la operacion requiere OTP
     /// </summary>
     /// <returns></returns>
-    public async Task<RespuestaTransaccion> ValidaRequiereOtp ( Header header, string str_operacion )
+    public async Task<Boolean> ValidaRequiereOtp ( Header header, string str_operacion )
     {
         var cabecera = new
         {
@@ -66,8 +66,23 @@ public class WsOtp : IWsOtp
                                                     _settings.auth_ws_otp,
                                                     AuthorizationType.BASIC,
                                                     header.str_id_transaccion);
-        return respuesta;
+
+        Boolean requiere_otp;
+        if (respuesta.codigo.Equals("1009"))
+        {
+            requiere_otp = true;
+        }
+        else if (respuesta.codigo.Equals("1006"))
+        {
+            requiere_otp = false;
+        }
+        else
+        {
+            throw new ArgumentException(respuesta.diccionario["str_error"]);
+        }
+        return requiere_otp;
     }
+
 
 
     /// <summary>
