@@ -17,11 +17,12 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
     public readonly IMemoryCache _memoryCache;
 
 
-    public GetParametrosSeguridadHandler ( ILogs logsService, IMemoryCache memoryCacheLlave )
+
+    public GetParametrosSeguridadHandler ( ILogs logsService, IMemoryCache memoryCache )
     {
         this._logsService = logsService;
         this.str_clase = GetType().FullName!;
-        this._memoryCache = memoryCacheLlave;
+        this._memoryCache = memoryCache;
     }
 
     public async Task<ResGetParametrosSeguridad> Handle(ReqGetParametrosSeguridad reqGetParametrosSeguridad, CancellationToken cancellationToken)

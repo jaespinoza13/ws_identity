@@ -25,13 +25,17 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     private readonly IParametersInMemory _parameters;
     private readonly Roles _roles;
     private readonly IMemoryCache _memoryCache;
+    private readonly ApiSettings _settings;
+
+
 
     public LoginHandler ( ILogs logsService,
                             IAutenticarseDat autenticarseDat,
                             IEncryptMego encrypt,
                             IGenerarToken generarToken,
                             IParametersInMemory parameters,
-                            IOptionsMonitor<Roles> options,
+                            IOptionsMonitor<Roles> roles,
+                              IOptionsMonitor<ApiSettings> options,
                              IMemoryCache memoryCache
                          )
     {
@@ -41,9 +45,9 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         _encrypt = encrypt;
         _generarToken = generarToken;
         _parameters = parameters;
-        this._memoryCache = memoryCache;
-
-        _roles = options.CurrentValue;
+        _memoryCache = memoryCache;
+        _settings = options.CurrentValue;
+        _roles = roles.CurrentValue;
     }
 
     public async Task<ResAutenticarse> Handle ( ReqAutenticarse reqAutenticarse, CancellationToken cancellationToken )
@@ -51,19 +55,25 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string str_operacion = "AUTENTICARSE";
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
-        //var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
-        //if (Key != null)
-        //{
-        //    try
-        //    {
-        //        reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-        //        reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw new ArgumentException("Error: Credenciales inválidas");
-        //    }
-        //}
+
+        if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
+        {
+            var Key = _memoryCache.Get<DatosLlaveRsa>("Key");
+            if (Key != null)
+                try
+                {
+                    reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
+                    reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentException("Error: Credenciales inválidas");
+                }
+            else 
+                throw new ArgumentException("Error: Credenciales inválidas");
+            
+        }
+       
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;

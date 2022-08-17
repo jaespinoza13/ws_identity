@@ -13,10 +13,10 @@ public class GenRsaPublicaPrivada
        out string publicKey,
        int keySize = 2048)
     {
-        RSA csp = RSA.Create();
+        RSA rsa = RSA.Create(keySize);
 
         // Public key.
-        var pubKey = csp.ExportParameters( false );
+        var pubKey = rsa.ExportParameters( false );
 
         var stringWriter = new StringWriter();
         var serializer = new XmlSerializer( typeof( RSAParameters ) );
@@ -25,7 +25,7 @@ public class GenRsaPublicaPrivada
         publicKey = stringWriter.ToString();
 
         // Private key.
-        var privKey = csp.ExportParameters( true );
+        var privKey = rsa.ExportParameters( true );
 
         stringWriter = new StringWriter();
         serializer = new XmlSerializer( typeof( RSAParameters ) );
