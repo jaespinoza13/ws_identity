@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace Application.ParametrosSeguridad;
+namespace Application.Common.Cryptography;
 
-public class GenRsaPublicaPrivada
+public class GenRsa
 {
     public bool GenerateKeys(
        out string privateKey,

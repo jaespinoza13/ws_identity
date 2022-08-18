@@ -12,6 +12,8 @@ using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Caching.Memory;
 using Application.ParametrosSeguridad;
+using Application.Common.Cryptography;
+using System.Text.Json;
 
 namespace Application.LogIn;
 
@@ -56,10 +58,10 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
 
-        if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
-        {
-            DesencriptarDatos(reqAutenticarse);
-        }
+        //if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
+        //{
+        //    DesencriptarDatos(reqAutenticarse);
+        //}
        
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;
@@ -154,17 +156,31 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 reqAutenticarse.str_id_usuario = datosLogin.int_id_usuario.ToString( );
                 await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
             }
+            respuesta.str_token = token;
+            if (!String.IsNullOrEmpty(token))
+            {
+                var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
+                var ClaveSecreta = Guid.NewGuid( ).ToString( );
+                var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
 
+                respuesta.objSocio!.str_mod = KeyCreate.str_modulo;
+                respuesta.objSocio.str_exp = KeyCreate.str_exponente;
+                respuesta.str_clave_secreta = ClaveSecreta;
+
+                reqAddKeys.str_ente = respuesta.objSocio.int_ente + ""!;
+                reqAddKeys.str_modulo = KeyCreate.str_modulo!;
+                reqAddKeys.str_exponente = KeyCreate.str_exponente!;
+                reqAddKeys.str_clave_secreta = ClaveSecreta!;
+                reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
+                reqAddKeys.str_llave_simetrica = CifradoAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
+                 res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
+
+            }
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
-            respuesta.str_token = token;
-            if (!String.IsNullOrEmpty(token)){
-                var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
-                respuesta.objSocio!.str_mod = KeyCreate.str_modulo;
-                respuesta.objSocio.str_exp = KeyCreate.str_exponente;
-            }
-            
+           
+
             return respuesta;
 
         }

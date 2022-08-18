@@ -8,5 +8,6 @@ namespace Application.Common.Interfaces
     {
         Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse, string claveEncriptada );
         Task<RespuestaTransaccion> SetIntentosFallidos ( ReqAutenticarse reqAutenticarse );
+        Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys );
     }
 }
