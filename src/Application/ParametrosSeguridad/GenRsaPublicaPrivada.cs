@@ -7,11 +7,10 @@ namespace Application.ParametrosSeguridad;
 
 public class GenRsaPublicaPrivada
 {
-    RSACryptoServiceProvider rsa = null;
     public bool GenerateKeys(
        out string privateKey,
        out string publicKey,
-       int keySize = 2048)
+       int keySize = 1024)
     {
         RSA rsa = RSA.Create(keySize);
 

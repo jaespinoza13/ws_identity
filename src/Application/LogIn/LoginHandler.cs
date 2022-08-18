@@ -58,20 +58,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
         if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
         {
-            var Key = _memoryCache.Get<DatosLlaveRsa>("Key_"+reqAutenticarse.str_nemonico_canal);
-            if (Key != null)
-                try
-                {
-                    reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-                    reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentException("Error: Credenciales inválidas");
-                }
-            else 
-                throw new ArgumentException("Error: Credenciales inválidas");
-            
+            DesencriptarDatos(reqAutenticarse);
         }
        
         respuesta.LlenarResHeader(reqAutenticarse);
@@ -109,7 +96,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                                         ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
 
                 }
-
                 if (bln_clave_valida)
                 {
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
@@ -173,6 +159,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             respuesta.str_token = token;
+            if (!String.IsNullOrEmpty(token)){
+                var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
+                respuesta.objSocio!.str_mod = KeyCreate.str_modulo;
+                respuesta.objSocio.str_exp = KeyCreate.str_exponente;
+            }
+            
             return respuesta;
 
         }
@@ -185,6 +177,22 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     public static bool ValidarClave ( string claveUsuario, string claveBase )
     {
         return BCrypt.Net.BCrypt.Verify(claveUsuario, claveBase);
+    }
+
+    public void DesencriptarDatos (ReqAutenticarse reqAutenticarse ) {
+        var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqAutenticarse.str_nemonico_canal);
+        if (Key != null)
+            try
+            {
+                reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
+                reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentException("Error: Credenciales inválidas");
+            }
+        else
+            throw new ArgumentException("Error: Credenciales inválidas");
     }
 }
 

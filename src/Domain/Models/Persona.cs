@@ -11,5 +11,7 @@
         public int int_ente { get; set; }
         public int int_tipo_documento { get; set; }
         public int int_id_perfil{ get; set; }
+        public string? str_mod{ get; set; }
+        public string ? str_exp{ get; set; }
     }
 }
