@@ -106,7 +106,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
             try
             {
-                DatosSolicitud ds = new DatosSolicitud( );
+                DatosSolicitud ds = new ( );
 
                 Funciones.LlenarDatosAuditoria(ds, reqAddKeys);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente });

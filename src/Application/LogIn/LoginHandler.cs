@@ -60,7 +60,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
         if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
         {
-            DesencriptarDatos(reqAutenticarse);
+           DesencriptarDatos(reqAutenticarse);
         }
 
         respuesta.LlenarResHeader(reqAutenticarse);
@@ -72,7 +72,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string token = String.Empty;
         Login? datosLogin;
         Persona? datosSocio;
-
+        ReqAddKeys reqAddKeys=new();
         try
         {
             var str_clave_encriptada = await _encrypt.Encrypt(reqAutenticarse.str_login, reqAutenticarse.str_password, reqAutenticarse.str_id_transaccion);
@@ -100,7 +100,10 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 }
                 if (bln_clave_valida)
                 {
+                    //BORRAR
                     datosSocio.int_id_usuario = datosLogin.int_id_usuario;
+                    //BORRAR
+                    datosSocio.str_id_usuario = datosLogin.str_id_usuario;
                     datosSocio.int_id_perfil = datosLogin.int_id_perfil;
                     var claims = new ClaimsIdentity(new[]
                         {
@@ -161,13 +164,13 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             {
                 var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
-                var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
+                reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
 
                 respuesta.objSocio!.str_mod = KeyCreate.str_modulo;
                 respuesta.objSocio.str_exp = KeyCreate.str_exponente;
                 respuesta.str_clave_secreta = ClaveSecreta;
 
-                reqAddKeys.str_ente = respuesta.objSocio.int_ente + ""!;
+                reqAddKeys.str_ente = respuesta.objSocio.str_ente!;
                 reqAddKeys.str_modulo = KeyCreate.str_modulo!;
                 reqAddKeys.str_exponente = KeyCreate.str_exponente!;
                 reqAddKeys.str_clave_secreta = ClaveSecreta!;
@@ -179,7 +182,11 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
-           
+            if (!String.IsNullOrEmpty(token)) {
+                respuesta.objSocio!.str_id_usuario = CifradoAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
+                respuesta.objSocio!.str_ente = CifradoAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
+
+            }
 
             return respuesta;
 
