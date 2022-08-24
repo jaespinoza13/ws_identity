@@ -1,5 +1,4 @@
-﻿using Application.ParametrosSeguridad;
-
+﻿
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
@@ -32,6 +31,12 @@ public static class CifradoRSA
         {
             throw new Exception( "Error GenerarLlavePublicaPrivada " + ex );
         }
+    }
+    public class DatosLlaveRsa
+    {
+        public string? str_modulo { get; set; }
+        public string? str_exponente { get; set; }
+        public string? str_xml_priv { get; set; }
     }
     public static string Decrypt ( string input, string key )
     {
