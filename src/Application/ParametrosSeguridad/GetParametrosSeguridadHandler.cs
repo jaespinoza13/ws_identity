@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using Application.Common.Cryptography;
+using static Application.Common.Cryptography.CifradoRSA;
 
 namespace Application.ParametrosSeguridad;
 public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeguridad, ResGetParametrosSeguridad>

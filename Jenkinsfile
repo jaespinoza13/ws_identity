@@ -9,9 +9,9 @@ pipeline {
     environment {
         VERSION_PRODUCCION  = '3.0.0'
         VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-identity-des'
-        NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '5016'
+        NOMBRE_CONTENEDOR   = 'api-identity-des-encriptar-info-lmorocho'
+        NOMBRE_IMAGEN       = 'ws_identity_des_encriptar_info_lmorocho'
+        PUERTO              = '5316'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsIdentity'
     }

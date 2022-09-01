@@ -14,6 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Application.ParametrosSeguridad;
 using Application.Common.Cryptography;
 using System.Text.Json;
+using static Application.Common.Cryptography.CifradoRSA;
 
 namespace Application.LogIn;
 
