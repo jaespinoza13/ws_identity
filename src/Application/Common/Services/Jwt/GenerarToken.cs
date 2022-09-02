@@ -41,7 +41,7 @@ internal class GenerarToken : IGenerarToken
         RSA rsa = RSA.Create(2048);
         rsa.ImportRSAPrivateKey(privateKeyBytes, out _);
         var key = new RsaSecurityKey(rsa);
-        var securityKey1 = new SymmetricSecurityKey(Encoding.Default.GetBytes(KeyCanales));
+        var securityKey1 = new SymmetricSecurityKey(Encoding.Default.GetBytes("ProEMLh5e_qnzdNU"));
 
         var ep = new EncryptingCredentials(
             securityKey1,
