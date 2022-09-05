@@ -195,8 +195,10 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
     public static void EncryptAesSalida ( ResAutenticarse respuesta,ReqAddKeys reqAddKeys )
     {
-        respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
-        respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
+        if (respuesta.str_res_codigo.Equals("000")) {
+            respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
+            respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
+        }
 
     }
 
