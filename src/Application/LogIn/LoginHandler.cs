@@ -59,10 +59,10 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
 
-        if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
-        {
-           DesencriptarDatos(reqAutenticarse);
-        }
+        //if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
+        //{
+        //   DesencriptarDatos(reqAutenticarse);
+        //}
 
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;

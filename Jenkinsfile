@@ -49,6 +49,14 @@ pipeline {
                         -e Key_canbmo=${SECRETKEY} \
                         -e Key_canbim=${SECRETKEY} \
                         -e Key_canven=${SECRETKEY} \
+                        -e Key_canbvi_pri=${SECRET_KEY_TOKEN_PRI} \
+                        -e Key_canbmo_pri=${SECRET_KEY_TOKEN_PRI} \
+                        -e Key_canbim_pri=${SECRET_KEY_TOKEN_PRI} \
+                        -e Key_canven_pri=${SECRET_KEY_TOKEN_PRI} \
+                        -e Key_canbvi_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
+                        -e Key_canbmo_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
+                        -e Key_canbim_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
+                        -e Key_canven_encrypt_token=${SECRET_KEY_ENCRYPT_TOKEN} \
                         -e Issuer=${ISSUER} \
                         -e ApiSettings__GrpcSettings__client_grpc_sybase=${ENDPOINT_GRPC_SYBASE} \
                         -e ApiSettings__GrpcSettings__client_grpc_mongo=${ENDPOINT_GRPC_MONGO} \
