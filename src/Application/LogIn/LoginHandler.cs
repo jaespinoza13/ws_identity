@@ -177,11 +177,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
-            if (!String.IsNullOrEmpty(token)) {
-                respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
-                respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
-
-            }
+            EncryptAesSalida(respuesta, reqAddKeys);
 
             return respuesta;
 
@@ -197,7 +193,13 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         return BCrypt.Net.BCrypt.Verify(claveUsuario, claveBase);
     }
 
- 
+    public static void EncryptAesSalida ( ResAutenticarse respuesta,ReqAddKeys reqAddKeys )
+    {
+        respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
+        respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
+
+    }
+
 }
 
 
