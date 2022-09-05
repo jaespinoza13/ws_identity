@@ -1,4 +1,5 @@
 ﻿using AccesoDatosGrpcAse.Neg;
+using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LogIn;

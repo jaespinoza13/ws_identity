@@ -1,6 +1,5 @@
 ﻿
-using Application.Common.ISO20022.Models;
-namespace Application.LogIn;
+namespace Application.Common.Cryptography;
 
 
 public class ResGetKeys 

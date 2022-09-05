@@ -7,7 +7,7 @@ namespace Application.Common.Cryptography;
 
 public class GenRsa
 {
-    public bool GenerateKeys(
+    public static bool GenerateKeys(
        out string privateKey,
        out string publicKey,
        int keySize = 1024)

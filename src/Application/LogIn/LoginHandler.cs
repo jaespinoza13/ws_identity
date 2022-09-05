@@ -14,7 +14,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Application.ParametrosSeguridad;
 using Application.Common.Cryptography;
 using System.Text.Json;
-using static Application.Common.Cryptography.CifradoRSA;
+using static Application.Common.Cryptography.CryptographyRSA;
 
 namespace Application.LogIn;
 
@@ -58,12 +58,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string str_operacion = "AUTENTICARSE";
         bool bln_clave_valida = false;
         var respuesta = new ResAutenticarse( );
-
-        if (_settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
-        {
-            DesencriptarDatos(reqAutenticarse);
-        }
-
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;
@@ -163,7 +157,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_token = token;
             if (!String.IsNullOrEmpty(token))
             {
-                var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
+                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
 
@@ -176,7 +170,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 reqAddKeys.str_exponente = KeyCreate.str_exponente!;
                 reqAddKeys.str_clave_secreta = ClaveSecreta!;
                 reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
-                reqAddKeys.str_llave_simetrica = CifradoAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
+                reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
                  res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
 
             }
@@ -184,8 +178,8 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             if (!String.IsNullOrEmpty(token)) {
-                respuesta.objSocio!.str_id_usuario = CifradoAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
-                respuesta.objSocio!.str_ente = CifradoAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
+                respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
+                respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
 
             }
 
@@ -203,21 +197,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         return BCrypt.Net.BCrypt.Verify(claveUsuario, claveBase);
     }
 
-    public void DesencriptarDatos (ReqAutenticarse reqAutenticarse ) {
-        var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqAutenticarse.str_nemonico_canal);
-        if (Key != null)
-            try
-            {
-                reqAutenticarse.str_login = CifradoRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-                reqAutenticarse.str_password = CifradoRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException("Error: Credenciales inválidas");
-            }
-        else
-            throw new ArgumentException("Error: Credenciales inválidas");
-    }
+ 
 }
 
 

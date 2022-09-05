@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.Common.Cryptography
 {
-    public class CifradoAES
+    public class CryptographyAES
     {
         #region Decrypt
 
@@ -136,7 +136,7 @@ namespace Application.Common.Cryptography
         {
             try
             {
-                Random rnd = new Random((int)DateTime.Now.Ticks);
+                Random rnd = new ((int)DateTime.Now.Ticks);
                 Byte[] b = new Byte[int_longitud];
                 rnd.NextBytes(b);
 
@@ -149,7 +149,7 @@ namespace Application.Common.Cryptography
         }
         public static string ByteArrayToHex ( byte[] bData )
         {
-            StringBuilder stringBuilder = new StringBuilder( );
+            StringBuilder stringBuilder = new ( );
             int arg_0F_0 = 0;
             int upperBound = bData.GetUpperBound(0);
             checked

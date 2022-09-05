@@ -6,15 +6,14 @@ using System.Xml.Serialization;
 
 namespace Application.Common.Cryptography;
 
-public static class CifradoRSA
+public static class CryptographyRSA
 {
     public static DatosLlaveRsa GenerarLlavePublicaPrivada(string NemonicoCanal)
     {
         try
         {
             string srt_llave_priv_xml = string.Empty, srt_llave_pub_xml = string.Empty;
-            var obj_grpp = new GenRsa( );
-            var a = obj_grpp.GenerateKeys( out srt_llave_priv_xml , out srt_llave_pub_xml);
+            var a = GenRsa.GenerateKeys( out srt_llave_priv_xml , out srt_llave_pub_xml);
             XmlDocument doc = new();
             doc.LoadXml(srt_llave_priv_xml);
 

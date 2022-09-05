@@ -1,15 +1,10 @@
-﻿using System.Reflection;
-
-using Application.Common.Models;
-using Application.Common.Converting;
+﻿
+using System.Reflection;
 using Application.Common.Interfaces;
 using MediatR;
-using System.Security.Cryptography;
-using System.Xml.Serialization;
-using System.Text;
 using Microsoft.Extensions.Caching.Memory;
 using Application.Common.Cryptography;
-using static Application.Common.Cryptography.CifradoRSA;
+using static Application.Common.Cryptography.CryptographyRSA;
 
 namespace Application.ParametrosSeguridad;
 public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeguridad, ResGetParametrosSeguridad>
@@ -40,7 +35,7 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
             var date = _memoryCache.Get<DateTime>("Date");
             if (DateTime.Compare(DateTime.Now, date.AddHours(1)) > 0)
             {
-                var KeyCreate = CifradoRSA.GenerarLlavePublicaPrivada(reqGetParametrosSeguridad.str_nemonico_canal);
+                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqGetParametrosSeguridad.str_nemonico_canal);
                 _memoryCache.Set<DatosLlaveRsa>("Key_"+reqGetParametrosSeguridad.str_nemonico_canal, KeyCreate);
                 _memoryCache.Set<DateTime>("Date_" + reqGetParametrosSeguridad.str_nemonico_canal, DateTime.Now);
             }

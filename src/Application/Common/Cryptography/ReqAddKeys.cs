@@ -3,7 +3,7 @@ using Application.Common.ISO20022.Models;
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.LogIn;
+namespace Application.Common.Cryptography;
 
 public class ReqAddKeys : Header, IRequest<ResAddKeys>
 {
