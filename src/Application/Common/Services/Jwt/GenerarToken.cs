@@ -34,11 +34,11 @@ internal class GenerarToken : IGenerarToken
     {
         ResComun respuesta = new( );
         respuesta.LlenarResHeader(header);
-        var privateKeyBytes = Convert.FromBase64String(_configuration["key_" + header.str_nemonico_canal.ToLower( ) + "_pri"]);
+        var privateKeyBytes = Convert.FromBase64String(_configuration["key_token_pri"]);
         var rsa = RSA.Create(2048);
         rsa.ImportRSAPrivateKey(privateKeyBytes, out _);
         var key = new RsaSecurityKey(rsa);
-        var securityKeyEncrypt = new SymmetricSecurityKey(Encoding.Default.GetBytes(_configuration["key_" + header.str_nemonico_canal.ToLower( ) + "_encrypt_token"]));
+        var securityKeyEncrypt = new SymmetricSecurityKey(Encoding.Default.GetBytes(_configuration["key_encrypt_token"]));
 
 
         try
