@@ -18,7 +18,7 @@ namespace WebUI.Filters
         private readonly IMemoryCache _memoryCache;
 
 
-        public CryptographyRSAFilter (  IOptionsMonitor<ApiSettings> options, IMemoryCache memoryCache
+        public CryptographyRSAFilter ( IOptionsMonitor<ApiSettings> options, IMemoryCache memoryCache
  )
         {
             _settings = options.CurrentValue;
@@ -35,24 +35,26 @@ namespace WebUI.Filters
             if (_settings.lst_canales_encriptar.Contains(reqGetKeys.str_nemonico_canal))
             {
 
-                var reqAutenticarse = JsonSerializer.Deserialize<ReqAutenticarse>(JsonSerializer.Serialize(modelRequest.Value))!;
 
-                    var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqAutenticarse.str_nemonico_canal);
-                    if (Key != null)
-                        try
-                        {
-                            reqAutenticarse.str_login = CryptographyRSA.Decrypt(reqAutenticarse.str_login, Key.str_xml_priv!);
-                            reqAutenticarse.str_password = CryptographyRSA.Decrypt(reqAutenticarse.str_password, Key.str_xml_priv!);
-                        }
-                        catch (Exception)
-                        {
-                            throw new ArgumentException("Error: Credenciales inválidas");
-                        }
-                    else
+                var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqGetKeys.str_nemonico_canal);
+                if (Key != null)
+                    try
+                    {
+                        var str_login = modelRequest.Value!.GetType( ).GetProperty("str_login");
+                        var str_password = modelRequest.Value.GetType( ).GetProperty("str_password");
+                        var valueLogin = str_login!.GetValue(modelRequest.Value, null)!.ToString( );
+                        var valuePass = str_password!.GetValue(modelRequest.Value, null)!.ToString( );
+                        var textoDesencriptado = CryptographyRSA.Decrypt(valueLogin!, Key.str_xml_priv!);
+                        str_login.SetValue(modelRequest.Value, CryptographyRSA.Decrypt(valueLogin!, Key.str_xml_priv!));
+                        str_password.SetValue(modelRequest.Value, CryptographyRSA.Decrypt(valuePass!, Key.str_xml_priv!));
+
+                    }
+                    catch (Exception)
+                    {
                         throw new ArgumentException("Error: Credenciales inválidas");
-
-                
-              
+                    }
+                else
+                    throw new ArgumentException("Error: Credenciales inválidas");
 
             }
 
