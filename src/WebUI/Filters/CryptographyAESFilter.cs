@@ -54,6 +54,25 @@ namespace WebUI.Filters
 
                             } );
 
+                            var id_servicio = response!.GetType( ).GetProperty("str_res_original_id_servicio")!.GetValue(response, null)!.ToString( );
+                            if (id_servicio != null
+                                && id_servicio.Equals("REQ_AUTENTICARSE"))
+                            {
+                              
+                                var objSocio = response.GetType( ).GetProperty("objSocio")!.GetValue(response);
+
+                                var propiedad_ente = objSocio!.GetType( ).GetProperty("str_ente");
+                                var propiedad_usuario = objSocio.GetType( ).GetProperty("str_id_usuario");
+
+                                var valor_ente = propiedad_ente!.GetValue(objSocio, null)!.ToString( );
+                                var valor_usuario = propiedad_usuario!.GetValue(objSocio, null)!.ToString( );
+                                var textoDesencriptado = CryptographyAES.Encrypt(valor_ente!, Key.str_llave_simetrica);
+                                propiedad_ente.SetValue(objSocio, textoDesencriptado);  
+                                var textoDesencriptadoUsuario = CryptographyAES.Encrypt(valor_usuario!, Key.str_llave_simetrica);
+                                propiedad_usuario.SetValue(objSocio, textoDesencriptadoUsuario);
+
+                            }
+
                         }
                         catch (Exception)
                         {
