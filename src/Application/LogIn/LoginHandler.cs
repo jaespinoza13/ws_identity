@@ -199,6 +199,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.objSocio!.str_id_usuario = CryptographyAES.Encrypt(respuesta.objSocio.str_id_usuario!, reqAddKeys.str_llave_simetrica);
             respuesta.objSocio!.str_ente = CryptographyAES.Encrypt(respuesta.objSocio.str_ente!, reqAddKeys.str_llave_simetrica);
         }
+        respuesta.str_login = CryptographyAES.Encrypt(respuesta.str_login!, reqAddKeys.str_llave_simetrica);
 
     }
 
