@@ -20,6 +20,8 @@ public class ResComun : Header
         str_ip_dispositivo = requerimiento.str_ip_dispositivo;
         str_remitente = requerimiento.str_receptor;
         str_receptor = requerimiento.str_remitente;
+        str_id_usuario = requerimiento.str_id_usuario;
+        str_id_sistema = requerimiento.str_id_sistema;
         str_tipo_peticion = "REQ";
         str_id_msj = requerimiento.str_id_msj;
         dt_fecha_operacion = DateTime.ParseExact( DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" ), "yyyy-MM-dd HH:mm:ss", null );
