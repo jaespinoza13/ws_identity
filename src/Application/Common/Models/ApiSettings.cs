@@ -36,8 +36,7 @@
         public List<int> lst_codigos_error_sistemas { get; set; } = new ();
         public List<string> lst_nombres_parametros { get; set; } = new ();
         public List<string> lst_canales_encriptar { get; set; } = new ();
-        public List<string> lst_datos_encriptados_aes_entrada { get; set; } = new ();
-        public List<string> lst_datos_encriptados_aes_salida { get; set; } = new ();
+        public List<string> lst_datos_encriptados_aes_out { get; set; } = new ();
 
         public bool valida_peticiones_diarias { get; set; }
         public int timeOutHttp { get; set; }

@@ -37,6 +37,7 @@ public static class ConfigureServices
 
         //FILTERS
         services.AddTransient<CryptographyRSAFilter>( );
+        services.AddTransient<CryptographyAESFilter>( );
         services.AddTransient<RequestControl>( );
 
         //SWAGGER

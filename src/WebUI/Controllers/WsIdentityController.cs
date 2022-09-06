@@ -19,7 +19,9 @@ namespace WebUI.Controllers
 
         [HttpPost("autenticarse")]
         [ServiceFilter(typeof(CryptographyRSAFilter))]
+        [ServiceFilter(typeof(CryptographyAESFilter))]
         public async Task<ResAutenticarse> LogIn ( ReqAutenticarse reqAutenticarse )
+
         {
             return await Mediator.Send(reqAutenticarse);
         }
