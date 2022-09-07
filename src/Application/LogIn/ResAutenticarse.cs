@@ -18,8 +18,8 @@ public class ResAutenticarse : ResComun
         }
         else {
             str_ente = CryptographyAES.Encrypt(str_ente!, Key.str_llave_simetrica);
-            str_id_usuario = CryptographyAES.Encrypt(str_ente!, Key.str_llave_simetrica);
-            str_login = CryptographyAES.Encrypt(str_ente!, Key.str_llave_simetrica);
+            str_id_usuario = CryptographyAES.Encrypt(str_id_usuario!, Key.str_llave_simetrica);
+            str_login = CryptographyAES.Encrypt(str_login!, Key.str_llave_simetrica);
             objSocio!.str_id_usuario=CryptographyAES.Encrypt(objSocio.str_id_usuario!, Key.str_llave_simetrica);
             objSocio.str_ente = CryptographyAES.Encrypt(objSocio.str_ente!, Key.str_llave_simetrica);
         }
