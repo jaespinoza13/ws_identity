@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Application.LogIn;
+using System.ComponentModel.DataAnnotations;
 
 namespace Application.Common.ISO20022.Models
 {
@@ -11,6 +12,7 @@ namespace Application.Common.ISO20022.Models
         /// <summary>
         /// Enete del socio
         /// </summary>
+
         public string str_ente { get; set; } = String.Empty;
         /// <summary>
         /// Nemonico del canal Ejm: CANBEEBOT

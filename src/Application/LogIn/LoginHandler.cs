@@ -170,8 +170,8 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 reqAddKeys.str_exponente = KeyCreate.str_exponente!;
                 reqAddKeys.str_clave_secreta = ClaveSecreta!;
                 reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
-                reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
-                 res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
+                reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(16);
+                res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
 
             }
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";

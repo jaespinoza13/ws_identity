@@ -2,6 +2,7 @@ using Application.Common.Converting;
 using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.LogIn;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Options;
@@ -28,8 +29,7 @@ namespace WebUI.Filters
         {
             if (context.Result != null) {
                 var response = ((ObjectResult)context.Result!).Value;
-
-
+               
                 if (response != null)
                 {
                     var reqGetKeys = JsonSerializer.Deserialize<ReqGetKeys>(JsonSerializer.Serialize(response))!;
@@ -40,56 +40,18 @@ namespace WebUI.Filters
 
                         if (Key != null)
                             try
-                            {
-                                _settings.lst_datos_encriptados_aes_out!.ForEach(atributo =>
-                                {
-                                    if (response!.GetType( ).GetProperty(atributo) != null)
-                                    {
-
-                                        var propiedad = response.GetType( ).GetProperty(atributo);
-                                        var valor = propiedad!.GetValue(response, null)!.ToString( );
-                                        var textoDesencriptado = CryptographyAES.Encrypt(valor!, Key.str_llave_simetrica);
-                                        propiedad.SetValue(response, textoDesencriptado);
-
-                                    }
-
-                                });
-
-                                var id_servicio = response!.GetType( ).GetProperty("str_res_original_id_servicio")!.GetValue(response, null)!.ToString( );
-                                if (id_servicio != null
-                                    && id_servicio.Equals("REQ_AUTENTICARSE"))
-                                {
-
-                                    var objSocio = response.GetType( ).GetProperty("objSocio")!.GetValue(response);
-
-                                    var propiedad_ente = objSocio!.GetType( ).GetProperty("str_ente");
-                                    var propiedad_usuario = objSocio.GetType( ).GetProperty("str_id_usuario");
-
-                                    var valor_ente = propiedad_ente!.GetValue(objSocio, null)!.ToString( );
-                                    var valor_usuario = propiedad_usuario!.GetValue(objSocio, null)!.ToString( );
-                                    var textoDesencriptado = CryptographyAES.Encrypt(valor_ente!, Key.str_llave_simetrica);
-                                    propiedad_ente.SetValue(objSocio, textoDesencriptado);
-                                    var textoDesencriptadoUsuario = CryptographyAES.Encrypt(valor_usuario!, Key.str_llave_simetrica);
-                                    propiedad_usuario.SetValue(objSocio, textoDesencriptadoUsuario);
-
-                                }
+                            { 
+                                response.GetType( ).GetMethod("DecryptRSA")!.Invoke(response, new object[] { Key });
 
                             }
                             catch (Exception)
                             {
                                 throw new ArgumentException("Error: Credenciales inválidas 002");
                             }
-                        else
-                            _settings.lst_datos_encriptados_aes_out!.ForEach(atributo =>
-                            {
-                                if (response!.GetType( ).GetProperty(atributo) != null)
-                                {
-
-                                    var propiedad = response.GetType( ).GetProperty(atributo);
-                                    propiedad!.SetValue(response, "");
-                                }
-
-                            });
+                        else 
+                            response.GetType( ).GetMethod("EncryptAES")!.Invoke(response, null);
+                        
+                            
                     }
 
 

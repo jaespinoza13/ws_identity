@@ -43,13 +43,7 @@ namespace WebUI.Filters
                 if (Key != null)
                     try
                     {
-                        var str_login = modelRequest.Value!.GetType( ).GetProperty("str_login");
-                        var str_password = modelRequest.Value.GetType( ).GetProperty("str_password");
-                        var valueLogin = str_login!.GetValue(modelRequest.Value, null)!.ToString( );
-                        var valuePass = str_password!.GetValue(modelRequest.Value, null)!.ToString( );
-                        var textoDesencriptado = CryptographyRSA.Decrypt(valueLogin!, Key.str_xml_priv!);
-                        str_login.SetValue(modelRequest.Value, CryptographyRSA.Decrypt(valueLogin!, Key.str_xml_priv!));
-                        str_password.SetValue(modelRequest.Value, CryptographyRSA.Decrypt(valuePass!, Key.str_xml_priv!));
+                        modelRequest.Value!.GetType( ).GetMethod("EncryptAES")!.Invoke(modelRequest.Value, new object[] { Key });
 
                     }
                     catch (Exception)
@@ -74,7 +68,7 @@ namespace WebUI.Filters
         {
             ResException resException = new( );
             resException.str_res_codigo = Convert.ToInt32(HttpStatusCode.Unauthorized).ToString( );
-            resException.str_res_id_servidor = "Error: Credenciales inválidas in";
+            resException.str_res_id_servidor = "Error: Credenciales inválidas";
             resException.str_res_estado_transaccion = "ERR";
             resException.dt_res_fecha_msj_crea = DateTime.Now;
             resException.str_res_info_adicional = "Tu sesión ha caducado, por favor ingresa nuevamente.";
