@@ -43,7 +43,7 @@ namespace WebUI.Filters
                 if (Key != null)
                     try
                     {
-                        modelRequest.Value!.GetType( ).GetMethod("EncryptAES")!.Invoke(modelRequest.Value, new object[] { Key });
+                        modelRequest.Value!.GetType( ).GetMethod("DecryptRSA")!.Invoke(modelRequest.Value, new object[] { Key });
 
                     }
                     catch (Exception)
@@ -68,10 +68,10 @@ namespace WebUI.Filters
         {
             ResException resException = new( );
             resException.str_res_codigo = Convert.ToInt32(HttpStatusCode.Unauthorized).ToString( );
-            resException.str_res_id_servidor = "Error: Credenciales inv·lidas";
+            resException.str_res_id_servidor = "Error: Credenciales inv√°lidas";
             resException.str_res_estado_transaccion = "ERR";
             resException.dt_res_fecha_msj_crea = DateTime.Now;
-            resException.str_res_info_adicional = "Tu sesiÛn ha caducado, por favor ingresa nuevamente.";
+            resException.str_res_info_adicional = "Tu sesi√≥n ha caducado, por favor ingresa nuevamente.";
 
             context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
             context.Result = new ObjectResult(resException);
