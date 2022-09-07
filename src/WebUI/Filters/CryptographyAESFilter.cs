@@ -49,7 +49,7 @@ namespace WebUI.Filters
                                 throw new ArgumentException("Error: Credenciales inválidas 002");
                             }
                         else 
-                            response.GetType( ).GetMethod("EncryptAES")!.Invoke(response, null);
+                            response.GetType( ).GetMethod("EncryptAES")!.Invoke(response, new object[] { null });
                         
                             
                     }
