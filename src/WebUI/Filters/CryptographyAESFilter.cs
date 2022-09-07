@@ -85,7 +85,5 @@ namespace WebUI.Filters
 
             }
         }
-
-
     }
 }

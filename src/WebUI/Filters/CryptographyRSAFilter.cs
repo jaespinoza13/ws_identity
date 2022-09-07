@@ -1,11 +1,14 @@
 using Application.Common.Converting;
 using Application.Common.Cryptography;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogIn;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using System.Net;
 using System.Text.Json;
 using static Application.Common.Cryptography.CryptographyRSA;
 
@@ -51,10 +54,10 @@ namespace WebUI.Filters
                     }
                     catch (Exception)
                     {
-                        throw new ArgumentException("Error: Credenciales inválidas");
+                        respopnderExcepcion(context);
                     }
                 else
-                    throw new ArgumentException("Error: Credenciales inválidas");
+                    respopnderExcepcion(context);
 
             }
 
@@ -67,6 +70,17 @@ namespace WebUI.Filters
 
         }
 
+        public void respopnderExcepcion ( ActionExecutingContext context )
+        {
+            ResException resException = new( );
+            resException.str_res_codigo = Convert.ToInt32(HttpStatusCode.Unauthorized).ToString( );
+            resException.str_res_id_servidor = "Error: Credenciales inválidas";
+            resException.str_res_estado_transaccion = "ERR";
+            resException.dt_res_fecha_msj_crea = DateTime.Now;
+            resException.str_res_info_adicional = "Tu sesión ha caducado, por favor ingresa nuevamente.";
 
+            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+            context.Result = new ObjectResult(resException);
+        }
     }
 }
