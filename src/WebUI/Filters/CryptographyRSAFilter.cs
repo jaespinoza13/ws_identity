@@ -54,10 +54,10 @@ namespace WebUI.Filters
                     }
                     catch (Exception)
                     {
-                        respopnderExcepcion(context);
+                        GenerarExcepcion(context);
                     }
                 else
-                    respopnderExcepcion(context);
+                    GenerarExcepcion(context);
 
             }
 
@@ -70,7 +70,7 @@ namespace WebUI.Filters
 
         }
 
-        public void respopnderExcepcion ( ActionExecutingContext context )
+        public void GenerarExcepcion ( ActionExecutingContext context )
         {
             ResException resException = new( );
             resException.str_res_codigo = Convert.ToInt32(HttpStatusCode.Unauthorized).ToString( );
