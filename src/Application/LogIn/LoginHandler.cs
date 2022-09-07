@@ -67,7 +67,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         string token = String.Empty;
         Login? datosLogin;
         Persona? datosSocio;
-        ReqAddKeys reqAddKeys=new();
+        ReqAddKeys reqAddKeys = new( );
         try
         {
             var str_clave_encriptada = await _encrypt.Encrypt(reqAutenticarse.str_login, reqAutenticarse.str_password, reqAutenticarse.str_id_transaccion);
@@ -155,25 +155,25 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
             }
             respuesta.str_token = token;
+
+            var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
+            var ClaveSecreta = Guid.NewGuid( ).ToString( );
+            reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
+            respuesta.str_clave_secreta = ClaveSecreta;
             if (!String.IsNullOrEmpty(token))
             {
-                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
-                var ClaveSecreta = Guid.NewGuid( ).ToString( );
-                reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
-
                 respuesta.objSocio!.str_mod = KeyCreate.str_modulo;
                 respuesta.objSocio.str_exp = KeyCreate.str_exponente;
-                respuesta.str_clave_secreta = ClaveSecreta;
-
                 reqAddKeys.str_ente = respuesta.objSocio.str_ente!;
-                reqAddKeys.str_modulo = KeyCreate.str_modulo!;
-                reqAddKeys.str_exponente = KeyCreate.str_exponente!;
-                reqAddKeys.str_clave_secreta = ClaveSecreta!;
-                reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
-                reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
-                 res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
-
             }
+            reqAddKeys.str_modulo = KeyCreate.str_modulo!;
+            reqAddKeys.str_exponente = KeyCreate.str_exponente!;
+            reqAddKeys.str_clave_secreta = ClaveSecreta!;
+            reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
+            reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(Convert.ToInt32(16));
+            res_tran = await _autenticarseDat.AddKeys(reqAddKeys);
+
+
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);

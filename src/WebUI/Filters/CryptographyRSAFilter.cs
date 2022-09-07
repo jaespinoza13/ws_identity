@@ -74,7 +74,7 @@ namespace WebUI.Filters
         {
             ResException resException = new( );
             resException.str_res_codigo = Convert.ToInt32(HttpStatusCode.Unauthorized).ToString( );
-            resException.str_res_id_servidor = "Error: Credenciales inválidas";
+            resException.str_res_id_servidor = "Error: Credenciales inválidas in";
             resException.str_res_estado_transaccion = "ERR";
             resException.dt_res_fecha_msj_crea = DateTime.Now;
             resException.str_res_info_adicional = "Tu sesión ha caducado, por favor ingresa nuevamente.";
