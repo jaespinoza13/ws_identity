@@ -41,7 +41,7 @@ namespace WebUI.Filters
                         if (Key != null)
                             try
                             { 
-                                response.GetType( ).GetMethod("DecryptRSA")!.Invoke(response, new object[] { Key });
+                                response.GetType( ).GetMethod("EncryptAES")!.Invoke(response, new object[] { Key });
 
                             }
                             catch (Exception)
