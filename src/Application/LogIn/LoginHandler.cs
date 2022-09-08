@@ -157,7 +157,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             respuesta.str_token = token;
             if (!String.IsNullOrEmpty(token))
             {
-                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqAutenticarse.str_nemonico_canal);
+                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada();
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqAutenticarse))!;
 

@@ -8,7 +8,7 @@ namespace Application.Common.Cryptography;
 
 public static class CryptographyRSA
 {
-    public static DatosLlaveRsa GenerarLlavePublicaPrivada(string NemonicoCanal)
+    public static DatosLlaveRsa GenerarLlavePublicaPrivada()
     {
         try
         {

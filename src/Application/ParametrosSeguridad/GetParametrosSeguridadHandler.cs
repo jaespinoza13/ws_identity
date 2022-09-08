@@ -33,9 +33,9 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
         {
 
             var date = _memoryCache.Get<DateTime>("Date");
-            if (DateTime.Compare(DateTime.Now, date.AddHours(1)) > 0)
+            if (DateTime.Compare(DateTime.Now, date.AddHours(24)) > 0)
             {
-                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada(reqGetParametrosSeguridad.str_nemonico_canal);
+                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada();
                 _memoryCache.Set<DatosLlaveRsa>("Key_"+reqGetParametrosSeguridad.str_nemonico_canal, KeyCreate);
                 _memoryCache.Set<DateTime>("Date_" + reqGetParametrosSeguridad.str_nemonico_canal, DateTime.Now);
             }
