@@ -7,7 +7,7 @@ namespace Application.Acceso.RecuperarContrasenia;
 
 public class ResValidaInfo : ResComun
 {
-    public dynamic datos_recuperacion { get; set; } = new System.Dynamic.ExpandoObject( );
+    public DatosRecuperacion datos_recuperacion { get; set; } = new( );
     public string? str_token { get; set; }
 
     public void EncryptAES ( ResGetKeys Key )

@@ -56,8 +56,8 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
             if (resTran.codigo.Equals("000"))
             {
                 respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<DatosRecuperacion>((ConjuntoDatos)resTran.cuerpo, 0)!;
-                reqValidaInfo.str_ente = respuesta.datos_recuperacion.int_ente + String.Empty;
-                reqValidaInfo.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
+                reqValidaInfo.str_ente = respuesta.datos_recuperacion.str_ente;
+                reqValidaInfo.str_id_usuario = respuesta.datos_recuperacion.str_id_usuario;
                 respuesta.datos_recuperacion.bl_requiere_otp =  _wsOtp.ValidaRequiereOtp(reqValidaInfo, reqValidaInfo.str_id_servicio).Result;
                 respuesta.str_res_estado_transaccion = "OK";
                 var claims = new ClaimsIdentity(new[]
