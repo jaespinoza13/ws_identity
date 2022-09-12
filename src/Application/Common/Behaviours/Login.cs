@@ -2,7 +2,7 @@
 
 public class Login
 {
-    public int int_id_usuario { get; set; }
+    //public int int_id_usuario { get; set; }
     public string? str_id_usuario { get; set; }
     public string? str_login { get; set; }
     public string? str_password { get; set; }

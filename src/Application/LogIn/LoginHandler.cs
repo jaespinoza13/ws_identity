@@ -87,7 +87,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 // Validar clave
                 if (!String.IsNullOrEmpty(datosLogin.str_password) || !String.IsNullOrEmpty(datosLogin.str_password_temp))
                 {
-                    string str_concat_clave_usuario = reqAutenticarse.str_password + datosSocio.int_ente;
+                    string str_concat_clave_usuario = reqAutenticarse.str_password + datosSocio.str_ente;
 
                     bln_clave_valida = !String.IsNullOrEmpty(datosLogin.str_password) ?
                                         ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
@@ -95,15 +95,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 }
                 if (bln_clave_valida)
                 {
-                    //BORRAR
-                    datosSocio.int_id_usuario = datosLogin.int_id_usuario;
-                    //BORRAR
                     datosSocio.str_id_usuario = datosLogin.str_id_usuario;
                     datosSocio.int_id_perfil = datosLogin.int_id_perfil;
                     var claims = new ClaimsIdentity(new[]
                         {
                         new Claim( ClaimTypes.Role,  _roles.Socio),
-                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString())
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.str_ente!)
                         });
 
                     token = await _generarToken.ConstruirToken(reqAutenticarse,
@@ -118,7 +115,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                     //Clave incorrecta
                     respuesta.str_res_codigo = "1054";
                     res_tran.diccionario["str_error"] = _parameters.FindErrorCode("1054").str_descripcion;
-                    reqAutenticarse.str_id_usuario = datosLogin.int_id_usuario.ToString( );
+                    reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
                     await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
                 }
 
@@ -128,12 +125,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 //Credenciales validadas.    
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
-                datosSocio.int_id_usuario = datosLogin.int_id_usuario;
+                datosSocio.str_id_usuario = datosLogin.str_id_usuario;
                 datosSocio.int_id_perfil = datosLogin.int_id_perfil;
                 var claims = new ClaimsIdentity(new[]
                        {
                         new Claim( ClaimTypes.Role,  _roles.Socio),
-                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.int_ente.ToString()),
+                        new Claim( ClaimTypes.NameIdentifier,   datosSocio.str_ente!),
 
                         });
                 token = await _generarToken.ConstruirToken(reqAutenticarse,
@@ -151,7 +148,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
                 //Clave incorrecta
                 respuesta.str_res_codigo = "1054";
-                reqAutenticarse.str_id_usuario = datosLogin.int_id_usuario.ToString( );
+                reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
                 await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
             }
             respuesta.str_token = token;
