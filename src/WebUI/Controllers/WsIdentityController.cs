@@ -25,6 +25,7 @@ namespace WebUI.Controllers
         {
             return await Mediator.Send(reqAutenticarse);
         }
+        [ServiceFilter(typeof(CryptographyRSAFilter))]
         [ServiceFilter(typeof(CryptographyAESFilter))]
         [HttpPost("VALIDAR_INFO_RECUPERACION")]
         public async Task<ResValidaInfo> ValidaInfoRecuperacion ( ReqValidaInfo reqValidaInfo )
