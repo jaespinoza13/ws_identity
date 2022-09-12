@@ -41,7 +41,7 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
 
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
-            respuesta.str_res_info_adicional = "Token valido por una vez";
+            respuesta.str_res_info_adicional = "Token válido por una vez";
         }
         catch (Exception)
         {

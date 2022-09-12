@@ -5,6 +5,7 @@ using Application.Common.Models;
 using Application.Jwt;
 using MediatR;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -20,18 +21,26 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
 {
     private readonly IGenerarToken _generarToken;
     private readonly Roles _rol;
+    private readonly ILogs _logsService;
+    private readonly string _clase;
+
+
     private readonly IAutenticarseDat _autenticarseDat;
 
     private readonly IParametersInMemory _parameters;
 
     public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken,
         IAutenticarseDat autenticarseDat, 
-        IOptionsMonitor<Roles> options, 
+        IOptionsMonitor<Roles> options,
+        ILogs logsService,
         IParametersInMemory parameters )
     {
+        _clase = GetType( ).Name;
+
         _generarToken = generarToken;
         _rol = options.CurrentValue;
         _autenticarseDat = autenticarseDat;
+        _logsService = logsService;
 
         _parameters = parameters;
     }
@@ -45,6 +54,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
         try
         {
             respuesta.LlenarResHeader(autenticarInvitadoExterno);
+            await _logsService.SaveHeaderLogs(request.header, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+
             var claims = new ClaimsIdentity(new[]
                     {
                         new Claim( ClaimTypes.Role, _rol.InvitadoExterno),
@@ -75,6 +86,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token Creado Correctamente";
+            await _logsService.SaveResponseLogs(respuesta, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+
 
         }
         catch (Exception)
