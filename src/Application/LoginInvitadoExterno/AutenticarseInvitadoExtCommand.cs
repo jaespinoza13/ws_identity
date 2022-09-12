@@ -54,8 +54,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 operaion,
                 claims,
                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
-            if (!String.IsNullOrEmpty(respuesta.str_token))
-            {
+           
                 var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada( );
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(request.header))!;
@@ -71,11 +70,12 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(16);
                 await _autenticarseDat.AddKeys(reqAddKeys);
 
-            }
+            
 
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token Creado Correctamente";
+
         }
         catch (Exception)
         {
