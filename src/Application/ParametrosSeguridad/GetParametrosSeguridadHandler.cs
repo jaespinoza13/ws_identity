@@ -42,8 +42,9 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
             var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqGetParametrosSeguridad.str_nemonico_canal);
             respuesta.datos_llave.str_modulo = Key.str_modulo;
             respuesta.datos_llave.str_exponente = Key.str_exponente;
+            respuesta.str_res_codigo = "000";
 
-          
+
 
             await _logsService.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
             return respuesta;
