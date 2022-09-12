@@ -1,3 +1,4 @@
+using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
@@ -5,6 +6,7 @@ using Application.Jwt;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Application.LoginInvitado;
 
@@ -18,12 +20,18 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
 {
     private readonly IGenerarToken _generarToken;
     private readonly Roles _rol;
+    private readonly IAutenticarseDat _autenticarseDat;
+
     private readonly IParametersInMemory _parameters;
 
-    public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters )
+    public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken,
+        IAutenticarseDat autenticarseDat, 
+        IOptionsMonitor<Roles> options, 
+        IParametersInMemory parameters )
     {
         _generarToken = generarToken;
         _rol = options.CurrentValue;
+        _autenticarseDat = autenticarseDat;
 
         _parameters = parameters;
     }
@@ -46,6 +54,25 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 operaion,
                 claims,
                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
+            if (!String.IsNullOrEmpty(respuesta.str_token))
+            {
+                var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada( );
+                var ClaveSecreta = Guid.NewGuid( ).ToString( );
+                var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(request.header))!;
+
+               
+                respuesta.str_clave_secreta = ClaveSecreta;
+
+                reqAddKeys.str_ente = request.header.str_ente!;
+                reqAddKeys.str_modulo = KeyCreate.str_modulo!;
+                reqAddKeys.str_exponente = KeyCreate.str_exponente!;
+                reqAddKeys.str_clave_secreta = ClaveSecreta!;
+                reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
+                reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(16);
+                await _autenticarseDat.AddKeys(reqAddKeys);
+
+            }
+
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token Creado Correctamente";

@@ -4,7 +4,7 @@ namespace Application.ParametrosSeguridad
 {
     public class ResGetParametrosSeguridad : ResComun
     {
-        public DatosLlaveRespuesta datos_llave { get; set; } = new();
+        public DatosLlaveRespuesta datos_parametros { get; set; } = new();
 
       
     }
