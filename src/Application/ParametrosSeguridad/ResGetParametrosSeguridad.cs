@@ -13,8 +13,8 @@ namespace Application.ParametrosSeguridad
  
     public class DatosLlaveRespuesta
     {
-        public string? str_modulo { get; set; }
-        public string? str_exponente { get; set; }
+        public string? str_mod { get; set; }
+        public string? str_exp { get; set; }
 
     }
 

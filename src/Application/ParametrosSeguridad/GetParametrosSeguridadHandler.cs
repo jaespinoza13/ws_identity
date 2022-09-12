@@ -40,8 +40,8 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
                 _memoryCache.Set<DateTime>("Date_" + reqGetParametrosSeguridad.str_nemonico_canal, DateTime.Now);
             }
             var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqGetParametrosSeguridad.str_nemonico_canal);
-            respuesta.datos_llave.str_modulo = Key.str_modulo;
-            respuesta.datos_llave.str_exponente = Key.str_exponente;
+            respuesta.datos_llave.str_mod = Key.str_modulo;
+            respuesta.datos_llave.str_exp = Key.str_exponente;
             respuesta.str_res_codigo = "000";
 
 
