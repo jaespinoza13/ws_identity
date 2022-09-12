@@ -77,8 +77,8 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(reqValidaInfo))!;
 
-                respuesta.datos_recuperacion!.str_mod = KeyCreate.str_modulo;
-                respuesta.datos_recuperacion.str_exp = KeyCreate.str_exponente;
+                respuesta.datos_recuperacion!.str_mod = KeyCreate.str_modulo!;
+                respuesta.datos_recuperacion.str_exp = KeyCreate.str_exponente!;
                 respuesta.str_clave_secreta = ClaveSecreta;
 
                 reqAddKeys.str_ente = respuesta.datos_recuperacion.str_ente!;
