@@ -61,16 +61,16 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                         new Claim( ClaimTypes.Role, _rol.InvitadoExterno),
                         new Claim( ClaimTypes.NameIdentifier,   autenticarInvitadoExterno.str_ente)
                         });
-            respuesta.str_token = await _generarToken.ConstruirToken(autenticarInvitadoExterno,
+            string str_token = await _generarToken.ConstruirToken(autenticarInvitadoExterno,
                 operaion,
                 claims,
                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
-           
+            if( !String.IsNullOrEmpty (str_token)){
                 var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada( );
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(request.header))!;
 
-               
+
                 respuesta.str_clave_secreta = ClaveSecreta;
 
                 reqAddKeys.str_ente = request.header.str_ente!;
@@ -80,6 +80,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 reqAddKeys.str_llave_privada = KeyCreate.str_xml_priv!;
                 reqAddKeys.str_llave_simetrica = CryptographyAES.GenerarLlaveHexadecimal(16);
                 await _autenticarseDat.AddKeys(reqAddKeys);
+            }
+                
 
             
 
@@ -87,7 +89,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token Creado Correctamente";
             await _logsService.SaveResponseLogs(respuesta, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
-
+            respuesta.str_token = str_token;
 
         }
         catch (Exception)
