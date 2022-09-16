@@ -5,5 +5,5 @@ namespace Application.Common.Interfaces;
 
 public interface IAccesoDat
 {
-    Task<RespuestaTransaccion> ValidaInfoRecuperacion(ReqValidaInfo reqValidaInfo);
+    Task<RespuestaTransaccion> ValidaInfoRecuperacion(ReqValidaInfoRecuparacion reqValidaInfo);
 }

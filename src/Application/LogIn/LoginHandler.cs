@@ -5,7 +5,6 @@ using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Jwt;
-using Domain.Models;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
@@ -14,7 +13,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Application.ParametrosSeguridad;
 using Application.Common.Cryptography;
 using System.Text.Json;
-using static Application.Common.Cryptography.CryptographyRSA;
+using Domain.Entities;
+using Application.Common.Functions;
 
 namespace Application.LogIn;
 
@@ -27,7 +27,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     private readonly IGenerarToken _generarToken;
     private readonly IParametersInMemory _parameters;
     private readonly Roles _roles;
-    private readonly IMemoryCache _memoryCache;
     private readonly ApiSettings _settings;
 
 
@@ -38,8 +37,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                             IGenerarToken generarToken,
                             IParametersInMemory parameters,
                             IOptionsMonitor<Roles> roles,
-                              IOptionsMonitor<ApiSettings> options,
-                             IMemoryCache memoryCache
+                            IOptionsMonitor<ApiSettings> options
                          )
     {
         _logsService = logsService;
@@ -48,7 +46,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         _encrypt = encrypt;
         _generarToken = generarToken;
         _parameters = parameters;
-        _memoryCache = memoryCache;
         _settings = options.CurrentValue;
         _roles = roles.CurrentValue;
     }
@@ -90,7 +87,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                     string str_concat_clave_usuario = reqAutenticarse.str_password + datosSocio.str_ente;
 
                     bln_clave_valida = !String.IsNullOrEmpty(datosLogin.str_password) ?
-                                        ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
+                                        Functions.ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : Functions.ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
 
                 }
                 if (bln_clave_valida)
@@ -152,7 +149,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
             }
             respuesta.str_token = token;
-            if (!String.IsNullOrEmpty(token))
+            if (!String.IsNullOrEmpty(token) && _settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
             {
                 var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada();
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
@@ -183,10 +180,8 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }
     }
-    public static bool ValidarClave ( string claveUsuario, string claveBase )
-    {
-        return BCrypt.Net.BCrypt.Verify(claveUsuario, claveBase);
-    }
+  
+
 }
 
 

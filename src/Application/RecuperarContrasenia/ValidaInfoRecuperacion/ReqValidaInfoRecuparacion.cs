@@ -6,7 +6,7 @@ using static Application.Common.Cryptography.CryptographyRSA;
 namespace Application.Acceso.RecuperarContrasenia;
 
 
-public class ReqValidaInfo : Header, IRequest<ResValidaInfo>
+public class ReqValidaInfoRecuparacion : Header, IRequest<ResValidaInfoRecuperacion>
 {
     public string str_num_documento { get; set; } = String.Empty;
     public void DecryptRSA ( DatosLlaveRsa Key )

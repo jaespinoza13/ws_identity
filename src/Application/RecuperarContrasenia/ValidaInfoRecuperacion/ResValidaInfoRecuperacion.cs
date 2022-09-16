@@ -5,7 +5,7 @@ using Application.Common.ISO20022.Models;
 
 namespace Application.Acceso.RecuperarContrasenia;
 
-public class ResValidaInfo : ResComun
+public class ResValidaInfoRecuperacion : ResComun
 {
     public DatosRecuperacion datos_recuperacion { get; set; } = new( );
     public string? str_token { get; set; }

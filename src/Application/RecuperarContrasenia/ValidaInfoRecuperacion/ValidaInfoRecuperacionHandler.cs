@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace Application.Acceso.RecuperarContrasenia;
 
-public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
+public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecuparacion, ResValidaInfoRecuperacion>
 {
 
     private readonly string _clase;
@@ -25,7 +25,7 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
     private readonly IAutenticarseDat _autenticarseDat;
 
 
-    public ValidaInfoHandler ( ILogs logs, IAccesoDat accesoDat,
+    public ValidaInfoRecuperacionHandler ( ILogs logs, IAccesoDat accesoDat,
           IAutenticarseDat autenticarseDat,
         IWsOtp wsOtp, IParametersInMemory parametersInMemory, IOptionsMonitor<Roles> options, IGenerarToken generarToken )
     {
@@ -39,10 +39,10 @@ public class ValidaInfoHandler : IRequestHandler<ReqValidaInfo, ResValidaInfo>
         _generarToken = generarToken;
     }
 
-    public async Task<ResValidaInfo> Handle ( ReqValidaInfo reqValidaInfo, CancellationToken cancellationToken )
+    public async Task<ResValidaInfoRecuperacion> Handle ( ReqValidaInfoRecuparacion reqValidaInfo, CancellationToken cancellationToken )
     {
         string str_operacion = "VALIDAR_INFO_RECUPERACION";
-        ResValidaInfo respuesta = new( );
+        ResValidaInfoRecuperacion respuesta = new( );
         respuesta.LlenarResHeader(reqValidaInfo);
         await _logs.SaveHeaderLogs(reqValidaInfo, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 

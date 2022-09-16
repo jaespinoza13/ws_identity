@@ -1,4 +1,5 @@
 ﻿using Application.Common.ISO20022.Models;
+using Domain.Entities;
 
 namespace Application.ParametrosSeguridad
 {
@@ -11,11 +12,6 @@ namespace Application.ParametrosSeguridad
 
    
  
-    public class DatosLlaveRespuesta
-    {
-        public string? str_mod { get; set; }
-        public string? str_exp { get; set; }
-
-    }
+   
 
 }

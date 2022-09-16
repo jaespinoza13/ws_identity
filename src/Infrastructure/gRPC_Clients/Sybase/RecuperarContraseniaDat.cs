@@ -28,7 +28,7 @@ public class RecuperarContraseniaDat : IAccesoDat
         _objClienteDal = objClienteDal;
     }
 
-    public async Task<RespuestaTransaccion> ValidaInfoRecuperacion ( ReqValidaInfo reqValidaInfo )
+    public async Task<RespuestaTransaccion> ValidaInfoRecuperacion ( ReqValidaInfoRecuparacion reqValidaInfo )
     {
         var respuesta = new RespuestaTransaccion( );
 

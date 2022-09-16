@@ -26,22 +26,23 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
 
 
     private readonly IAutenticarseDat _autenticarseDat;
-
+    private readonly ApiSettings _settings;
     private readonly IParametersInMemory _parameters;
 
     public AutenticarseInvitadoExtHandler ( IGenerarToken generarToken,
         IAutenticarseDat autenticarseDat, 
-        IOptionsMonitor<Roles> options,
+        IOptionsMonitor<Roles> roles,
+          IOptionsMonitor<ApiSettings> options,
         ILogs logsService,
         IParametersInMemory parameters )
     {
         _clase = GetType( ).Name;
 
         _generarToken = generarToken;
-        _rol = options.CurrentValue;
+        _rol = roles.CurrentValue;
         _autenticarseDat = autenticarseDat;
         _logsService = logsService;
-
+        _settings = options.CurrentValue;
         _parameters = parameters;
     }
 
@@ -65,7 +66,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 operaion,
                 claims,
                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
-            if( !String.IsNullOrEmpty (str_token)){
+            if( !String.IsNullOrEmpty (str_token) && _settings.lst_canales_encriptar.Contains(autenticarInvitadoExterno.str_nemonico_canal))
+            {
                 var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada( );
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(request.header))!;
