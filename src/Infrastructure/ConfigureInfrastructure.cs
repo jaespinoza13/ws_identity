@@ -7,6 +7,7 @@ using Infrastructure.Services;
 using Infrastructure.MemoryCache;
 using Infrastructure.ExternalAPIs;
 using Infrastructure.Common.Interfaces;
+using Application.RecuperarReenvio;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -28,7 +29,7 @@ public static class ConfigureInfrastructure
 
         //CASOS DE USO
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
-
+        services.AddSingleton<IValidarRecuperaciones, ValidarRecuperacionesDat>( );
 
         return services;
     }
