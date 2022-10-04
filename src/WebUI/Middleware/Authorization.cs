@@ -29,6 +29,7 @@ namespace WebUI.Middleware
         {
             string authHeader = httpContext.Request.Headers["Authorization-Mego"];
             var conte = httpContext.Connection.RemoteIpAddress.ToString( );
+            var contes = httpContext.Connection.RemoteIpAddress.ToString();
 
 
             if (authHeader != null && authHeader.StartsWith("Auth-Mego"))
@@ -46,7 +47,7 @@ namespace WebUI.Middleware
             }
             else
             {
-                await ResException(httpContext, "No autorizado" + conte, Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
+                await ResException(httpContext, "No autorizado" + conte +"|" +contes, Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
             }
         }
 
