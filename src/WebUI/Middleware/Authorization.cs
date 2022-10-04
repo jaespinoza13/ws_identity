@@ -28,9 +28,6 @@ namespace WebUI.Middleware
         public async Task Invoke ( HttpContext httpContext )
         {
             string authHeader = httpContext.Request.Headers["Authorization-Mego"];
-            var conte = httpContext.Connection.RemoteIpAddress.ToString( );
-            var contes = httpContext.Connection.LocalIpAddress.ToString( );
-
 
             if (authHeader != null && authHeader.StartsWith("Auth-Mego"))
             {
@@ -42,12 +39,12 @@ namespace WebUI.Middleware
                 }
                 else
                 {
-                    await ResException(httpContext, "Credenciales erroneas"+ conte, Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
+                    await ResException(httpContext, "Credenciales erroneas", Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
                 }
             }
             else
             {
-                await ResException(httpContext, "No autorizado" + conte +"|" +contes, Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
+                await ResException(httpContext, "No autorizado", Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
             }
         }
 
