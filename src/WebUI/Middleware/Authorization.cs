@@ -46,7 +46,7 @@ namespace WebUI.Middleware
             }
             else
             {
-                await ResException(httpContext, "No autorizado", Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
+                await ResException(httpContext, "No autorizado" + conte, Convert.ToInt32(System.Net.HttpStatusCode.Unauthorized), System.Net.HttpStatusCode.Unauthorized.ToString( ));
             }
         }
 
