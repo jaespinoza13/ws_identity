@@ -16,4 +16,3 @@ This layer contains classes for accessing external resources such as file system
 ### WebUI
 
 This layer is a single page application based on Angular 13 and ASP.NET Core 6. This layer depends on both the Application and Infrastructure layers, however, the dependency on Infrastructure is only to support dependency injection. Therefore only *Startup.cs* should reference Infrastructure.
-
