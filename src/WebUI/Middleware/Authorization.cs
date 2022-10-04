@@ -29,7 +29,7 @@ namespace WebUI.Middleware
         {
             string authHeader = httpContext.Request.Headers["Authorization-Mego"];
             var conte = httpContext.Connection.RemoteIpAddress.ToString( );
-            var contes = httpContext.Connection.RemoteIpAddress.ToString();
+            var contes = httpContext.Connection.LocalIpAddress.ToString( );
 
 
             if (authHeader != null && authHeader.StartsWith("Auth-Mego"))
