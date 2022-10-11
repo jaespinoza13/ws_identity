@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.Jwt;
+using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System;
@@ -50,7 +51,8 @@ namespace Application.RecuperarReenvio
 
                 if (res_tran.codigo.Equals("000"))
                 {
-                    respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<ResValidarInfRecupReenvio.DatosRecuperacion>((ConjuntoDatos)res_tran.cuerpo, 0)!;
+
+                    respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<DatosRecuperacion>((ConjuntoDatos)res_tran.cuerpo, 0)!;
                     reqValidarInfRecupReenvio.str_ente = respuesta.datos_recuperacion.int_ente + String.Empty;
                     reqValidarInfRecupReenvio.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
                     respuesta.datos_recuperacion.bl_requiere_otp = _wsOtp.ValidaRequiereOtp(reqValidarInfRecupReenvio, reqValidarInfRecupReenvio.str_id_servicio).Result;
