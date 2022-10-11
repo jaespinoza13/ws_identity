@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Acceso.RecuperarContrasenia;
 using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
+using Application.RecuperarReenvio;
 
 namespace WebUI.Controllers
 {
@@ -43,6 +44,12 @@ namespace WebUI.Controllers
         public Task<ResAutenticarseInvitadoExt> AutenticarseInvitadoExterno ( Header header )
         {
             return Mediator.Send(new AutenticarseInvitadoExtCommand(header));
+        }
+
+        [HttpPost("VALIDAR_INF_RECUP_REENVIO")]
+        public Task<ResValidarInfRecupReenvio> ValidarInfRecupReactiva ( ReqValidarInfRecupReenvio ReqValidarInfRecupReenvio )
+        {
+            return Mediator.Send(ReqValidarInfRecupReenvio);
         }
     }
 }
