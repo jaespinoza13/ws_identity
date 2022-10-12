@@ -27,6 +27,7 @@ namespace Application.RecuperarReenvio
                 str_login = CryptographyAES.Encrypt(str_login!, Key.str_llave_simetrica);
                 datos_recuperacion!.str_id_usuario = CryptographyAES.Encrypt(datos_recuperacion.str_id_usuario!, Key.str_llave_simetrica);
                 datos_recuperacion.str_ente = CryptographyAES.Encrypt(datos_recuperacion.str_ente!, Key.str_llave_simetrica);
+                datos_recuperacion.str_login = CryptographyAES.Encrypt(datos_recuperacion.str_login!, Key.str_llave_simetrica);
             }
         }
 
