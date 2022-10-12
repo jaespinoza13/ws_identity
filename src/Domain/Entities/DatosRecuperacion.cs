@@ -15,7 +15,7 @@ namespace Domain.Entities
         public int int_validar_imagen { get; set; }
         public string str_mod { get; set; } = String.Empty;
         public string str_exp { get; set; } = String.Empty;
-        public string str_token { get; set; } = String.Empty;
+       
 
     }
 }

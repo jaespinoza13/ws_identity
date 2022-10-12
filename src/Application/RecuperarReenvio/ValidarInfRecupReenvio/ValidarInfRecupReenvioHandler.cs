@@ -53,8 +53,8 @@ namespace Application.RecuperarReenvio
                 {
 
                     respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<DatosRecuperacion>((ConjuntoDatos)res_tran.cuerpo, 0)!;
-                    reqValidarInfRecupReenvio.str_ente = respuesta.datos_recuperacion.int_ente + String.Empty;
-                    reqValidarInfRecupReenvio.str_id_usuario = respuesta.datos_recuperacion.int_id_usuario + String.Empty;
+                    reqValidarInfRecupReenvio.str_ente = respuesta.datos_recuperacion.str_ente + String.Empty;
+                    reqValidarInfRecupReenvio.str_id_usuario = respuesta.datos_recuperacion.str_id_usuario + String.Empty;
                     respuesta.datos_recuperacion.bl_requiere_otp = _wsOtp.ValidaRequiereOtp(reqValidarInfRecupReenvio, reqValidarInfRecupReenvio.str_id_servicio).Result;
                     respuesta.str_res_estado_transaccion = "OK";
                     var claims = new ClaimsIdentity(new[]
@@ -73,7 +73,7 @@ namespace Application.RecuperarReenvio
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
 
                 await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
-                respuesta.datos_recuperacion.str_token = token;
+                respuesta.str_token = token;
 
                 return respuesta;
             }

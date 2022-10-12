@@ -46,6 +46,7 @@ namespace WebUI.Controllers
             return Mediator.Send(new AutenticarseInvitadoExtCommand(header));
         }
 
+        [ServiceFilter(typeof(CryptographyAESFilter))]
         [HttpPost("VALIDAR_INF_RECUP_REENVIO")]
         public Task<ResValidarInfRecupReenvio> ValidarInfRecupReactiva ( ReqValidarInfRecupReenvio ReqValidarInfRecupReenvio )
         {
