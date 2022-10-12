@@ -57,6 +57,7 @@ namespace Application.RecuperarReenvio
                 {
 
                     respuesta.datos_recuperacion = Conversions.ConvertConjuntoDatosToClass<DatosRecuperacion>((ConjuntoDatos)res_tran.cuerpo, 0)!;
+                    respuesta.str_login = respuesta.datos_recuperacion.str_login;
                     reqValidarInfRecupReenvio.str_ente = respuesta.datos_recuperacion.str_ente + String.Empty;
                     reqValidarInfRecupReenvio.str_id_usuario = respuesta.datos_recuperacion.str_id_usuario + String.Empty;
                     respuesta.datos_recuperacion.bl_requiere_otp = _wsOtp.ValidaRequiereOtp(reqValidarInfRecupReenvio, reqValidarInfRecupReenvio.str_id_servicio).Result;
