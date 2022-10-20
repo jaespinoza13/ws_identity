@@ -2,16 +2,16 @@ pipeline {
     
  agent {
         node {
-            label 'web-service-development-server'
+            label 'web-service-production-server'
         }
     }
 
     environment {
-        VERSION_PRODUCCION  = '3.0.0'
-        VERSION_ACTUAL      = '1.0.0'
-        NOMBRE_CONTENEDOR   = 'api-identity-des-encriptar-info-lmorocho'
-        NOMBRE_IMAGEN       = 'ws_identity_des_encriptar_info_lmorocho'
-        PUERTO              = '5316'
+        VERSION_PRODUCCION  = '1.0.0'
+        VERSION_ACTUAL      = '0.0.0'
+        NOMBRE_CONTENEDOR   = 'servicio-identity'
+        NOMBRE_IMAGEN       = 'ws_identity'
+        PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsIdentity'
     }
