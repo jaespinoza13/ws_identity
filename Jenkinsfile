@@ -1,14 +1,14 @@
 pipeline {
     
- agent {
+    agent {
         node {
             label 'web-service-production-server'
         }
     }
 
     environment {
-        VERSION_PRODUCCION  = '1.0.0'
-        VERSION_ACTUAL      = '0.0.0'
+        VERSION_DESPLIEGUE  = '1.0.0'
+        VERSION_PRODUCCION  = '0.0.0'
         NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '9010'
@@ -20,27 +20,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building..'
-                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION} --no-cache .'
+                echo 'Building ...'
+                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE} --no-cache .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing..'
+                echo 'Testing ...'
             }
         }
 
         stage('Clean') {
             steps {
-                echo 'Cleaning..'
+                echo 'Cleaning ...'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/  \
@@ -58,13 +58,14 @@ pipeline {
                         -e ApiSettings__Endpoints__servicio_encrypt=${ENDPOINT_WS_ENCRYPT} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_identity=${AUTH_WS_IDENTITY} \
-                        ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
+                        ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
         }
+
         stage('Restart') {
             steps {
-                echo 'Deploying....'
+                echo 'Restarting ...'
                 sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }
