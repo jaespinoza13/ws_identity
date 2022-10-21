@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "AccesoDatosGrpcMongo.Neg";
+
+package datosdal;
+
+service DALMongo {
+  rpc insertar_documento(DatosSolicitud) returns(DatosRespuesta);
+  rpc buscar_documentos(DatosSolicitud) returns(DatosRespuesta);
+  rpc actualizar_documento(DatosSolicitud) returns(DatosRespuesta);
+  rpc actualizar_documento_avanzado(DatosSolicitud) returns(DatosRespuesta);
+  rpc buscar_documentos_avanzado(DatosSolicitud) returns(DatosRespuesta);
+  rpc add_logs(DatosSolicitud) returns(DatosRespuesta);
+
+}
+
+  message DatosSolicitud {
+  string strNameBD=1; 
+  string nombreColeccion=2; 
+  string filter=3; 
+  string sol_tran=4; 
+  }
+  message DatosRespuesta {
+  string mensaje=1;
+  }

@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option csharp_namespace = "AccesoDatosGrpcAse.Neg";
+
+package datosdal;
+
+service DAL {
+  rpc ExecuteDataSet (DatosSolicitud) returns (DatosRespuesta);
+  rpc ExecuteDataSetOld (DatosSolicitud) returns (DatosRespuesta);
+  rpc ExecuteNonQuery (DatosSolicitud) returns (DatosRespuestaNonQuery);
+}
+
+enum TipoDato {
+  desconocido = 0;
+  BigDateTime = 1;
+  BigInt = 2;
+  Binary = 3;
+  Bit = 4;
+  Char = 5;
+  Date = 6;
+  DateTime = 7;
+  Decimal = 8;
+  Double = 9;
+  Integer = 10;
+  Image = 11;
+  Money = 12;
+  NChar = 13;
+  Numeric = 14;
+  NVarChar = 15;
+  Real = 16;
+  SmallDateTime = 17;
+  SmallInt = 18;
+  SmallMoney = 19;
+  Text = 20;
+  Unitext = 21;
+  Time = 22;
+  TimeStamp = 23;
+  TinyInt = 24;
+  UniChar = 25;
+  UniVarChar = 26;
+  UnsignedBigInt = 27;
+  UnsignedInt = 28;
+  UnsignedSmallInt = 29;
+  Unsupported = 30;
+  VarBinary = 31;
+  VarChar = 32;
+}
+
+message ParametroEntrada {
+  string strNameParameter = 1;
+  TipoDato tipoDato = 2;
+  string objValue = 3;
+}
+
+message ParametroSalida {
+  string strNameParameter = 1;
+  TipoDato tipoDato = 2;
+  int32 size = 3;
+}
+
+message DatosSolicitud {
+  repeated ParametroEntrada listaPEntrada = 1;
+  repeated ParametroSalida listaPSalida = 2;
+  string nombreSP = 3;
+  string nombreBD = 4;
+  string cl = 5;
+}
+
+message ParametroSalidaValores {
+  string strNameParameter = 1;
+  string objValue = 2;
+}
+
+message Resultado {
+  string nombreCampo = 1;
+  string valor = 2;
+}
+
+message Fila {
+  repeated Columna listaFilas = 1;
+}
+
+message Columna {
+  repeated Resultado listaColumnas = 1;
+}
+
+message DatosRespuesta {
+  repeated ParametroSalidaValores listaPSalidaValores = 1;
+  int32 numRetorno = 2;
+  repeated Fila listaTablas = 3;
+}
+
+message DatosRespuestaNonQuery {
+  repeated ParametroSalidaValores listaPSalidaValores = 1;
+  int32 numRetorno = 2;
+  int32 numAfectados = 3;
+}
