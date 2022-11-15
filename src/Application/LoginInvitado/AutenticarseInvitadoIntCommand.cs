@@ -37,7 +37,7 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
                         new Claim( ClaimTypes.Role, _rol.InvitadoInterno),
                         new Claim( ClaimTypes.NameIdentifier,   autenticarseInvitadoInterno.str_login)
                         });
-            respuesta.str_token = await _generarToken.ConstruirToken(autenticarseInvitadoInterno, operaion, claims, 1);
+            respuesta.str_token = await _generarToken.ConstruirToken(autenticarseInvitadoInterno, operaion, claims, 5);
 
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
