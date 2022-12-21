@@ -2,7 +2,7 @@ pipeline {
     
     agent {
         node {
-            label 'web-service-production-server'
+            label 'web-service-development-server'
         }
     }
 

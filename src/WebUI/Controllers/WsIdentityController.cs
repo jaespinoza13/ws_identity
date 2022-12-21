@@ -5,6 +5,7 @@ using Application.Acceso.RecuperarContrasenia;
 using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
 using Application.RecuperarReenvio;
+using Application.LogInMegomovil.LogInCredenciales;
 
 namespace WebUI.Controllers
 {
@@ -51,6 +52,12 @@ namespace WebUI.Controllers
         public Task<ResValidarInfRecupReenvio> ValidarInfRecupReactiva ( ReqValidarInfRecupReenvio ReqValidarInfRecupReenvio )
         {
             return Mediator.Send(ReqValidarInfRecupReenvio);
+        }
+
+        [HttpPost("VALIDAR_LOGIN_APP")]
+        public Task<ResValidarLogin> getValidarCredencialesApp ( ReqValidarLogin reqValidarLogin )
+        {
+            return Mediator.Send(reqValidarLogin);
         }
     }
 }

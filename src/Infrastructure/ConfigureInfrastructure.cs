@@ -27,6 +27,7 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IWsOtp, WsOtp>( );
         services.AddSingleton<IOtpDat, OtpDat>( );
         services.AddSingleton<IKeysDat , KeysDat>( );
+        services.AddSingleton<IAutenticarseMegomovilDat, AutenticarseMegomovilDat>( );
 
         //CASOS DE USO
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
