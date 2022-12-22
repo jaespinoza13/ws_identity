@@ -6,6 +6,7 @@ using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
 using Application.RecuperarReenvio;
 using Application.LogInMegomovil.LogInCredenciales;
+using Application.LogInMegomovil.LoginInHuella;
 
 namespace WebUI.Controllers
 {
@@ -56,6 +57,11 @@ namespace WebUI.Controllers
 
         [HttpPost("VALIDAR_LOGIN_APP")]
         public Task<ResValidarLogin> getValidarCredencialesApp ( ReqValidarLogin reqValidarLogin )
+        {
+            return Mediator.Send(reqValidarLogin);
+        }
+        [HttpPost("VALIDAR_HUELLA_APP")]
+        public Task<ResValidarHuella> getValidarHuellaApp ( ReqValidarHuella reqValidarLogin )
         {
             return Mediator.Send(reqValidarLogin);
         }

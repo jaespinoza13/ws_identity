@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogIn;
+using Application.LogInMegomovil.LoginInHuella;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
@@ -81,23 +82,23 @@ namespace Infrastructure.gRPC_Clients.Sybase
         /// </summary>
         /// <param name="str_login"></param>
         /// <returns></returns>
-        public async Task<RespuestaTransaccion> getAutenticarHuellaFaceID ( Header header )
+        public async Task<RespuestaTransaccion> getAutenticarHuellaFaceID ( ReqValidarHuella header )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion( );
             try
             {
                 var ds = new DatosSolicitud( );
 
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "str_login", TipoDato = TipoDato.VarChar, ObjValue = header.str_login });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "str_canal", TipoDato = TipoDato.VarChar, ObjValue = header.str_nemonico_canal });
-                //ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "str_identificador", TipoDato = TipoDato.VarChar, ObjValue = header.str_identificador });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "str_terminal", TipoDato = TipoDato.VarChar, ObjValue = header.str_ip_dispositivo });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "str_usuario", TipoDato = TipoDato.VarChar, ObjValue = "USR_BMO" });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "int_sistema", TipoDato = TipoDato.Integer, ObjValue = header.str_id_sistema });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "int_oficina", TipoDato = TipoDato.Integer, ObjValue = "1" });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = header.str_login });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_canal", TipoDato = TipoDato.VarChar, ObjValue = header.str_nemonico_canal });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_identificador", TipoDato = TipoDato.VarChar, ObjValue = header.str_identificador });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_terminal", TipoDato = TipoDato.VarChar, ObjValue = header.str_ip_dispositivo });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_usuario", TipoDato = TipoDato.VarChar, ObjValue = "USR_BMO" });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = header.str_id_sistema });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_oficina", TipoDato = TipoDato.Integer, ObjValue = "1" });
 
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "error_cod", TipoDato = TipoDato.Integer });
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error_cod", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error", TipoDato = TipoDato.VarChar });
 
                 ds.NombreSP = "get_huella_autenticar";
                 ds.NombreBD = "meg_appmovil";

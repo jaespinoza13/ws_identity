@@ -15,4 +15,10 @@ namespace Domain.Entities
         public string lgc_estado { get; set; } = "";
         public int int_usr_migrado { get; set; } = 0;
     }
+    public class DatosHuellaMegomovil
+    {
+        public int lgc_pk_id { get; set; } = 0;
+        public string lgd_huella_codigo { get; set; } = "";
+        public string lgc_ente { get; set; } = "";
+    }
 }
