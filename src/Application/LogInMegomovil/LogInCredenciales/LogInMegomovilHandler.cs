@@ -67,7 +67,7 @@ public class LogInMegomovilHandler : IRequestHandler<ReqValidarLogin, ResValidar
 
                 if (autenticar.int_usr_migrado == 1) autenticar.lgc_ente = "";
 
-                string str_pass_val = autenticar.lgc_clave ?? autenticar.lgc_clave_tmp;
+                string str_pass_val = String.IsNullOrEmpty(autenticar.lgc_clave.Trim()) ? autenticar.lgc_clave_tmp : autenticar.lgc_clave;
                 string srt_pass_act = reqAutenticarse.str_password + autenticar.lgc_ente;
 
                 bool bln_clave_valida = Functions.ValidarClave(srt_pass_act, str_pass_val);
