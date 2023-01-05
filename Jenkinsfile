@@ -9,9 +9,9 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-identity'
-        NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '9010'
+        NOMBRE_CONTENEDOR   = 'servicio-identity-movil'
+        NOMBRE_IMAGEN       = 'ws_identity_movil'
+        PUERTO              = '6014'
         PUERTO_CONTENEDOR   = '80'
         RUTA_LOGS           = '/app/wsIdentity'
     }

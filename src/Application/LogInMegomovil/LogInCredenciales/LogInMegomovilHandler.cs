@@ -64,6 +64,7 @@ public class LogInMegomovilHandler : IRequestHandler<ReqValidarLogin, ResValidar
                 var autenticar = Conversions.ConvertConjuntoDatosToClass<DatosAutenticarMegomovil>((ConjuntoDatos)res_tran.cuerpo, 0);
 
                 string str_ente = autenticar.lgc_ente;
+                string str_id_usuario = autenticar.lgc_pk_id.ToString( )!;
 
                 if (autenticar.int_usr_migrado == 1) autenticar.lgc_ente = "";
 
@@ -77,7 +78,8 @@ public class LogInMegomovilHandler : IRequestHandler<ReqValidarLogin, ResValidar
                     var claims = new ClaimsIdentity(new[]
                         {
                         new Claim( ClaimTypes.Role,  _roles.Socio),
-                        new Claim( ClaimTypes.NameIdentifier, str_ente!)
+                        new Claim( ClaimTypes.NameIdentifier, str_ente!),
+                        new Claim( ClaimTypes.Sid, str_id_usuario)
                         });
 
                     string token = await _generarToken.ConstruirToken(reqAutenticarse,
@@ -85,7 +87,7 @@ public class LogInMegomovilHandler : IRequestHandler<ReqValidarLogin, ResValidar
                                                             claims,
                                                             Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqAutenticarse.str_nemonico_canal.ToUpper( )).str_valor_ini)
                                                             );
-                    respuesta.str_id_usuario = autenticar.lgc_pk_id.ToString( )!;
+                    respuesta.str_id_usuario = str_id_usuario;
                     respuesta.str_ente = str_ente;
                     respuesta.str_token = token;
                     str_clave = BCrypt.Net.BCrypt.HashPassword(srt_pass_act);
