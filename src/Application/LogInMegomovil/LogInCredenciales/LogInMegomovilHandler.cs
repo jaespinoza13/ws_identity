@@ -100,9 +100,9 @@ public class LogInMegomovilHandler : IRequestHandler<ReqValidarLogin, ResValidar
                 }
             }
 
+            respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
-            respuesta.str_res_codigo = res_tran.codigo;
 
             await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             respuesta.str_password = str_clave;
