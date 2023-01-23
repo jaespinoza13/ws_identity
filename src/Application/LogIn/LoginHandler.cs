@@ -110,10 +110,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 else
                 {
                     //Clave incorrecta
-                    respuesta.str_res_codigo = "1054";
-                    res_tran.diccionario["str_error"] = _parameters.FindErrorCode("1054").str_descripcion;
+                    //respuesta.str_res_codigo = "1054";
+                    //res_tran.diccionario["str_error"] = _parameters.FindErrorCode("1054").str_descripcion;
                     reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
-                    await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
+                    var res_tran_intentos=await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
+                    respuesta.str_res_codigo = res_tran_intentos.codigo.Equals("414") ? res_tran_intentos.codigo: "1054";
+                    res_tran.diccionario["str_error"] = res_tran_intentos.codigo.Equals("414") ? res_tran_intentos.diccionario["str_error"] : _parameters.FindErrorCode("1054").str_descripcion;
                 }
 
             }
@@ -144,9 +146,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
 
                 //Clave incorrecta
-                respuesta.str_res_codigo = "1054";
+                //respuesta.str_res_codigo = "1054";
                 reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
-                await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
+                var res_tran_intentos = await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
+                respuesta.str_res_codigo = res_tran_intentos.codigo.Equals("414") ? res_tran_intentos.codigo : "1054";
+                res_tran.diccionario["str_error"] = res_tran_intentos.codigo.Equals("414") ? res_tran_intentos.diccionario["str_error"] : _parameters.FindErrorCode("1054").str_descripcion;
+
             }
             respuesta.str_token = token;
             if (!String.IsNullOrEmpty(token) && _settings.lst_canales_encriptar.Contains(reqAutenticarse.str_nemonico_canal))
