@@ -79,11 +79,10 @@ internal static class Functions
 
             var data = Encoding.UTF8.GetBytes(str_datos.ToString( ));
 
-
             ECDsa eCDsa = ECDsa.Create();
+            eCDsa.ImportECPrivateKey(key,out _);
 
-            //bln_respuesta = eCDsa.VerifyData(data, signature, HashAlgorithmName.SHA256);
-            bln_respuesta = eCDsa.VerifyData(data, signature, HashAlgorithmName.SHA256);
+            bln_respuesta = eCDsa.VerifyData(data, signature, HashAlgorithmName.SHA1);
 
 
         }
