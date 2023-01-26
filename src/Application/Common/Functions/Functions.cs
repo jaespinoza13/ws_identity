@@ -79,10 +79,12 @@ internal static class Functions
 
             var data = Encoding.UTF8.GetBytes(str_datos.ToString( ));
 
-            ECDsa eCDsa = ECDsa.Create();
-            eCDsa.ImportECPrivateKey(key,out _);
+            ECParameters ecParameters = ConvertSecp256r1PublicKeyToECParameters(str_clave_publica);     // Replaced!
 
-            bln_respuesta = eCDsa.VerifyData(data, signature, HashAlgorithmName.SHA1);
+            // Verify the signature
+            var eCDsa = ECDsa.Create( );
+            eCDsa.ImportParameters(ecParameters);
+            bln_respuesta = eCDsa.VerifyData(data, signature, HashAlgorithmName.SHA256);
 
 
         }
@@ -92,6 +94,30 @@ internal static class Functions
         }
         return bln_respuesta;
     }
+    private static readonly byte[] s_secp256r1Prefix = Convert.FromBase64String("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE");
+    private static ECParameters ConvertSecp256r1PublicKeyToECParameters ( string base64 )
+    {
+        byte[] subjectPublicKeyInfo = Convert.FromBase64String(base64);
 
+        if (subjectPublicKeyInfo.Length != 91)
+            throw new InvalidOperationException( );
+
+        byte[] prefix = s_secp256r1Prefix;
+
+        if (!subjectPublicKeyInfo.Take(prefix.Length).SequenceEqual(prefix))
+            throw new InvalidOperationException( );
+
+        byte[] x = new byte[32];
+        byte[] y = new byte[32];
+        Buffer.BlockCopy(subjectPublicKeyInfo, prefix.Length, x, 0, x.Length);
+        Buffer.BlockCopy(subjectPublicKeyInfo, prefix.Length + x.Length, y, 0, y.Length);
+
+        ECParameters ecParameters = new ECParameters( );
+        ecParameters.Curve = ECCurve.NamedCurves.nistP256; // aka secp256r1 aka  prime256v1
+        ecParameters.Q.X = x;
+        ecParameters.Q.Y = y;
+
+        return ecParameters;
+    }
 
 }
