@@ -52,7 +52,7 @@ namespace Application.LogInMegomovil.LoginInHuella
             respuesta.LlenarResHeader(reqAutenticarse);
             string password = reqAutenticarse.str_password;
             reqAutenticarse.str_password = String.Empty;
-            //await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             reqAutenticarse.str_password = password;
 
             try
@@ -96,7 +96,7 @@ namespace Application.LogInMegomovil.LoginInHuella
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
                 respuesta.str_res_codigo = res_tran.codigo;
 
-                //await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+                await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 respuesta.str_password = str_clave;
                 return respuesta;
 
