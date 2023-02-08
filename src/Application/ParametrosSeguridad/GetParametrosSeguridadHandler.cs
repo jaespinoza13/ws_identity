@@ -12,14 +12,18 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
     public readonly ILogs _logsService;
     private readonly string str_clase;
     public readonly IMemoryCache _memoryCache;
+    private readonly IParametersInMemory _parameters;
 
 
 
-    public GetParametrosSeguridadHandler ( ILogs logsService, IMemoryCache memoryCache )
+
+    public GetParametrosSeguridadHandler ( ILogs logsService, IMemoryCache memoryCache, IParametersInMemory parameters )
     {
         this._logsService = logsService;
         this.str_clase = GetType().FullName!;
         this._memoryCache = memoryCache;
+        _parameters = parameters;
+
     }
 
     public async Task<ResGetParametrosSeguridad> Handle(ReqGetParametrosSeguridad reqGetParametrosSeguridad, CancellationToken cancellationToken)
@@ -42,6 +46,9 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
             var Key = _memoryCache.Get<DatosLlaveRsa>("Key_" + reqGetParametrosSeguridad.str_nemonico_canal);
             respuesta.datos_parametros.str_mod = Key.str_modulo;
             respuesta.datos_parametros.str_exp = Key.str_exponente;
+            respuesta.datos_parametros.int_t_inac = Convert.ToInt32(_parameters.FindParametro("POL_TMP_MAX_INACTIVIDAD_" + reqGetParametrosSeguridad.str_nemonico_canal.ToUpper( )).str_valor_ini);
+            respuesta.datos_parametros.int_t_otp = Convert.ToInt32(_parameters.FindParametro("TIEMPO_REG_OTP_" + reqGetParametrosSeguridad.str_nemonico_canal.ToUpper( )).str_valor_ini);
+
             respuesta.str_res_codigo = "000";
 
 
