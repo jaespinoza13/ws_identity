@@ -8,6 +8,7 @@ using Infrastructure.MemoryCache;
 using Infrastructure.ExternalAPIs;
 using Infrastructure.Common.Interfaces;
 using Application.RecuperarReenvio;
+using Application.LogInMegomovil;
 
 namespace Microsoft.Extensions.DependencyInjection;
 public static class ConfigureInfrastructure
@@ -28,6 +29,8 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IOtpDat, OtpDat>( );
         services.AddSingleton<IKeysDat , KeysDat>( );
         services.AddSingleton<IAutenticarseMegomovilDat, AutenticarseMegomovilDat>( );
+        services.AddSingleton<ICifradoMegomovil, CifradoMegomovil>( );
+        services.AddSingleton<IKeysMegomovilDat, KeysMegomovilDat>( );
 
         //CASOS DE USO
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );

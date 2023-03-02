@@ -4,7 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogIn;
-using Application.LogInMegomovil.LoginInHuella;
+using Application.LogInMegomovil;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
@@ -50,7 +50,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error", TipoDato = TipoDato.VarChar });
 
                 ds.NombreSP = "get_login_autenticar";
-                ds.NombreBD = "meg_appmovil";
+                ds.NombreBD = _settings.DB_meg_appmovil;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
 
@@ -82,7 +82,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
         /// </summary>
         /// <param name="str_login"></param>
         /// <returns></returns>
-        public async Task<RespuestaTransaccion> getAutenticarHuellaFaceID ( ReqValidarHuella header )
+        public async Task<RespuestaTransaccion> getAutenticarHuellaFaceID ( ReqValidarLogin header )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion( );
             try
@@ -101,7 +101,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error", TipoDato = TipoDato.VarChar });
 
                 ds.NombreSP = "get_huella_autenticar";
-                ds.NombreBD = "meg_appmovil";
+                ds.NombreBD = _settings.DB_meg_appmovil;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
 

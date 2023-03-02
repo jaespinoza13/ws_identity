@@ -5,8 +5,7 @@ using Application.Acceso.RecuperarContrasenia;
 using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
 using Application.RecuperarReenvio;
-using Application.LogInMegomovil.LogInCredenciales;
-using Application.LogInMegomovil.LoginInHuella;
+using Application.LogInMegomovil;
 
 namespace WebUI.Controllers
 {
@@ -56,14 +55,20 @@ namespace WebUI.Controllers
         }
 
         [HttpPost("VALIDAR_LOGIN_APP")]
-        public Task<ResValidarLogin> getValidarCredencialesApp ( ReqValidarLogin reqValidarLogin )
+        public IActionResult getValidarCredencialesApp ( object reqValidarLogin )
         {
-            return Mediator.Send(reqValidarLogin);
+            string str_identificador = HttpContext.Request.Headers["identificador"];
+            string str_secreto = HttpContext.Request.Headers["secreto"];
+            var respuesta = Mediator.Send(new LogInMegomovilCommand(reqValidarLogin, str_identificador, str_secreto)).Result;
+            return Ok(respuesta);
         }
         [HttpPost("VALIDAR_HUELLA_APP")]
-        public Task<ResValidarHuella> getValidarHuellaApp ( ReqValidarHuella reqValidarLogin )
+        public IActionResult getValidarHuellaApp ( object reqValidarLogin )
         {
-            return Mediator.Send(reqValidarLogin);
+            string str_identificador = HttpContext.Request.Headers["identificador"];
+            string str_secreto = HttpContext.Request.Headers["secreto"];
+            var respuesta = Mediator.Send(new LoginInHuellaCommand(reqValidarLogin, str_identificador, str_secreto)).Result;
+            return Ok(respuesta);
         }
     }
 }

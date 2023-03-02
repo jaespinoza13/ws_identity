@@ -1,19 +1,19 @@
 ﻿
 using System.Security.Cryptography;
 using System.Text;
-using Application.LogInMegomovil.LoginInHuella;
+using Application.LogInMegomovil;
 
 namespace Application.Common.Functions;
 
 internal static class Functions
 {
-   
+    private static readonly byte[] s_secp256r1Prefix = Convert.FromBase64String("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE");
     public static bool ValidarClave ( string claveUsuario, string claveBase )
     {
         return BCrypt.Net.BCrypt.Verify(claveUsuario, claveBase);
     }
 
-    public static bool VerificarHuella ( ReqValidarHuella req_validar_login, string str_clave_publica )
+    public static bool VerificarHuella ( ReqValidarLogin req_validar_login, string str_clave_publica )
     {
         bool bln_respuesta = false;
         try
@@ -93,8 +93,8 @@ internal static class Functions
             throw new Exception("Error al verificar huella " + ex);
         }
         return bln_respuesta;
-    }
-    private static readonly byte[] s_secp256r1Prefix = Convert.FromBase64String("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE");
+    }    
+
     private static ECParameters ConvertSecp256r1PublicKeyToECParameters ( string base64 )
     {
         byte[] subjectPublicKeyInfo = Convert.FromBase64String(base64);
