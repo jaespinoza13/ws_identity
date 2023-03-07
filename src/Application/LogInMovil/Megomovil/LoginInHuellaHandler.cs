@@ -134,6 +134,7 @@ namespace Application.LogInMegomovil.Megomovil
             var header = new Header( );
             header.str_id_transaccion = Guid.NewGuid( ).ToString( );
             header.str_id_servicio = "REQ_VALIDAR_LOGIN";
+            header.str_nemonico_canal = "CANBMO";
 
             string str_result = "";
 
