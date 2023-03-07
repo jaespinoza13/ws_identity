@@ -2,7 +2,7 @@
 using MediatR;
 using System.ComponentModel.DataAnnotations;
 
-namespace Application.LogInMegomovil;
+namespace Application.LogInMegomovil.Megomovil;
 
 public class ReqValidarLogin : Header, IRequest<ResValidarLogin>
 {

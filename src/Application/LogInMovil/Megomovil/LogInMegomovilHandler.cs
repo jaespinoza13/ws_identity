@@ -1,6 +1,4 @@
 ﻿using MediatR;
-
-using Application.Common.Behaviours;
 using Application.Common.Converting;
 using Application.Common.Interfaces;
 using Application.Common.Models;
@@ -8,13 +6,12 @@ using Application.Jwt;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
-using Application.Common.Cryptography;
 using System.Text.Json;
 using Domain.Entities;
 using Application.Common.Functions;
 using Application.Common.ISO20022.Models;
 
-namespace Application.LogInMegomovil;
+namespace Application.LogInMegomovil.Megomovil;
 
 public record LogInMegomovilCommand ( object objTrama, string str_identificador, string str_clave_secreta ) : IRequest<object>;
 public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, object>

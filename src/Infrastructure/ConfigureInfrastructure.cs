@@ -30,7 +30,7 @@ public static class ConfigureInfrastructure
         services.AddSingleton<IKeysDat , KeysDat>( );
         services.AddSingleton<IAutenticarseMegomovilDat, AutenticarseMegomovilDat>( );
         services.AddSingleton<ICifradoMegomovil, CifradoMegomovil>( );
-        services.AddSingleton<IKeysMegomovilDat, KeysMegomovilDat>( );
+        services.AddSingleton<IKeysMovilDat, KeysMovilDat>( );
 
         //CASOS DE USO
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );

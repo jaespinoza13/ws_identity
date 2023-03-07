@@ -1,7 +1,7 @@
 ﻿
 using System.Security.Cryptography;
 using System.Text;
-using Application.LogInMegomovil;
+using Application.LogInMegomovil.Megomovil;
 
 namespace Application.Common.Functions;
 

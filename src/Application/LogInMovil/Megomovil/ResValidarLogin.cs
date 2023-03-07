@@ -1,7 +1,7 @@
 ﻿
 using Application.Common.ISO20022.Models;
 
-namespace Application.LogInMegomovil;
+namespace Application.LogInMegomovil.Megomovil;
 
 public class ResValidarLogin : ResComun
 {

@@ -12,14 +12,14 @@ using static AccesoDatosGrpcAse.Neg.DAL;
 namespace Infrastructure.gRPC_Clients.Sybase
 {
   
-    internal class KeysMegomovilDat : IKeysMegomovilDat
+    internal class KeysMovilDat : IKeysMovilDat
     {
         private readonly ApiSettings _settings;
         private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
 
-        public KeysMegomovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public KeysMovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
@@ -28,7 +28,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             _objClienteDal = objClienteDal;
         } 
 
-        public RespuestaTransaccion getLLavesCifrado( Header reqValidarLogin, string str_identificador )
+        public RespuestaTransaccion getLLavesCifradoMegomovil( Header reqValidarLogin, string str_identificador )
         {
             var respuesta = new RespuestaTransaccion();
 
@@ -65,5 +65,6 @@ namespace Infrastructure.gRPC_Clients.Sybase
             }
             return respuesta;
         }
+
     }
 }

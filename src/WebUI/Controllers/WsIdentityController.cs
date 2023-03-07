@@ -5,7 +5,7 @@ using Application.Acceso.RecuperarContrasenia;
 using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
 using Application.RecuperarReenvio;
-using Application.LogInMegomovil;
+using Application.LogInMegomovil.Megomovil;
 
 namespace WebUI.Controllers
 {

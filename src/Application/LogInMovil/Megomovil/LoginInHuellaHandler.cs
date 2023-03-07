@@ -16,7 +16,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Options;
 
-namespace Application.LogInMegomovil
+namespace Application.LogInMegomovil.Megomovil
 {
     public record LoginInHuellaCommand ( object objTrama, string str_identificador, string str_clave_secreta ) : IRequest<object>;
     public class LoginInHuellaHandler : IRequestHandler<LoginInHuellaCommand, object>

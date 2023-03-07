@@ -6,9 +6,9 @@ using Application.LogInMegomovil;
 
 namespace Application.Common.Interfaces
 {
-    public interface IKeysMegomovilDat
+    public interface IKeysMovilDat
     {
-        RespuestaTransaccion getLLavesCifrado ( Header header, string str_identificador);
+        RespuestaTransaccion getLLavesCifradoMegomovil ( Header header, string str_identificador);
 
     }
 }

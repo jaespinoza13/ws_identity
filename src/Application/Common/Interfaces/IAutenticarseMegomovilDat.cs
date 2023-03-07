@@ -1,9 +1,7 @@
 ﻿
-using Application.Common.Cryptography;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
-using Application.LogIn;
-using Application.LogInMegomovil;
+using Application.LogInMegomovil.Megomovil;
 
 namespace Application.Common.Interfaces
 {
