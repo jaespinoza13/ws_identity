@@ -8,7 +8,7 @@ namespace Application.Common.Interfaces
 {
     public interface IKeysMovilDat
     {
-        RespuestaTransaccion getLLavesCifradoMegomovil ( Header header, string str_identificador);
+        RespuestaTransaccion getLLavesCifradoMovil ( Header header, string str_identificador);
 
     }
 }

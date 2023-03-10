@@ -28,7 +28,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             _objClienteDal = objClienteDal;
         } 
 
-        public RespuestaTransaccion getLLavesCifradoMegomovil( Header reqValidarLogin, string str_identificador )
+        public RespuestaTransaccion getLLavesCifradoMovil( Header header, string str_identificador )
         {
             var respuesta = new RespuestaTransaccion();
 
@@ -38,18 +38,18 @@ namespace Infrastructure.gRPC_Clients.Sybase
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = str_identificador } );
 
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error", TipoDato = TipoDato.VarChar });
-                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error_cod", TipoDato = TipoDato.Integer });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
 
-                ds.NombreSP = "get_llaves_cifrado";
-                ds.NombreBD = _settings.DB_meg_appmovil;
+                ds.NombreSP = "get_llaves_descifrado";
+                ds.NombreBD = getBaseCifrado(header);
 
                 var resultado = _objClienteDal.ExecuteDataSet( ds );
                 var lst_valores = new List<ParametroSalidaValores>();
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add( item );
-                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@error_cod" )!.ObjValue;
-                var str_error = lst_valores.Find( x => x.StrNameParameter == "@error" )!.ObjValue.Trim();
+                var str_codigo = lst_valores.Find( x => x.StrNameParameter == "@int_o_error_cod")!.ObjValue;
+                var str_error = lst_valores.Find( x => x.StrNameParameter == "@str_o_error" )!.ObjValue.Trim();
 
                 respuesta.codigo = str_codigo.ToString().Trim().PadLeft( 3, '0' );
                 respuesta.cuerpo = Funciones.ObtenerDatos( resultado );
@@ -60,10 +60,21 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase(reqValidarLogin, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException(reqValidarLogin.str_id_transaccion )!;
+                _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                throw new ArgumentException(header.str_id_transaccion )!;
             }
             return respuesta;
+        }
+        private string getBaseCifrado ( Header header )
+        {
+            string str_base = "";
+            switch (header.str_nemonico_canal)
+            {
+                case "CANBMO":
+                    str_base = _settings.DB_meg_appmovil!;
+                    break;
+            }
+            return str_base;
         }
 
     }

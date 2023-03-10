@@ -18,7 +18,7 @@ using Microsoft.Extensions.Options;
 
 namespace Application.LogInMegomovil.Megomovil
 {
-    public record LoginInHuellaCommand ( object objTrama, string str_identificador, string str_clave_secreta ) : IRequest<object>;
+    public record LoginInHuellaCommand ( object objTrama, string str_identificador, string str_clave_secreta, string str_id_transaccion ) : IRequest<object>;
     public class LoginInHuellaHandler : IRequestHandler<LoginInHuellaCommand, object>
     {
         private readonly ILogs _logsService;
@@ -62,6 +62,10 @@ namespace Application.LogInMegomovil.Megomovil
                 reqAutenticarse  = getTramaDesencriptada(loginInHuella);
 
                 respuesta.LlenarResHeader(reqAutenticarse);
+
+                respuesta.str_id_transaccion = loginInHuella.str_id_transaccion;
+                reqAutenticarse.str_id_transaccion = loginInHuella.str_id_transaccion;
+
                 string password = reqAutenticarse.str_password;
                 reqAutenticarse.str_password = String.Empty;
                 await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
@@ -132,7 +136,7 @@ namespace Application.LogInMegomovil.Megomovil
         private ReqValidarLogin getTramaDesencriptada ( LoginInHuellaCommand logInMegomovil )
         {
             var header = new Header( );
-            header.str_id_transaccion = Guid.NewGuid( ).ToString( );
+            header.str_id_transaccion = logInMegomovil.str_id_transaccion;
             header.str_id_servicio = "REQ_VALIDAR_LOGIN";
             header.str_nemonico_canal = "CANBMO";
 

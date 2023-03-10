@@ -75,19 +75,17 @@ namespace Application.LogInMegomovil
 
         private void getLlavesCifradoCanal ( Header header, string str_identificador, ref string srt_llave_pub_pri_xml, ref string str_iv )
         {
-            if (header.str_nemonico_canal == "CANBMO")
+            var res_tran = _keysMegomovil.getLLavesCifradoMovil(header, str_identificador);
+
+            if (res_tran.codigo != "000")
             {
-                var res_tran = _keysMegomovil.getLLavesCifradoMegomovil(header, str_identificador);
-
-                if (res_tran.codigo != "000")
-                {
-                    throw new Exception(res_tran.diccionario["str_error"]);
-                }
-
-                var dt = Conversions.ConvertConjuntoDatosToClass<LlavesCifradoMegomovil>((ConjuntoDatos)res_tran.cuerpo);
-
-                FuncionesCifrado.armarLlaves(dt, ref srt_llave_pub_pri_xml, ref str_iv);
+                throw new Exception( header.str_id_transaccion + " " + res_tran.diccionario["str_error"]);
             }
+
+            var dt = Conversions.ConvertConjuntoDatosToClass<LlavesCifradoMovil>((ConjuntoDatos)res_tran.cuerpo);
+
+            srt_llave_pub_pri_xml = dt.str_llv_pub_priv;
+            str_iv = dt.str_iv;
         }
     }
 }

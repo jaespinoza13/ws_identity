@@ -59,7 +59,8 @@ namespace WebUI.Controllers
         {
             string str_identificador = HttpContext.Request.Headers["identificador"];
             string str_secreto = HttpContext.Request.Headers["secreto"];
-            var respuesta = Mediator.Send(new LogInMegomovilCommand(reqValidarLogin, str_identificador, str_secreto)).Result;
+            string str_id_transaccion = HttpContext.Request.Headers["id-transaccion"];
+            var respuesta = Mediator.Send(new LogInMegomovilCommand(reqValidarLogin, str_identificador, str_secreto, str_id_transaccion)).Result;
             return Ok(respuesta);
         }
         [HttpPost("VALIDAR_HUELLA_APP")]
@@ -67,7 +68,8 @@ namespace WebUI.Controllers
         {
             string str_identificador = HttpContext.Request.Headers["identificador"];
             string str_secreto = HttpContext.Request.Headers["secreto"];
-            var respuesta = Mediator.Send(new LoginInHuellaCommand(reqValidarLogin, str_identificador, str_secreto)).Result;
+            string str_id_transaccion = HttpContext.Request.Headers["id-transaccion"];
+            var respuesta = Mediator.Send(new LoginInHuellaCommand(reqValidarLogin, str_identificador, str_secreto, str_id_transaccion)).Result;
             return Ok(respuesta);
         }
     }
