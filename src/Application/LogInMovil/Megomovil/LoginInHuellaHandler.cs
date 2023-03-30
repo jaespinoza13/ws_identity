@@ -124,7 +124,7 @@ namespace Application.LogInMegomovil.Megomovil
                     code = respuesta.str_res_codigo,
                     token = respuesta.str_token
                 };
-                return respuesta;
+                return result;
 
             }
             catch (Exception exception)
