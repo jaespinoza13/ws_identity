@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Security.Claims;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Application.Common.Converting;
 using Application.Common.Functions;
 using Application.Common.Interfaces;
@@ -28,7 +23,6 @@ namespace Application.LogInMegomovil.Megomovil
         private readonly ICifradoMegomovil _cifradoMegomovil;
         private readonly IParametersInMemory _parameters;
         private readonly Roles _roles;
-        private readonly ApiSettings _settings;
         bool encriptado = true;
 
 
@@ -46,7 +40,6 @@ namespace Application.LogInMegomovil.Megomovil
             _autenticarseDat = autenticarseDat;
             _generarToken = generarToken;
             _parameters = parameters;
-            _settings = options.CurrentValue;
             _roles = roles.CurrentValue;
             _cifradoMegomovil = cifradoMegomovil;
         }

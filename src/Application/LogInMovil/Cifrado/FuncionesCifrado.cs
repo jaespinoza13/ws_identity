@@ -36,7 +36,7 @@ namespace Application.LogInMegomovil
             try
             {
                 var rsa = RSA.Create( );
-                rsa.KeySize = 1024;
+                rsa.KeySize = 2048;
                 rsa.FromXmlString(llavePubPriXml);
 
                 var bytes = rsa.Decrypt(datosEncriptados, RSAEncryptionPadding.OaepSHA1);

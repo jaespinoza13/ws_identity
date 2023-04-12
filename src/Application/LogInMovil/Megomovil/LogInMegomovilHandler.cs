@@ -23,7 +23,6 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
     private readonly IGenerarToken _generarToken;
     private readonly IParametersInMemory _parameters;
     private readonly Roles _roles;
-    private readonly ApiSettings _settings;
     bool encriptado = true;
     public LogInMegomovilHandler ( ILogs logsService,
                             IAutenticarseMegomovilDat autenticarseDat,
@@ -39,7 +38,6 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
         _autenticarseDat = autenticarseDat;
         _generarToken = generarToken;
         _parameters = parameters;
-        _settings = options.CurrentValue;
         _roles = roles.CurrentValue;
         _cifradoMegomovil = cifradoMegomovil;
     }
