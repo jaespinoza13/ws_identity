@@ -116,7 +116,8 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
             respuesta.str_token = token;
             respuesta.str_password = str_clave;
             respuesta.str_identificador = reqAutenticarse.str_identificador;
-
+            respuesta.str_remitente = reqAutenticarse.str_remitente;
+            respuesta.str_receptor = reqAutenticarse.str_receptor;
             var result = new
             {
                 trama = getTramaEncriptada(respuesta),
