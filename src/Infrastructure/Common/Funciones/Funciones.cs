@@ -43,6 +43,7 @@ namespace Infrastructure.Common.Funciones
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = header.str_ip_dispositivo });
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_sesion", TipoDato = TipoDato.VarChar, ObjValue = header.str_sesion });
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_mac_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = header.str_mac_dispositivo });
+            ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_pais", TipoDato = TipoDato.VarChar, ObjValue = header.str_pais });
 
             ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
             ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });

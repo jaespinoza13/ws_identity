@@ -23,9 +23,6 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-.sonarqube/
-.sonarlint/
-.vscode/
 
 # Jetbrains Rider cache/options directory
 .idea/
@@ -33,6 +30,10 @@ bld/
 
 # Cache/Directorio de opciones de Visual Studio 2015
 .vs/
+.vscode/
+.sonarqube/
+.sonarlint/
+
 
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
