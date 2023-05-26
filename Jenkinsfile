@@ -7,19 +7,11 @@ pipeline {
     }
 
     environment {
-<<<<<<< HEAD
-        VERSION_DESPLIEGUE  = '1.1.3'
-        VERSION_PRODUCCION  = '1.1.2'
-        NOMBRE_CONTENEDOR   = 'servicio-identity'
-        NOMBRE_IMAGEN       = 'ws_identity'
-        PUERTO              = '9010'
-=======
-        VERSION_DESPLIEGUE  = '1.1.0'
-        VERSION_PRODUCCION  = '1.0.0'
+        VERSION_DESPLIEGUE  = '1.1.1'
+        VERSION_PRODUCCION  = '1.1.0'
         NOMBRE_CONTENEDOR   = 'servicio-identity-movil'
         NOMBRE_IMAGEN       = 'ws_identity_movil'
         PUERTO              = '8010'
->>>>>>> lib_migracion_bmo
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 		= '/config/wsIdentity/'
         RUTA_LOGS           = '/app/wsIdentity'
