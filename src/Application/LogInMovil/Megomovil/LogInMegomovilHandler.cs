@@ -59,7 +59,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
 
             string password = reqAutenticarse.str_password;
             reqAutenticarse.str_password = String.Empty;
-            await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             reqAutenticarse.str_password = password;
 
             RespuestaTransaccion res_tran = await _autenticarseDat.getAutenticarCredenciales(reqAutenticarse);
@@ -109,8 +109,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
-
-            await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
             respuesta.str_token_dispositivo = reqAutenticarse.str_token_dispositivo;
             respuesta.str_token = token;
@@ -130,7 +129,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
         }
         catch (Exception exception)
         {
-            await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
+            _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
             throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }
     }
