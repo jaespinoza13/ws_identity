@@ -109,6 +109,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
             respuesta.str_res_codigo = res_tran.codigo;
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
+            respuesta.dt_fecha_operacion = DateTime.Now;
             _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
             respuesta.str_token_dispositivo = reqAutenticarse.str_token_dispositivo;
@@ -129,6 +130,10 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
         }
         catch (Exception exception)
         {
+            if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
+            {
+                respuesta.str_res_info_adicional = "identificador: " + logInMegomovilCommand.str_identificador + ", id_transaccion: " + logInMegomovilCommand.str_id_transaccion;
+            }
             _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
             throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }

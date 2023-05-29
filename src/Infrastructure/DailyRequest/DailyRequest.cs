@@ -31,6 +31,7 @@ public class DailyRequest : IDailyRequest
 
         try
         {
+            Thread.Sleep( 3000 );
             string str_fecha_diaria = DateTime.Now.ToString("yyyy-MM-dd");
             string str_filtro = "{'str_fecha_solicitud':'" + str_fecha_diaria + "','str_operacion':'" + str_operacion + "'}";
 

@@ -103,6 +103,7 @@ namespace Application.LogInMegomovil.Megomovil
                 respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
                 respuesta.str_res_codigo = res_tran.codigo;
+                respuesta.dt_fecha_operacion = DateTime.Now;
 
                 _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
@@ -123,6 +124,10 @@ namespace Application.LogInMegomovil.Megomovil
             }
             catch (Exception exception)
             {
+                if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
+                {
+                    respuesta.str_res_info_adicional = "identificador: " + loginInHuella.str_identificador + ", id_transaccion: " + loginInHuella.str_id_transaccion;
+                }
                 _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
