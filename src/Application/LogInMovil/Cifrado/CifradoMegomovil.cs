@@ -24,7 +24,7 @@ namespace Application.LogInMegomovil
 
             var bt_llave_encriptada = Convert.FromBase64String(str_clave_secreta);
             var str_llave_desencriptada_str = FuncionesCifrado.Decrypt(srt_llave_pub_pri_xml, bt_llave_encriptada);
-
+            Console.WriteLine("FuncionesCifrado.Decrypt sale: " + header.str_id_transaccion + ", fecha: " + DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null).ToString( ));
             bt_llave_desencriptada_bytes = Convert.FromBase64String(str_llave_desencriptada_str);
             bt_iv = FuncionesCifrado.HexToByteArray(str_iv);
         }
@@ -81,7 +81,7 @@ namespace Application.LogInMegomovil
             {
                 throw new Exception( header.str_id_transaccion + " " + res_tran.diccionario["str_error"]);
             }
-
+            Console.WriteLine("getLlavesCifrado sale: " + header.str_id_transaccion + ", fecha: " + DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null).ToString( ));
             var dt = Conversions.ConvertConjuntoDatosToClass<LlavesCifradoMovil>((ConjuntoDatos)res_tran.cuerpo);
 
             srt_llave_pub_pri_xml = dt.str_llv_pub_priv;

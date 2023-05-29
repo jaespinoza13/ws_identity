@@ -150,9 +150,11 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
 
         if (encriptado)
         {
+            Console.WriteLine("getLlavesCifrado: " + logInMegomovil.str_id_transaccion + ", fecha: " + DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null).ToString());
             _cifradoMegomovil.getLlavesCifrado(header, logInMegomovil.str_identificador, logInMegomovil.str_clave_secreta);
             var dicTrama = JsonSerializer.Deserialize<Dictionary<string, string>>(JsonSerializer.Serialize(logInMegomovil.objTrama))!;
             str_result = _cifradoMegomovil.desencriptarTrama(dicTrama["data"]);
+            Console.WriteLine("_cifradoMegomovil.desencriptarTrama sale: " + logInMegomovil.str_id_transaccion + ", fecha: " + DateTime.ParseExact(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss", null).ToString( ));
         }
         else
             str_result = JsonSerializer.Serialize(logInMegomovil.objTrama);
