@@ -69,7 +69,7 @@ internal class OtpDat : IOtpDat
         {
             respuesta.codigo = "003";
             respuesta.diccionario.Add( "str_error", exception.ToString() );
-            await _logsService.SaveExcepcionDataBaseSybase( req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+            _logsService.SaveExcepcionDataBaseSybase( req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
             throw new ArgumentException( req_get_datos.str_id_transaccion )!;
         }
         return respuesta;

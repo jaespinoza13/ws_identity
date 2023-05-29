@@ -17,7 +17,8 @@ public interface IHttpService
                                         string parameters,
                                         string auth,
                                         string authorizationType,
-                                        string str_id_transaccion
+                                        string str_id_transaccion,
+                                         Boolean guardarPeticion = true
                                      );
 
 }
@@ -68,7 +69,8 @@ public class HttpService : IHttpService
                                                         string parameters,
                                                         string auth,
                                                         string authorizationType,
-                                                        string str_id_transaccion )
+                                                        string str_id_transaccion,
+                                                        Boolean guardarPeticion = true )
     {
         try
         {
@@ -102,15 +104,16 @@ public class HttpService : IHttpService
                     cabecera = response.Headers,
                     cuerpo = response.Content.ReadAsStreamAsync( )
                 };
-
-                await _logs.SaveHttpErrorLogs(JsonSerializer.Deserialize<dynamic>(serializedData), MethodBase.GetCurrentMethod( )!.Name, "HttpService", res_servicio, str_id_transaccion);
+                var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
+                await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, "HttpService", res_servicio, str_id_transaccion);
             }
 
             return respuesta;
         }
         catch (Exception ex)
         {
-            var data = JsonSerializer.Deserialize<dynamic>(serializedData);
+            var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
+
             await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, str_clase, ex, str_id_transaccion);
             throw new Exception(data!.str_id_transaccion)!;
         }

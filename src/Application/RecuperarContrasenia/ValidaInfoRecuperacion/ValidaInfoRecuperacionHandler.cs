@@ -45,7 +45,7 @@ public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecupa
         string str_operacion = "VALIDAR_INFO_RECUPERACION";
         ResValidaInfoRecuperacion respuesta = new( );
         respuesta.LlenarResHeader(reqValidaInfo);
-        await _logs.SaveHeaderLogs(reqValidaInfo, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+        _logs.SaveHeaderLogs(reqValidaInfo, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
         string token = String.Empty;
 
@@ -94,14 +94,14 @@ public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecupa
             respuesta.str_res_codigo = resTran.codigo;
             respuesta.str_res_info_adicional = resTran.diccionario["str_error"].ToString( );
 
-            await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
             respuesta.str_token = token;
 
             return respuesta;
         }
         catch (Exception exception)
         {
-            await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
+            _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
             throw new ArgumentException(respuesta.str_id_transaccion);
         }
     }
