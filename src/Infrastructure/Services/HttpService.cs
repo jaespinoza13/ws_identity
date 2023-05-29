@@ -21,6 +21,7 @@ public interface IHttpService
                                          Boolean guardarPeticion = true
                                      );
 
+
 }
 public class HttpService : IHttpService
 {
@@ -113,8 +114,8 @@ public class HttpService : IHttpService
         catch (Exception ex)
         {
             var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
-
             await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, str_clase, ex, str_id_transaccion);
+
             throw new Exception(data!.str_id_transaccion)!;
         }
     }

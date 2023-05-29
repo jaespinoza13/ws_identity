@@ -5,6 +5,7 @@
         public string? DB_meg_megonline { get; set; }
         public string? DB_meg_servicios { get; set; }
         public string? DB_meg_sistemas { get; set; }
+        public string? DB_meg_appmovil { get; set; }
 
 
         public string? client_grpc_sybase { get; set; }
