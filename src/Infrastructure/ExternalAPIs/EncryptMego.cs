@@ -28,7 +28,7 @@ internal class EncryptMego : IEncryptMego
 
         string str_data = JsonSerializer.Serialize(objData);
 
-        HashCobis hashCobis = await _httpService.PostRestServiceDataAsync<HashCobis>(str_data, _settings.servicio_encrypt, String.Empty, String.Empty, String.Empty, str_id_transaccion);
+        HashCobis hashCobis = await _httpService.PostRestServiceDataAsync<HashCobis>(str_data, _settings.servicio_encrypt, String.Empty, String.Empty, String.Empty, str_id_transaccion, false);
         return hashCobis.str_hash_password!;
     }
 }

@@ -31,7 +31,7 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
         string str_operacion = "GET_PARAMETROS_SEGURIDAD";
         var respuesta = new ResGetParametrosSeguridad();
         respuesta.LlenarResHeader( reqGetParametrosSeguridad );
-        _logsService.SaveHeaderLogs( reqGetParametrosSeguridad, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+        _ = _logsService.SaveHeaderLogs(reqGetParametrosSeguridad, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
 
         try
         {
@@ -53,7 +53,7 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
 
 
 
-            _logsService.SaveResponseLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase );
+            _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
             return respuesta;
         }
         catch (Exception exception)
