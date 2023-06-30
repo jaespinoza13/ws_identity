@@ -78,6 +78,9 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
 
+                datosSocio.str_correo = datosSocio.str_correo?.Length >= 5 ? EnmascararCorreoElectronico(datosSocio.str_correo) : datosSocio.str_correo;
+                datosSocio.str_telefono = datosSocio.str_telefono?.Length == 10 ? EnmascararTelefono(datosSocio.str_telefono) : datosSocio.str_telefono;
+
                 datosLogin.str_password = datosLogin.str_password!.Trim( );
                 datosLogin.str_password_temp = datosLogin.str_password_temp!.Trim( );
 
@@ -185,8 +188,41 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }
     }
-  
 
+    public string EnmascararTelefono ( string telefono )
+    {
+        //if (telefono.Length != 10)
+        //{
+        //    throw new ArgumentException("La cadena debe tener 10 letras.");
+        //}
+
+        string primerasTresLetras = telefono.Substring(0, 3);
+        string ultimasDosLetras = telefono.Substring(8, 2);
+        string enmascarado = $"{primerasTresLetras}*****{ultimasDosLetras}";
+
+        return enmascarado;
+    }
+
+    public string EnmascararCorreoElectronico ( string correo )
+    {
+        int longitud = correo.Length;
+        int indiceArroba = correo.IndexOf('@');
+        int indicePunto = correo.LastIndexOf('.');
+        int numPrimerosAsteriscos = indiceArroba - 4;
+        int numSegundosAsteriscos = indicePunto - indiceArroba - 3;
+
+        string primerosDosCaracteres = correo.Substring(0, 2);
+        string primerosAsteriscos = new string('*', numPrimerosAsteriscos >= 1 ? numPrimerosAsteriscos : 2);
+        string segundosAsteriscos = new string('*', numPrimerosAsteriscos >= 0 ? numSegundosAsteriscos : 0);
+        string caracteresAntesArroba = correo.Substring(indiceArroba - 2, 2);
+        string caracterDespuesArroba = correo.Substring(indiceArroba + 1, 1);
+        string caracterAntesPunto = correo.Substring(indicePunto - 1, 1);
+        string caracteresDespuesPunto = correo.Substring(indicePunto + 1);
+
+        string enmascarado = $"{primerosDosCaracteres}{primerosAsteriscos}{caracteresAntesArroba}@{caracterDespuesArroba}{segundosAsteriscos}{caracterAntesPunto}.{caracteresDespuesPunto}";
+
+        return enmascarado;
+    }
 }
 
 
