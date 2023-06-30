@@ -26,7 +26,6 @@ public class RequestControl : IActionFilter
             //CONTROL DE PETICIONES DIARIAS
             var endpoint = context.HttpContext.Request.Path;
             string[] operacion = endpoint.Value!.Split("/");
-            Task.Run(( ) => _dailyRequest.controlPeticionesDiaras(operacion[3].ToUpper( )));
         }
         else
         {
