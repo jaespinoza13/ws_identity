@@ -21,7 +21,7 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
     private readonly Roles _rol;
     private readonly IParametersInMemory _parameters;
 
-    public AutenticarseHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters, )
+    public AutenticarseHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters)
     {
         _generarToken = generarToken;
         _rol = options.CurrentValue;
