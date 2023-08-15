@@ -3,6 +3,7 @@ using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LogIn;
+using Application.LoginUsuarioExterno.UsuarioExterno;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
@@ -100,14 +101,14 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
-        } 
+        }
         public async Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys )
         {
             var respuesta = new RespuestaTransaccion( );
 
             try
             {
-                DatosSolicitud ds = new ( );
+                DatosSolicitud ds = new( );
 
                 Funciones.LlenarDatosAuditoria(ds, reqAddKeys);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente });

@@ -35,6 +35,7 @@ public static class ConfigureInfrastructure
         //CASOS DE USO
         services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
         services.AddSingleton<IValidarRecuperaciones, ValidarRecuperacionesDat>( );
+        services.AddSingleton<IAutenticarseUsuarioExternoDat, AutenticarseUsuarioExternoDat>( );
 
         return services;
     }
