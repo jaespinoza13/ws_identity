@@ -12,6 +12,6 @@ namespace Application.Common.Interfaces
     {
         Task<RespuestaTransaccion> LoginUsuarioExternoDat ( ReqLoginUsuarioExterno reqLoginUsuarioExterno, string claveEncriptada );
         Task<RespuestaTransaccion> SetIntentosFallidos ( ReqLoginUsuarioExterno reqLoginUsuarioExterno );
-        Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys );
+        //Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys );
     }
 }
