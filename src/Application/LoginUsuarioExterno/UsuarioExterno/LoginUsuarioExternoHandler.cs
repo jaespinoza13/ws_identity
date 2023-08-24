@@ -98,12 +98,12 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
                         reqLoginUsuarioExterno.str_id_usuario = datosLogin.str_id_usuario!;
                         var res_tran_intentos = await _autenticarseUsuariosExternosDat.SetIntentosFallidos(reqLoginUsuarioExterno);
                         respuesta.str_res_codigo = res_tran_intentos.codigo.Equals("1046") ? res_tran_intentos.codigo : "1054";
+                        respuesta.str_res_estado_transaccion = res_tran_intentos.diccionario["str_error"];
                         res_tran.diccionario["str_error"] = res_tran_intentos.codigo.Equals("1046") ? res_tran_intentos.diccionario["str_error"] : _parameters.FindErrorCode("1054").str_descripcion;
                     }
 
                 }
-                respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
-                respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
+                respuesta.str_res_info_adicional = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
                 _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 return respuesta;
 
