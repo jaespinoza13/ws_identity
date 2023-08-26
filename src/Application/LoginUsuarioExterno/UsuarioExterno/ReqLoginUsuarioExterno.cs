@@ -20,6 +20,7 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
         [Required]
         //public string str_login { get; set; } = String.Empty;
         public string str_password { get; set; } = String.Empty;
+        public string str_id_usr_ext { get; set; }
 
     }
 }

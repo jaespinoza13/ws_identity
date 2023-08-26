@@ -77,7 +77,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 DatosSolicitud ds = new DatosSolicitud( );
 
                 Funciones.LlenarDatosAuditoria(ds, reqLoginUsuarioExterno);
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ente", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_ente.ToString( ) });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_usr_ext", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_usr_ext.ToString( ) });
 
 
                 ds.NombreSP = "set_intentos_fallidos_usr_ext";
