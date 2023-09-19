@@ -97,7 +97,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error_cod", TipoDato = TipoDato.Integer });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@error", TipoDato = TipoDato.VarChar });
 
-                ds.NombreSP = "get_huella_autenticar"; 
+                ds.NombreSP = "get_huella_autenticar";
                 ds.NombreBD = _settings.DB_meg_appmovil;
 
                 var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
