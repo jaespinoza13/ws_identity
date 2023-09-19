@@ -13,7 +13,7 @@ using Application.Common.ISO20022.Models;
 
 namespace Application.LogInMegomovil.Megomovil;
 
-public record LogInMegomovilCommand ( object objTrama, string str_identificador, string str_clave_secreta, string str_id_transaccion ) : IRequest<object>;
+public record LogInMegomovilCommand ( object objTrama, string str_identificador, string str_clave_secreta, string str_id_transaccion, string str_ip ) : IRequest<object>;
 public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, object>
 {
     private readonly ILogs _logsService;
@@ -52,8 +52,8 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
         {
             reqAutenticarse = getTramaDesencriptada(logInMegomovilCommand);
 
+            reqAutenticarse.str_ip_dispositivo = logInMegomovilCommand.str_ip;
             respuesta.LlenarResHeader(reqAutenticarse);
-
             respuesta.str_id_transaccion = logInMegomovilCommand.str_id_transaccion;
             reqAutenticarse.str_id_transaccion = logInMegomovilCommand.str_id_transaccion;
 

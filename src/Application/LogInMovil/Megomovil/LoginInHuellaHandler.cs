@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 
 namespace Application.LogInMegomovil.Megomovil
 {
-    public record LoginInHuellaCommand ( object objTrama, string str_identificador, string str_clave_secreta, string str_id_transaccion ) : IRequest<object>;
+    public record LoginInHuellaCommand ( object objTrama, string str_identificador, string str_clave_secreta, string str_id_transaccion, string str_ip ) : IRequest<object>;
     public class LoginInHuellaHandler : IRequestHandler<LoginInHuellaCommand, object>
     {
         private readonly ILogs _logsService;
@@ -54,6 +54,7 @@ namespace Application.LogInMegomovil.Megomovil
             {
                 reqAutenticarse  = getTramaDesencriptada(loginInHuella);
 
+                reqAutenticarse.str_ip_dispositivo = loginInHuella.str_ip;
                 respuesta.LlenarResHeader(reqAutenticarse);
 
                 respuesta.str_id_transaccion = loginInHuella.str_id_transaccion;
