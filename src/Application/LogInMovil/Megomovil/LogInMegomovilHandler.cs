@@ -52,7 +52,9 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
         {
             reqAutenticarse = getTramaDesencriptada(logInMegomovilCommand);
 
-            reqAutenticarse.str_ip_dispositivo = logInMegomovilCommand.str_ip;
+            Functions.getRequestHeaders(reqAutenticarse, logInMegomovilCommand.str_ip);
+            string str_huella = reqAutenticarse.str_firma_digital;
+            reqAutenticarse.str_firma_digital = "**********";
             respuesta.LlenarResHeader(reqAutenticarse);
             respuesta.str_id_transaccion = logInMegomovilCommand.str_id_transaccion;
             reqAutenticarse.str_id_transaccion = logInMegomovilCommand.str_id_transaccion;
@@ -61,6 +63,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
             reqAutenticarse.str_password = String.Empty;
             _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             reqAutenticarse.str_password = password;
+            reqAutenticarse.str_firma_digital = str_huella;
 
             RespuestaTransaccion res_tran = await _autenticarseDat.getAutenticarCredenciales(reqAutenticarse);
             respuesta.str_res_codigo = res_tran.codigo;

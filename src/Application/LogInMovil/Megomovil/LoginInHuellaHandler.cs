@@ -54,7 +54,8 @@ namespace Application.LogInMegomovil.Megomovil
             {
                 reqAutenticarse  = getTramaDesencriptada(loginInHuella);
 
-                reqAutenticarse.str_ip_dispositivo = loginInHuella.str_ip;
+                Functions.getRequestHeaders(reqAutenticarse, loginInHuella.str_ip);
+
                 respuesta.LlenarResHeader(reqAutenticarse);
 
                 respuesta.str_id_transaccion = loginInHuella.str_id_transaccion;
