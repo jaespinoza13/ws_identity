@@ -54,15 +54,15 @@ namespace Application.LogInMegomovil.Megomovil
             {
                 reqAutenticarse  = getTramaDesencriptada(loginInHuella);
 
+                string str_huella = reqAutenticarse.str_firma_digital;
+                reqAutenticarse.str_firma_digital = "**********";
                 respuesta.LlenarResHeader(reqAutenticarse);
 
                 respuesta.str_id_transaccion = loginInHuella.str_id_transaccion;
                 reqAutenticarse.str_id_transaccion = loginInHuella.str_id_transaccion;
 
                 string password = reqAutenticarse.str_password;
-                string str_huella = reqAutenticarse.str_firma_digital;
                 reqAutenticarse.str_password = String.Empty;
-                reqAutenticarse.str_firma_digital = "**********";
                 _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 reqAutenticarse.str_password = password;
                 reqAutenticarse.str_firma_digital = str_huella;
