@@ -1,4 +1,4 @@
-pipeline {
+﻿pipeline {
     
     agent {
         node {
@@ -7,13 +7,13 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.0'
-        VERSION_PRODUCCION  = '1.2.1'
+        VERSION_DESPLIEGUE  = '1.3.1'
+        VERSION_PRODUCCION  = '1.3.0'
         NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
-		RUTA_CONFIG 		= '/config/wsIdentity/'
+	RUTA_CONFIG 	    = '/config/wsIdentity/'
         RUTA_LOGS           = '/app/wsIdentity'
     }
     
@@ -35,6 +35,8 @@ pipeline {
             steps {
                 echo 'Cleaning ...'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
+		echo 'Cleaning BMO ...'
+                sh 'docker rm -f servicio-identity-bmo'
             }
         }
 
@@ -43,8 +45,15 @@ pipeline {
                 echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-						-v ${RUTA_LOGS}:/app/Logs/ \
+			-v ${RUTA_LOGS}:/app/Logs/ \
                         -v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
+                        ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
+                    '''
+		echo 'Deploying BMO ...'
+                sh  '''docker run --restart=always -it -dp 9026:${PUERTO_CONTENEDOR} --name servicio-identity-bmo \
+                        -e TZ=${TZ} \
+			-v ${RUTA_LOGS}:/app/Logs/ \
+                        -v ${RUTA_CONFIG}appsettings_bmo.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
