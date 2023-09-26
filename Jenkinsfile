@@ -1,4 +1,4 @@
-﻿pipeline {
+pipeline {
     
     agent {
         node {
@@ -35,7 +35,9 @@
             steps {
                 echo 'Cleaning ...'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
-		echo 'Cleaning BMO ...'
+            }
+            steps {
+                echo 'Cleaning BMO ...'
                 sh 'docker rm -f servicio-identity-bmo'
             }
         }
@@ -45,14 +47,16 @@
                 echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-			-v ${RUTA_LOGS}:/app/Logs/ \
+			            -v ${RUTA_LOGS}:/app/Logs/ \
                         -v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
-		echo 'Deploying BMO ...'
+            }
+            steps{
+                echo 'Deploying BMO ...'
                 sh  '''docker run --restart=always -it -dp 9026:${PUERTO_CONTENEDOR} --name servicio-identity-bmo \
                         -e TZ=${TZ} \
-			-v ${RUTA_LOGS}:/app/Logs/ \
+			            -v ${RUTA_LOGS}:/app/Logs/ \
                         -v ${RUTA_CONFIG}appsettings_bmo.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
