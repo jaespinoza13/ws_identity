@@ -40,8 +40,13 @@ namespace Infrastructure.gRPC_Clients.Sybase
             try
             { 
                 DatosSolicitud ds = new( );
-                Funciones.LlenarDatosAuditoria(ds, reqLoginUsuariosExternos);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = claveEncriptada });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExternos.str_login });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExternos.str_nemonico_canal });
+
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
+
 
                 ds.NombreSP = "get_login_auth_usuario_externo";
                 ds.NombreBD = _settings.DB_meg_servicios;

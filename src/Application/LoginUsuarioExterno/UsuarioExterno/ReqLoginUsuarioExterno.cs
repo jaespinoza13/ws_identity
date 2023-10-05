@@ -14,8 +14,6 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
 {
     public class ReqLoginUsuarioExterno : Header, IRequest<ResLoginUsuarioExterno>
     {
-        // Aqui no se puede desencriptar ya que no sabemos 
-        // si los usuarios externos enviaran encriptaos estos datos
 
         [Required]
         //public string str_login { get; set; } = String.Empty;
