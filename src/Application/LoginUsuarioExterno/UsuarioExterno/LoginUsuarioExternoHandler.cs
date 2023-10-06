@@ -103,7 +103,12 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
                     }
 
                 }
-                respuesta.str_res_info_adicional = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
+                else
+                {
+                    respuesta.str_res_info_adicional = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
+                    respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
+                }
+
                 _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 return respuesta;
 

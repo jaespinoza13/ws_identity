@@ -76,13 +76,19 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public async Task<RespuestaTransaccion> SetIntentosFallidos ( ReqLoginUsuarioExterno reqLoginUsuarioExterno )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            
             try
             {
                 DatosSolicitud ds = new DatosSolicitud( );
 
-                Funciones.LlenarDatosAuditoria(ds, reqLoginUsuarioExterno);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_usr_ext", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_usr_ext.ToString( ) });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_oficina });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_sistema });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuarioExterno.str_login });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_ip_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuarioExterno.str_ip_dispositivo });
+
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
+                ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
 
 
                 ds.NombreSP = "set_intentos_fallidos_usr_ext";
