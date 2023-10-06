@@ -92,6 +92,7 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
                                                                 Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + reqLoginUsuarioExterno.str_nemonico_canal.ToUpper( )).str_valor_ini)
                                                                 );
                         respuesta.str_token = token;
+                        respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
                     }
                     else
                     {
