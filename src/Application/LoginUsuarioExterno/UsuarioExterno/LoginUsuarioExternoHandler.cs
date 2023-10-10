@@ -67,7 +67,7 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
 
                 if (res_tran.codigo.Equals("000"))
                 {
-
+                     
                     datosLogin = Conversions.ConvertConjuntoDatosToClass<LoginUsrExterno>((ConjuntoDatos)res_tran.cuerpo, 0);
                     datosLogin.str_password = datosLogin.str_password!.Trim( );
 
