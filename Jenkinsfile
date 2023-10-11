@@ -7,13 +7,13 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.1'
-        VERSION_PRODUCCION  = '1.3.0'
+        VERSION_DESPLIEGUE  = '1.3.2'
+        VERSION_PRODUCCION  = '1.3.1'
         NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
-	RUTA_CONFIG 	    = '/config/wsIdentity/'
+		RUTA_CONFIG 	    = '/config/wsIdentity/'
         RUTA_LOGS           = '/app/wsIdentity'
     }
     
