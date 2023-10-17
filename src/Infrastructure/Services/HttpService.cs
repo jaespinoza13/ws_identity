@@ -18,7 +18,7 @@ public interface IHttpService
                                         string auth,
                                         string authorizationType,
                                         string str_id_transaccion,
-                                        Boolean guardarPeticion = true
+                                         Boolean guardarPeticion = true
                                      );
 
 
@@ -71,8 +71,7 @@ public class HttpService : IHttpService
                                                         string auth,
                                                         string authorizationType,
                                                         string str_id_transaccion,
-                                                        Boolean guardarPeticion = true
-    )
+                                                        Boolean guardarPeticion = true )
     {
         try
         {
@@ -106,10 +105,8 @@ public class HttpService : IHttpService
                     cabecera = response.Headers,
                     cuerpo = response.Content.ReadAsStreamAsync( )
                 };
-
                 var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
                 await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, "HttpService", res_servicio, str_id_transaccion);
-
             }
 
             return respuesta;
