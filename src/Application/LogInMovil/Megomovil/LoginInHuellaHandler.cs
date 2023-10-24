@@ -56,6 +56,8 @@ namespace Application.LogInMegomovil.Megomovil
 
                 Functions.getRequestHeaders(reqAutenticarse, loginInHuella.str_ip);
 
+                string str_huella = reqAutenticarse.str_firma_digital;
+                reqAutenticarse.str_firma_digital = "**********";
                 respuesta.LlenarResHeader(reqAutenticarse);
 
                 respuesta.str_id_transaccion = loginInHuella.str_id_transaccion;
@@ -65,6 +67,7 @@ namespace Application.LogInMegomovil.Megomovil
                 reqAutenticarse.str_password = String.Empty;
                 _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 reqAutenticarse.str_password = password;
+                reqAutenticarse.str_firma_digital = str_huella;
 
                 RespuestaTransaccion res_tran = await _autenticarseDat.getAutenticarHuellaFaceID(reqAutenticarse);
                 respuesta.str_res_codigo = res_tran.codigo;
