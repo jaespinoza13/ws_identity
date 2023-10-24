@@ -7,13 +7,13 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.0'
-        VERSION_PRODUCCION  = '1.2.1'
+        VERSION_DESPLIEGUE  = '1.3.3'
+        VERSION_PRODUCCION  = '1.3.2'
         NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
-		RUTA_CONFIG 		= '/config/wsIdentity/'
+		RUTA_CONFIG 	    = '/config/wsIdentity/'
         RUTA_LOGS           = '/app/wsIdentity'
     }
     
@@ -43,7 +43,7 @@ pipeline {
                 echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
-						-v ${RUTA_LOGS}:/app/Logs/ \
+			            -v ${RUTA_LOGS}:/app/Logs/ \
                         -v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''

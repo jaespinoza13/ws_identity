@@ -1,6 +1,6 @@
 pipeline {
     
-    agent {
+ agent {
         node {
             label 'web-service-development-server'
         }
@@ -20,27 +20,27 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building ...'
-                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE} --no-cache .'
+                echo 'Building..'
+                sh 'docker build -t ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION} --no-cache .'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Testing ...'
+                echo 'Testing..'
             }
         }
 
         stage('Clean') {
             steps {
-                echo 'Cleaning ...'
+                echo 'Cleaning..'
                 sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying ...'
+                echo 'Deploying....'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} \
                         --name ${NOMBRE_CONTENEDOR} \
                         -v ${RUTA_LOGS}:/app/Logs/  \
@@ -58,14 +58,13 @@ pipeline {
                         -e ApiSettings__Endpoints__servicio_encrypt=${ENDPOINT_WS_ENCRYPT} \
                         -e ApiSettings__EndpointsAuth__auth_ws_otp=${AUTH_WS_OTP} \
                         -e ApiSettings__EndpointsAuth__auth_ws_identity=${AUTH_WS_IDENTITY} \
-                        ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
+                        ${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                     '''
             }
         }
-
         stage('Restart') {
             steps {
-                echo 'Restarting ...'
+                echo 'Deploying....'
                 sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }

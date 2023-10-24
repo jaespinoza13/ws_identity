@@ -1,6 +1,7 @@
 ﻿
 using System.Security.Cryptography;
 using System.Text;
+using Application.Common.ISO20022.Models;
 using Application.LogInMegomovil.Megomovil;
 
 namespace Application.Common.Functions;
@@ -119,5 +120,39 @@ internal static class Functions
 
         return ecParameters;
     }
+    public static void getRequestHeaders ( Header header, string str_ip_publica )
+    {
+        if (getValidarIpv4(header.str_ip_dispositivo!))
+            return;
 
+        if (!getValidarIpv4(str_ip_publica))
+        {
+            header.str_ip_dispositivo = header.str_num_sim;
+            return;
+        }
+        header.str_ip_dispositivo = str_ip_publica;
+        header.str_prioridad = "-1";
+
+    }
+
+    /// <summary>
+    /// Validar formato de ipv4
+    /// </summary>
+    /// <param name="str_ip_dispositivo"></param>
+    /// <returns></returns>
+    public static bool getValidarIpv4 ( string str_ip_dispositivo )
+    {
+        string[] parts = str_ip_dispositivo.Split('.');
+
+        if (parts.Length != 4)
+            return false;
+
+        foreach (string part in parts)
+        {
+            if (!int.TryParse(part, out int num) || num < 0 || num > 255 || (part.StartsWith("0") && part.Length > 1))
+                return false;
+        }
+
+        return true;
+    }
 }

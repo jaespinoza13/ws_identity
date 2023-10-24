@@ -14,6 +14,8 @@ namespace Application.LoginInvitado;
 public class ResAutenticarseInvitadoExt : ResComun
 {
     public string str_token { get; set; } = String.Empty;
+    public string? str_mod { get; set; }
+    public string? str_exp { get; set; }
 }
 public record AutenticarseInvitadoExtCommand ( Header header ) : IRequest<ResAutenticarseInvitadoExt>;
 
@@ -72,7 +74,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
                 var ClaveSecreta = Guid.NewGuid( ).ToString( );
                 var reqAddKeys = JsonSerializer.Deserialize<ReqAddKeys>(JsonSerializer.Serialize(request.header))!;
 
-
+                respuesta.str_mod = KeyCreate.str_modulo;
+                respuesta.str_exp = KeyCreate.str_exponente;
                 respuesta.str_clave_secreta = ClaveSecreta;
 
                 reqAddKeys.str_ente = request.header.str_ente!;
