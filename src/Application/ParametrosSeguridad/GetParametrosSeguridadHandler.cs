@@ -58,7 +58,7 @@ public class GetParametrosSeguridadHandler : IRequestHandler<ReqGetParametrosSeg
         }
         catch (Exception exception)
         {
-            _logsService.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
+            await _logsService.SaveExceptionLogs( respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception );
             throw new ArgumentException( reqGetParametrosSeguridad.str_id_transaccion )!;
         }
        

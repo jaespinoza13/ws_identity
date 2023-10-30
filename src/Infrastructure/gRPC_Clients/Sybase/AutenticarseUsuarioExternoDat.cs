@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AccesoDatosGrpcAse.Neg;
-using Application.Common.Cryptography;
+﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LoginUsuarioExterno.UsuarioExterno;
-using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -33,7 +26,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             _objClienteDal = objClienteDal;
         }
 
-        public async Task<RespuestaTransaccion> LoginUsuarioExternoDat ( ReqLoginUsuarioExterno reqLoginUsuariosExternos, string claveEncriptada )
+        public async Task<RespuestaTransaccion> LoginUsuarioExternoDat ( ReqLoginUsuarioExterno reqLoginUsuariosExterno, string claveEncriptada )
         {
             var respuesta = new RespuestaTransaccion( );
 
@@ -41,8 +34,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             { 
                 DatosSolicitud ds = new( );
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = claveEncriptada });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExternos.str_login });
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExternos.str_nemonico_canal });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExterno.str_login });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExterno.str_nemonico_canal });
 
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
                 ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
@@ -67,8 +60,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExternos, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
-                throw new ArgumentException(reqLoginUsuariosExternos.str_id_transaccion)!;
+                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                throw new ArgumentException(reqLoginUsuariosExterno.str_id_transaccion)!;
             }
             return respuesta;
         }
@@ -110,7 +103,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqLoginUsuarioExterno.str_id_transaccion)!;
             }
             return respuesta;

@@ -142,8 +142,9 @@ namespace Application.Common.Cryptography
 
                 return ByteArrayToHex(b);
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
