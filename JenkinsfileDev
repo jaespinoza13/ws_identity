@@ -51,7 +51,7 @@ pipeline {
         }
         stage('Restart') {
             steps {
-                echo 'Restarting ...'
+                echo 'Deploying....'
                 sh 'docker restart ${NOMBRE_CONTENEDOR}'
             }
         }

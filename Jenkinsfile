@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.3.2'
-        VERSION_PRODUCCION  = '1.3.1'
+        VERSION_DESPLIEGUE  = '1.3.4'
+        VERSION_PRODUCCION  = '1.3.3'
         NOMBRE_CONTENEDOR   = 'servicio-identity'
         NOMBRE_IMAGEN       = 'ws_identity'
         PUERTO              = '9010'
