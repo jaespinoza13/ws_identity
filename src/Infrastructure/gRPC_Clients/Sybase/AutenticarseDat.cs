@@ -59,7 +59,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
@@ -97,7 +97,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
@@ -138,7 +138,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAddKeys.str_id_transaccion)!;
             }
             return respuesta;

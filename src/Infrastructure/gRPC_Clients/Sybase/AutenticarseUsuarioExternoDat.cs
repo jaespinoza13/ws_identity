@@ -60,7 +60,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqLoginUsuariosExterno.str_id_transaccion)!;
             }
             return respuesta;
@@ -103,7 +103,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqLoginUsuarioExterno.str_id_transaccion)!;
             }
             return respuesta;
