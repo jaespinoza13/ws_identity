@@ -54,6 +54,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
         ResAutenticarseInvitadoExt respuesta = new( );
         string operaion = "GENERAR_TOKEN_INVITADO_EXT";
 
+
         try
         {
             respuesta.LlenarResHeader(autenticarInvitadoExterno);
