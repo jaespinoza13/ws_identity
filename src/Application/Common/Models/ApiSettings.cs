@@ -53,5 +53,9 @@
 
         public int mostrar_descripcion_badrequest { get; set; }
 
+
+        //Config Service
+        public double defaultTokenTime { get; set; }
+
     }
 }

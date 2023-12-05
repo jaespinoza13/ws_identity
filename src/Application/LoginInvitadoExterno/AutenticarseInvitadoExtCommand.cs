@@ -59,6 +59,8 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             respuesta.LlenarResHeader(autenticarInvitadoExterno);
             _ = _logsService.SaveHeaderLogs(request.header, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
+            double tokenTime = _parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )) == null ? _settings.defaultTokenTime :
+                Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini);
             var claims = new ClaimsIdentity(new[]
                     {
                         new Claim( ClaimTypes.Role, _rol.InvitadoExterno),
@@ -67,7 +69,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             string str_token = await _generarToken.ConstruirToken(autenticarInvitadoExterno,
                 operaion,
                 claims,
-                Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
+               tokenTime);
             if( !String.IsNullOrEmpty (str_token) && _settings.lst_canales_encriptar.Contains(autenticarInvitadoExterno.str_nemonico_canal))
             {
                 var KeyCreate = CryptographyRSA.GenerarLlavePublicaPrivada( );
