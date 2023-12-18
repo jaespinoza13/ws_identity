@@ -3,6 +3,7 @@ using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LogIn;
+using Application.LoginUsuarioExterno.UsuarioExterno;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
@@ -58,7 +59,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
@@ -96,18 +97,18 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
-        } 
+        }
         public async Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys )
         {
             var respuesta = new RespuestaTransaccion( );
 
             try
             {
-                DatosSolicitud ds = new ( );
+                DatosSolicitud ds = new( );
 
                 Funciones.LlenarDatosAuditoria(ds, reqAddKeys);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente });
@@ -137,7 +138,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _ = _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
                 throw new ArgumentException(reqAddKeys.str_id_transaccion)!;
             }
             return respuesta;

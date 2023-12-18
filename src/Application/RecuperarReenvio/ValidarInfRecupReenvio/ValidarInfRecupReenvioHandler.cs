@@ -45,7 +45,7 @@ namespace Application.RecuperarReenvio
             string str_operacion = "VALIDAR_INF_RECUP_REENVIO";
             var respuesta = new ResValidarInfRecupReenvio( );
             respuesta.LlenarResHeader(reqValidarInfRecupReenvio);
-            _logs.SaveHeaderLogs(reqValidarInfRecupReenvio, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            _ = _logs.SaveHeaderLogs(reqValidarInfRecupReenvio, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
             string token = String.Empty;
 
@@ -96,14 +96,14 @@ namespace Application.RecuperarReenvio
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
 
-                _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+                _ = _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
                 respuesta.str_token = token;
 
                 return respuesta;
             }
             catch (Exception exception)
             {
-                _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
+                _ = _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
                 throw new ArgumentException(reqValidarInfRecupReenvio.str_id_transaccion)!;
             }
         }      
