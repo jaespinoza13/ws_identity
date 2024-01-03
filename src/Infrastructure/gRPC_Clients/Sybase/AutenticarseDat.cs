@@ -1,6 +1,7 @@
 ﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Cryptography;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogIn;
 using Application.LoginUsuarioExterno.UsuarioExterno;
@@ -59,7 +60,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
@@ -97,7 +98,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _ = _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
+
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
             return respuesta;
@@ -138,7 +140,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _ = _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException(reqAddKeys.str_id_transaccion)!;
             }
             return respuesta;

@@ -1,10 +1,12 @@
 ﻿using AccesoDatosGrpcAse.Neg;
+using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogInMegomovil.Megomovil;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
+using System;
 using System.Reflection;
 using static AccesoDatosGrpcAse.Neg.DAL;
 
@@ -68,7 +70,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
-                await _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod( )!.Name, ex, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, ex);
+
                 throw new ArgumentException(header.str_id_transaccion)!;
             }
             return respuesta;
@@ -119,7 +122,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
-                await _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod( )!.Name, ex, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, ex);
                 throw new ArgumentException(header.str_id_transaccion)!;
             }
             return respuesta;

@@ -64,7 +64,7 @@ internal class GenerarToken : IGenerarToken
         }
         catch (Exception exception)
         {
-            _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
+            await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
             throw new ArgumentException(header.str_id_transaccion);
         }
     }

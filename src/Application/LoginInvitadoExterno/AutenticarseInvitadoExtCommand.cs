@@ -57,7 +57,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
         try
         {
             respuesta.LlenarResHeader(autenticarInvitadoExterno);
-            _ = _logsService.SaveHeaderLogs(request.header, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            await _logsService.SaveHeaderLogs(request, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
             var claims = new ClaimsIdentity(new[]
                     {
@@ -93,7 +93,7 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token Creado Correctamente";
-            _ = _logsService.SaveResponseLogs(respuesta, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            await _logsService.SaveResponseLogs(respuesta, operaion, MethodBase.GetCurrentMethod( )!.Name, _clase);
             respuesta.str_token = str_token;
 
         }

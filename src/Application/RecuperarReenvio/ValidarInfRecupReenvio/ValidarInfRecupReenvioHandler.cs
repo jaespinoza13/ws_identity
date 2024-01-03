@@ -45,13 +45,13 @@ namespace Application.RecuperarReenvio
             string str_operacion = "VALIDAR_INF_RECUP_REENVIO";
             var respuesta = new ResValidarInfRecupReenvio( );
             respuesta.LlenarResHeader(reqValidarInfRecupReenvio);
-            _ = _logs.SaveHeaderLogs(reqValidarInfRecupReenvio, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            await _logs.SaveHeaderLogs(reqValidarInfRecupReenvio, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
             string token = String.Empty;
 
             try
             {
-                RespuestaTransaccion res_tran = _accesoDat.ValidarInfRecupReactiva(reqValidarInfRecupReenvio);
+                RespuestaTransaccion res_tran = _accesoDat.ValidarInfRecupReactiva(reqValidarInfRecupReenvio);// validar
 
                 if (res_tran.codigo.Equals("000"))
                 {
@@ -96,14 +96,14 @@ namespace Application.RecuperarReenvio
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
 
-                _ = _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+                await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
                 respuesta.str_token = token;
 
                 return respuesta;
             }
             catch (Exception exception)
             {
-                _ = _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
+                await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
                 throw new ArgumentException(reqValidarInfRecupReenvio.str_id_transaccion)!;
             }
         }      

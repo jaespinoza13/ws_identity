@@ -2,6 +2,7 @@
 using AccesoDatosGrpcAse.Neg;
 using Application.Acceso.RecuperarContrasenia;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
@@ -58,9 +59,8 @@ public class RecuperarContraseniaDat : IAccesoDat
         {
             respuesta.codigo = "001";
             respuesta.diccionario.Add("str_error", exception.ToString( ));
-            _ = _logsService.SaveExcepcionDataBaseSybase(reqValidaInfo, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+            await _logsService.SaveExcepcionDataBaseSybase(reqValidaInfo, reqValidaInfo.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
             throw new ArgumentException(reqValidaInfo.str_id_transaccion)!;
-
         }
         return respuesta;
     }

@@ -1,10 +1,12 @@
 ﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LoginUsuarioExterno.UsuarioExterno;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
+using System.Reflection.PortableExecutable;
 using static AccesoDatosGrpcAse.Neg.DAL;
 
 namespace Infrastructure.gRPC_Clients.Sybase
@@ -60,7 +62,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+
+                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, reqLoginUsuariosExterno.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException(reqLoginUsuariosExterno.str_id_transaccion)!;
             }
             return respuesta;
@@ -103,7 +106,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                await _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, reqLoginUsuarioExterno.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException(reqLoginUsuarioExterno.str_id_transaccion)!;
             }
             return respuesta;

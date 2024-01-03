@@ -44,14 +44,26 @@
 
         public string servicio_ws_otp { get; set; } = String.Empty;
         public string servicio_encrypt { get; set; } = String.Empty;
+        public string url_logs { get; set; } = String.Empty;
 
 
         public string auth_ws_identity { get; set; } = String.Empty;
         public string auth_ws_otp { get; set; } = String.Empty;
+        public string auth_logs { get; set; } = String.Empty;
 
         public bool valor_encriptar { get; set; }
 
         public int mostrar_descripcion_badrequest { get; set; }
+
+        public string url_acceso_logs { get; set; } = String.Empty;
+
+        #region CollectionsMongo
+        public string errores_http { get; set; } = "errores_http";
+        #endregion
+
+        #region TypesAuthorization
+        public string typeAuthAccesoLogs { get; set; } = String.Empty;
+        #endregion
 
     }
 }
