@@ -61,6 +61,5 @@
         public string errores_http { get; set; } = "errores_http";
         #endregion
 
-
     }
 }
