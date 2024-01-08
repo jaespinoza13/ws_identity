@@ -61,9 +61,6 @@
         public string errores_http { get; set; } = "errores_http";
         #endregion
 
-        #region TypesAuthorization
-        public string typeAuthAccesoLogs { get; set; } = String.Empty;
-        #endregion
 
     }
 }

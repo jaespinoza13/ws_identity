@@ -21,25 +21,16 @@ public interface IHttpService
                                          Boolean guardarPeticion = true
                                      );
 
-    Task<string> solicitar_servicio ( SolicitarServicio solicitarServicio );
     object solicitar_servicio_async ( SolicitarServicio solicitarServicio );
 }
 public class HttpService : IHttpService
 {
-    private readonly Dictionary<string, object> _Ilogs;
     private readonly ApiSettings _settings;
     private readonly string str_clase;
-    private const string strRutaGuardarLog = "saveLogs/";
     public HttpService ( IOptionsMonitor<ApiSettings> option )
     {
         _settings = option.CurrentValue;
         str_clase = GetType( ).FullName!;
-
-        _Ilogs = new Dictionary<string, object>( );
-        _Ilogs.Add("str_base", _settings.nombre_base_mongo);
-        _Ilogs.Add("str_collection", "respuestas_http");
-        _Ilogs.Add("tipo_log", "respuestas_http");
-        _Ilogs.Add(_settings.typeAuthAccesoLogs, _settings.auth_logs);
     }
 
     public async Task<T> GetRestServiceDataAsync<T> ( string serviceAddress )
@@ -126,33 +117,6 @@ public class HttpService : IHttpService
             throw new Exception(data!.str_id_transaccion)!;
         }
     }
-   
-    public async Task<string> solicitar_servicio ( SolicitarServicio solicitarServicio )
-    {
-        var peticion = solicitarServicio.objSolicitud;
-
-        try
-        {
-            var client = new HttpClient( );
-            var request = createRequest(solicitarServicio);
-
-            addHeaders(solicitarServicio, client);
-
-            var response = await client.SendAsync(request);
-
-            client.Dispose( );
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                return await response.Content.ReadAsStringAsync( );
-            else
-                throw new ArgumentException(response.StatusCode.ToString( ));
-
-        }
-        catch (Exception ex)
-        {
-            saveErrorHttp(solicitarServicio, peticion, ex);
-            throw new ArgumentException(ex.Message);
-        }
-    }
 
     /// <summary>
     /// Crear solicitud http
@@ -187,22 +151,6 @@ public class HttpService : IHttpService
         {
             httpClient.DefaultRequestHeaders.Add(header.Key, header.Value.ToString( ));
         }
-    }
-
-    /// <summary>
-    /// Guarda excepciones que den al solicitar un recurso
-    /// </summary>
-    /// <param name="solicitarServicio"></param>
-    /// <param name="objPeticion"></param>
-    /// <param name="ex"></param>
-    private void saveErrorHttp ( SolicitarServicio solicitarServicio, object objPeticion, Exception ex )
-    {
-        solicitarServicio.objSolicitud = new { objPeticion, error = ex.Message };
-        solicitarServicio.urlServicio = _settings.url_acceso_logs + strRutaGuardarLog;
-        solicitarServicio.dcyHeadersAdicionales = _Ilogs;
-        solicitarServicio.dcyHeadersAdicionales["str_collection"] = _settings.errores_http;
-        solicitarServicio.dcyHeadersAdicionales["tipo_log"] = _settings.errores_http;
-        solicitar_servicio_async(solicitarServicio);
     }
 
     public object solicitar_servicio_async ( SolicitarServicio solicitarServicio )

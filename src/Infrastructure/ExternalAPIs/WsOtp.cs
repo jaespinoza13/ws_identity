@@ -94,9 +94,6 @@ public class WsOtp : IWsOtp
             
         return requiere_otp;
     }
-       
-    
-
 
 
     /// <summary>
@@ -150,8 +147,6 @@ public class WsOtp : IWsOtp
                                                         _settings.auth_ws_otp,
                                                         AuthorizationType.BASIC,
                                                         reqValidaOtp.str_id_transaccion);
-
-            //await _logs.SaveResponseLogs(reqValidaOtp, "HttpService", MethodBase.GetCurrentMethod( )!.Name, _str_clase);
 
         }
         catch (Exception ex)

@@ -80,21 +80,9 @@ public class LogsService : ILogs
         return Task.CompletedTask;
     }
 
-    public async Task SaveAmenazasLogs ( ValidacionInyeccion validacion, String str_operacion, String str_metodo, String str_clase )
+    public Task SaveAmenazasLogs ( ValidacionInyeccion validacion, String str_operacion, String str_metodo, String str_clase )
     {
-        infoLog.str_clase = str_clase;
-        infoLog.str_operacion = str_operacion;
-        infoLog.str_objeto = validacion!;
-        infoLog.str_metodo = str_metodo;
-        infoLog.str_fecha = validacion.dtt_fecha;
-        infoLog.str_id_transaccion = validacion.idHeader;
-        infoLog.str_tipo = "s:<";
-
-        // REGISTRA LOGS DE TEXTO 
-        TextFiles.RegistrarTramas(infoLog.str_tipo, infoLog, _settings.logs_path_amenazas);
-
-        //REGISTRA LOGS DE MONGO
-        await _mongoDat.GuardarAmenazasMongo(validacion!);
+        return Task.CompletedTask;
     }
 
     /// <summary>
