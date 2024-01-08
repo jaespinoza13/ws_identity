@@ -9,12 +9,13 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-identity-usuario-externo'
-        NOMBRE_IMAGEN       = 'ws_identity_usuario_externo'
-        PUERTO              = '6013'
+        NOMBRE_CONTENEDOR   = 'servicio-identity-bmo'
+        NOMBRE_IMAGEN       = 'ws_identity_bmo'
+        PUERTO              = '6060'
         PUERTO_CONTENEDOR   = '80'
         RUTA_CONFIG           = '/config/wsIdentity/'
     }
+
     
     stages {
 
