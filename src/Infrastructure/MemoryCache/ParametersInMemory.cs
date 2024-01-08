@@ -48,7 +48,7 @@ internal class ParametersInMemory : IParametersInMemory
             {
                 req_get_parametros.str_nombre = "CODIGOS_ERROR";
                 req_get_parametros.str_id_sistema = item.ToString();
-                RespuestaTransaccion res_tran = _parametros.GetParametrosDat(req_get_parametros);// VALIDAR
+                RespuestaTransaccion res_tran = _parametros.GetParametrosDat(req_get_parametros);
                 lst_errores.AddRange(Conversions.ConvertConjuntoDatosToListClass<Parametro>((ConjuntoDatos)res_tran.cuerpo).Where(x => !lst_parametros.Any(y => y.str_nemonico == x.str_nemonico)));
 
             }
@@ -57,7 +57,7 @@ internal class ParametersInMemory : IParametersInMemory
             {
                 req_get_parametros.str_nombre = item;
                 req_get_parametros.str_id_sistema = "-1";
-                RespuestaTransaccion res_tran2 = _parametros.GetParametrosDat(req_get_parametros);// VALIDAR
+                RespuestaTransaccion res_tran2 = _parametros.GetParametrosDat(req_get_parametros);
                 lst_parametros.AddRange(Conversions.ConvertConjuntoDatosToListClass<Parametro>((ConjuntoDatos)res_tran2.cuerpo).Where(x => !lst_parametros.Any(y => y.str_nemonico == x.str_nemonico)));
             }
 

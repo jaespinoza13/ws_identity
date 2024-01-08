@@ -51,7 +51,7 @@ namespace Application.RecuperarReenvio
 
             try
             {
-                RespuestaTransaccion res_tran = _accesoDat.ValidarInfRecupReactiva(reqValidarInfRecupReenvio);// validar
+                RespuestaTransaccion res_tran = _accesoDat.ValidarInfRecupReactiva(reqValidarInfRecupReenvio);
 
                 if (res_tran.codigo.Equals("000"))
                 {
