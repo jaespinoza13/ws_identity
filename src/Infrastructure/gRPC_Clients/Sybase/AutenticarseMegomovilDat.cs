@@ -69,7 +69,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
                 await _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod( )!.Name, ex, str_clase);
-                throw new ArgumentException(header.str_id_transaccion)!;
+                return respuesta;
             }
             return respuesta;
         }
@@ -120,7 +120,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
                 await _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod( )!.Name, ex, str_clase);
-                throw new ArgumentException(header.str_id_transaccion)!;
+                return respuesta;
             }
             return respuesta;
         }
