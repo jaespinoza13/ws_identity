@@ -16,12 +16,10 @@ internal class EncryptMego : IEncryptMego
     private readonly ApiSettings _settings;
     private readonly ILogs _logs;
     private readonly string _str_clase;
-    public EncryptMego ( IHttpService httpService, IOptionsMonitor<ApiSettings> option, ILogs logs )
+    public EncryptMego ( IHttpService httpService, IOptionsMonitor<ApiSettings> option )
     {
         _httpService = httpService;
         _settings = option.CurrentValue;
-        _logs = logs;
-        _str_clase = GetType( ).FullName!;
     }
 
     public async Task<string> Encrypt ( string str_login, string str_password, string str_id_transaccion )
@@ -47,3 +45,5 @@ internal class EncryptMego : IEncryptMego
         }
     }
 }
+
+
