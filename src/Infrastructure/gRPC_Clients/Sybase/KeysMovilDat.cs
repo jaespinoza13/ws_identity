@@ -1,9 +1,8 @@
 ﻿using AccesoDatosGrpcAse.Neg;
-using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
-using Application.LogInMegomovil;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -15,26 +14,28 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class KeysMovilDat : IKeysMovilDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public KeysMovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public KeysMovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
-            _objClienteDal = objClienteDal;
         } 
 
         public RespuestaTransaccion getLLavesCifradoMovil( Header header, string str_identificador )
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new();
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_dispositivo", TipoDato = TipoDato.VarChar, ObjValue = str_identificador } );
 
@@ -59,10 +60,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-                throw new ArgumentException(header.str_id_transaccion )!;
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
         private string getBaseCifrado ( Header header )

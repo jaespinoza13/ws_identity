@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LoginUsuarioExterno.UsuarioExterno;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -12,27 +13,29 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class AutenticarseUsuarioExternoDat : IAutenticarseUsuarioExternoDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public AutenticarseUsuarioExternoDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
+        public AutenticarseUsuarioExternoDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType( ).FullName!;
-
-            _objClienteDal = objClienteDal;
         }
 
         public async Task<RespuestaTransaccion> LoginUsuarioExternoDat ( ReqLoginUsuarioExterno reqLoginUsuariosExterno, string claveEncriptada )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             { 
                 DatosSolicitud ds = new( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
+
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = claveEncriptada });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExterno.str_login });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_nemonico_canal", TipoDato = TipoDato.VarChar, ObjValue = reqLoginUsuariosExterno.str_nemonico_canal });
@@ -59,20 +62,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuariosExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
-                throw new ArgumentException(reqLoginUsuariosExterno.str_id_transaccion)!;
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 
         public async Task<RespuestaTransaccion> SetIntentosFallidos ( ReqLoginUsuarioExterno reqLoginUsuarioExterno )
         {
             var respuesta = new RespuestaTransaccion( );
-            
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud( );
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_usr_ext", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_usr_ext.ToString( ) });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_oficina", TipoDato = TipoDato.Integer, ObjValue = reqLoginUsuarioExterno.str_id_oficina });
@@ -102,10 +107,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
                 _ = _logsService.SaveExcepcionDataBaseSybase(reqLoginUsuarioExterno, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
-                throw new ArgumentException(reqLoginUsuarioExterno.str_id_transaccion)!;
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
     }

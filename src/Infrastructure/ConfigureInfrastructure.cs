@@ -18,24 +18,25 @@ public static class ConfigureInfrastructure
         //INFRAESTRUCTURA
         services.AddSingleton<ParametersInMemory>( );
         services.AddSingleton<ILogs, LogsService>( );
+        
         services.AddSingleton<IMongoDat, LogsMongoDat>( );
         services.AddSingleton<IDailyRequest, DailyRequest>( );
         services.AddSingleton<IParametersInMemory, ParametersInMemory>( );
-        services.AddSingleton<IParametrosDat, ParametrosDat>( );
+        services.AddTransient<IParametrosDat, ParametrosDat>( );
         services.AddSingleton<IHttpService, HttpService>( );
-        services.AddSingleton<IAutenticarseDat, AutenticarseDat>( );
+        services.AddTransient<IAutenticarseDat, AutenticarseDat>( );
         services.AddSingleton<IEncryptMego, EncryptMego>( );
         services.AddSingleton<IWsOtp, WsOtp>( );
-        services.AddSingleton<IOtpDat, OtpDat>( );
-        services.AddSingleton<IKeysDat , KeysDat>( );
-        services.AddSingleton<IAutenticarseMegomovilDat, AutenticarseMegomovilDat>( );
+        services.AddTransient<IOtpDat, OtpDat>( );
+        services.AddTransient<IKeysDat , KeysDat>( );
+        services.AddTransient<IAutenticarseMegomovilDat, AutenticarseMegomovilDat>( );
         services.AddTransient<ICifradoMegomovil, CifradoMegomovil>( );
-        services.AddSingleton<IKeysMovilDat, KeysMovilDat>( );
+        services.AddTransient<IKeysMovilDat, KeysMovilDat>( );
 
         //CASOS DE USO
-        services.AddSingleton<IAccesoDat, RecuperarContraseniaDat>( );
-        services.AddSingleton<IValidarRecuperaciones, ValidarRecuperacionesDat>( );
-        services.AddSingleton<IAutenticarseUsuarioExternoDat, AutenticarseUsuarioExternoDat>( );
+        services.AddTransient<IAccesoDat, RecuperarContraseniaDat>( );
+        services.AddTransient<IValidarRecuperaciones, ValidarRecuperacionesDat>( );
+        services.AddTransient<IAutenticarseUsuarioExternoDat, AutenticarseUsuarioExternoDat>( );
 
         return services;
     }

@@ -16,28 +16,30 @@ namespace Infrastructure.gRPC_Clients.Sybase;
 internal class OtpDat : IOtpDat
 {
     private readonly ApiSettings _settings;
-    private readonly DALClient _objClienteDal;
     private readonly ILogs _logsService;
     private readonly string str_clase;
+    private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-    public OtpDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
+    public OtpDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
     {
         _settings = options.CurrentValue;
         _logsService = logsService;
 
         this.str_clase = GetType().FullName!;
-
-        _objClienteDal = objClienteDal;
     }
 
 
     public async Task<RespuestaTransaccion> GetDatosOtpDat(dynamic req_get_datos)
     {
         var respuesta = new RespuestaTransaccion();
-
+        GrpcChannel grpcChannel = null!;
+        DALClient _objClienteDal = null!;
         try
         {
             DatosSolicitud ds = new();
+
+            (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
+
             ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = req_get_datos.str_ente } );
 
             ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_sistema", TipoDato = TipoDato.Integer, ObjValue = req_get_datos.str_id_sistema } );
@@ -68,10 +70,10 @@ internal class OtpDat : IOtpDat
         catch (Exception exception)
         {
             respuesta.codigo = "003";
-            respuesta.diccionario.Add( "str_error", exception.ToString() );
+            respuesta.diccionario.Add("str_error", str_mensaje_error);
             _logsService.SaveExcepcionDataBaseSybase( req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
-            throw new ArgumentException( req_get_datos.str_id_transaccion )!;
         }
+        Funciones.setCloseConnection(grpcChannel);
         return respuesta;
     }
 }
