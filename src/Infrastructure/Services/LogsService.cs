@@ -120,7 +120,7 @@ public class LogsService : ILogs
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error en mongo: " + ex.Message);
+            Console.WriteLine("Error en base de datos: " + ex.Message);
         }
         return Task.CompletedTask;
     }

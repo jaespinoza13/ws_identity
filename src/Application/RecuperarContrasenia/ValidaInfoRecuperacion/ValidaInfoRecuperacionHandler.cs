@@ -101,6 +101,10 @@ public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecupa
         }
         catch (Exception exception)
         {
+            if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
+            {
+                respuesta.str_res_info_adicional = "ente: " + reqValidaInfo.str_ente + ", id_transaccion: " + reqValidaInfo.str_id_transaccion;
+            }
             await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
             throw new ArgumentException(respuesta.str_id_transaccion);
         }

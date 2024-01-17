@@ -103,6 +103,10 @@ namespace Application.RecuperarReenvio
             }
             catch (Exception exception)
             {
+                if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
+                {
+                    respuesta.str_res_info_adicional = "ente: " + reqValidarInfRecupReenvio.str_ente + ", id_transaccion: " + reqValidarInfRecupReenvio.str_id_transaccion;
+                }
                 await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
                 throw new ArgumentException(reqValidarInfRecupReenvio.str_id_transaccion)!;
             }
