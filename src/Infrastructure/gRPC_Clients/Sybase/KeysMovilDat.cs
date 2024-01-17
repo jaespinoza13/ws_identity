@@ -60,7 +60,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase(header, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
+                
                 throw new ArgumentException(header.str_id_transaccion )!;
             }
             return respuesta;

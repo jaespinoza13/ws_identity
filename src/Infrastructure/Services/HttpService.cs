@@ -21,16 +21,14 @@ public interface IHttpService
                                          Boolean guardarPeticion = true
                                      );
 
-
+    object solicitar_servicio_async ( SolicitarServicio solicitarServicio );
 }
 public class HttpService : IHttpService
 {
-    private readonly ILogs _logs;
     private readonly ApiSettings _settings;
     private readonly string str_clase;
-    public HttpService ( IOptionsMonitor<ApiSettings> option, ILogs logs )
+    public HttpService ( IOptionsMonitor<ApiSettings> option )
     {
-        _logs = logs;
         _settings = option.CurrentValue;
         str_clase = GetType( ).FullName!;
     }
@@ -106,7 +104,8 @@ public class HttpService : IHttpService
                     cuerpo = response.Content.ReadAsStreamAsync( )
                 };
                 var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
-                await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, "HttpService", res_servicio, str_id_transaccion);
+                
+
             }
 
             return respuesta;
@@ -114,9 +113,64 @@ public class HttpService : IHttpService
         catch (Exception ex)
         {
             var data = guardarPeticion ? JsonSerializer.Deserialize<dynamic>(serializedData) : null;
-            await _logs.SaveHttpErrorLogs(data, MethodBase.GetCurrentMethod( )!.Name, str_clase, ex, str_id_transaccion);
 
             throw new Exception(data!.str_id_transaccion)!;
         }
+    }
+
+    /// <summary>
+    /// Crear solicitud http
+    /// </summary>
+    /// <param name="solicitarServicio"></param>
+    /// <returns></returns>
+    private static HttpRequestMessage createRequest ( SolicitarServicio solicitarServicio )
+    {
+        string str_solicitud = JsonSerializer.Serialize(solicitarServicio.objSolicitud);
+
+        var request = new HttpRequestMessage( );
+        if (solicitarServicio.contentType == "application/x-www-form-urlencoded")
+        {
+            var parametros = JsonSerializer.Deserialize<Dictionary<string, string>>(str_solicitud)!;
+            request.Content = new FormUrlEncodedContent(parametros);
+        }
+        else
+            request.Content = new StringContent(str_solicitud, Encoding.UTF8, solicitarServicio.contentType);
+
+        request.Method = new HttpMethod(solicitarServicio.tipoMetodo);
+        request.RequestUri = new Uri(solicitarServicio.urlServicio, System.UriKind.RelativeOrAbsolute);
+        request.Content.Headers.Add("No-Paging", "true");
+        return request;
+    }
+
+    private static void addHeaders ( SolicitarServicio solicitarServicio, HttpClient httpClient )
+    {
+        if (solicitarServicio.valueAuth != null)
+            httpClient.DefaultRequestHeaders.Add(solicitarServicio.tipoAuth, solicitarServicio.valueAuth);
+
+        foreach (var header in solicitarServicio.dcyHeadersAdicionales)
+        {
+            httpClient.DefaultRequestHeaders.Add(header.Key, header.Value.ToString( ));
+        }
+    }
+
+    public object solicitar_servicio_async ( SolicitarServicio solicitarServicio )
+    {
+        var respuesta = new object { };
+
+        try
+        {
+            var client = new HttpClient( );
+            var request = createRequest(solicitarServicio);
+
+            addHeaders(solicitarServicio, client);
+
+            client.SendAsync(request);
+        }
+        catch
+        {
+            // si se genera erro no se necesita generar excepcion
+        }
+
+        return respuesta;
     }
 }

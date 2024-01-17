@@ -1,5 +1,6 @@
 ﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
@@ -66,10 +67,11 @@ internal class ParametrosDat : IParametrosDat
         {
             respuesta.codigo = "001";
             respuesta.diccionario.Add("str_error", exception.ToString( ));
-            _logsService.SaveExcepcionDataBaseSybase(req_get_parametros, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+            _logsService.SaveExcepcionDataBaseSybase(req_get_parametros, req_get_parametros.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
             throw new ArgumentException(req_get_parametros.str_id_transaccion)!;
         }
         return respuesta;
+
     }
 }
 

@@ -35,7 +35,7 @@ namespace WebUI.Filters
                     var reqGetKeys = JsonSerializer.Deserialize<ReqGetKeys>(JsonSerializer.Serialize(response))!;
                     if (_settings.lst_canales_encriptar.Contains(reqGetKeys.str_nemonico_canal))
                     {
-                        var res_tran = _keysDat.GetKeys(reqGetKeys);
+                        var res_tran = _keysDat.GetKeys(reqGetKeys); 
                         var Key = Conversions.ConvertConjuntoDatosToClass<ResGetKeys>((ConjuntoDatos)res_tran.cuerpo, 0);
 
                         if (Key != null)

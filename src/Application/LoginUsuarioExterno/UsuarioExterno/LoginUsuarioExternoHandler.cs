@@ -52,7 +52,7 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
             respuesta.LlenarResHeader(reqLoginUsuarioExterno);
             string password = reqLoginUsuarioExterno.str_password;
             reqLoginUsuarioExterno.str_password = String.Empty;
-            _ = _logsService.SaveHeaderLogs(reqLoginUsuarioExterno, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            await _logsService.SaveHeaderLogs(reqLoginUsuarioExterno, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             reqLoginUsuarioExterno.str_password = password;
 
             string token = String.Empty;
@@ -110,13 +110,13 @@ namespace Application.LoginUsuarioExterno.UsuarioExterno
                     respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : res_tran.diccionario["str_error"];
                 }
 
-                _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+                await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 return respuesta;
 
             }
             catch (Exception exception)
             {
-                _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
+                await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
                 throw new ArgumentException(reqLoginUsuarioExterno.str_id_transaccion)!;
             }
         }
