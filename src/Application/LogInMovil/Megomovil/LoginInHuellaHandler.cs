@@ -130,7 +130,6 @@ namespace Application.LogInMegomovil.Megomovil
             catch (Exception exception)
             {
                 string str_cod_error = "001";
-
                 if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
                 {
                     str_cod_error = "ERR_CIFRADO";
