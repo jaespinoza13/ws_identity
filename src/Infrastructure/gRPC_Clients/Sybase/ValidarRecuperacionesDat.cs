@@ -1,5 +1,6 @@
 ﻿using AccesoDatosGrpcAse.Neg;
 using Application.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.RecuperarReenvio;
 using Infrastructure.Common.Funciones;
@@ -63,7 +64,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(ReqValidarInfRecupReenvio, MethodBase.GetCurrentMethod( )!.Name, exception, str_clase);
+                _logsService.SaveExcepcionDataBaseSybase(ReqValidarInfRecupReenvio, ReqValidarInfRecupReenvio.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException(ReqValidarInfRecupReenvio.str_id_transaccion)!;
             }
             return respuesta;

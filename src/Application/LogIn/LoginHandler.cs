@@ -58,7 +58,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         respuesta.LlenarResHeader(reqAutenticarse);
         string password = reqAutenticarse.str_password;
         reqAutenticarse.str_password = String.Empty;
-        _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);   
+        await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);   
         reqAutenticarse.str_password = password;
 
         string token = String.Empty;
@@ -89,7 +89,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 {
                     string str_concat_clave_usuario = reqAutenticarse.str_password + datosSocio.str_ente;
 
-                    bln_clave_valida = !String.IsNullOrEmpty(datosLogin.str_password) ?
+                     bln_clave_valida = !String.IsNullOrEmpty(datosLogin.str_password) ?
                                         Functions.ValidarClave(str_concat_clave_usuario, datosLogin.str_password) : Functions.ValidarClave(str_concat_clave_usuario, datosLogin.str_password_temp);
 
                 }
@@ -113,8 +113,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 else
                 {
                     //Clave incorrecta
-                    //respuesta.str_res_codigo = "1054";
-                    //res_tran.diccionario["str_error"] = _parameters.FindErrorCode("1054").str_descripcion;
+
                     reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
                     var res_tran_intentos=await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
                     respuesta.str_res_codigo = res_tran_intentos.codigo.Equals("1046") ? res_tran_intentos.codigo: "1054";
@@ -149,7 +148,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
 
                 //Clave incorrecta
-                //respuesta.str_res_codigo = "1054";
+
                 reqAutenticarse.str_id_usuario = datosLogin.str_id_usuario!;
                 var res_tran_intentos = await _autenticarseDat.SetIntentosFallidos(reqAutenticarse);
                 respuesta.str_res_codigo = res_tran_intentos.codigo.Equals("1046") ? res_tran_intentos.codigo : "1054";
@@ -178,23 +177,19 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
             }
             respuesta.str_res_estado_transaccion = respuesta.str_res_codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
-            _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
+            await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase);
             return respuesta;
 
         }
         catch (Exception exception)
         {
-            _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception);
+            await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod()!.Name, str_clase, exception);
             throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
         }
     }
 
-    public string EnmascararTelefono ( string telefono )
+    static string EnmascararTelefono ( string telefono )
     {
-        //if (telefono.Length != 10)
-        //{
-        //    throw new ArgumentException("La cadena debe tener 10 letras.");
-        //}
 
         string primerasTresLetras = telefono.Substring(0, 3);
         string ultimasDosLetras = telefono.Substring(8, 2);
@@ -203,7 +198,7 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         return enmascarado;
     }
 
-    public string EnmascararCorreoElectronico ( string correo )
+    static string EnmascararCorreoElectronico ( string correo )
     {
         int longitud = correo.Length;
         int indiceArroba = correo.IndexOf('@');

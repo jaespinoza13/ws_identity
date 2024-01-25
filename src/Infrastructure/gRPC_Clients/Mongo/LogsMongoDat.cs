@@ -29,7 +29,7 @@ public class LogsMongoDat : IMongoDat
             ds.NombreColeccion = _settings.coll_peticiones;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
-            _objClienteMongo.insertar_documentoAsync(ds);
+            _ = _objClienteMongo.insertar_documentoAsync(ds);
         }
         catch (Exception ex)
         {
@@ -49,7 +49,7 @@ public class LogsMongoDat : IMongoDat
             ds.NombreColeccion = _settings.coll_respuesta;
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
-            _objClienteMongo.insertar_documentoAsync(ds);
+            _ = _objClienteMongo.insertar_documentoAsync(ds);
 
         }
         catch (Exception ex)
@@ -81,7 +81,7 @@ public class LogsMongoDat : IMongoDat
             ds.Filter = String.Empty;
             ds.SolTran = ser_cabecera;
 
-            _objClienteMongo.insertar_documentoAsync(ds);
+            _ = _objClienteMongo.insertar_documentoAsync(ds);
 
         }
         catch (Exception ex)

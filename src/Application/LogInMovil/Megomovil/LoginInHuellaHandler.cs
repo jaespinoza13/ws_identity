@@ -65,7 +65,7 @@ namespace Application.LogInMegomovil.Megomovil
 
                 string password = reqAutenticarse.str_password;
                 reqAutenticarse.str_password = String.Empty;
-                _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+                await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
                 reqAutenticarse.str_password = password;
                 reqAutenticarse.str_firma_digital = str_huella;
 
@@ -110,7 +110,7 @@ namespace Application.LogInMegomovil.Megomovil
                 respuesta.str_res_codigo = res_tran.codigo;
                 respuesta.dt_fecha_operacion = DateTime.Now;
 
-                _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+                await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
                 respuesta.str_token_dispositivo = reqAutenticarse.str_token_dispositivo;
                 respuesta.str_token = token;
@@ -133,7 +133,7 @@ namespace Application.LogInMegomovil.Megomovil
                 {
                     respuesta.str_res_info_adicional = "identificador: " + loginInHuella.str_identificador + ", id_transaccion: " + loginInHuella.str_id_transaccion;
                 }
-                _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
+                await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
                 throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
             }
         }

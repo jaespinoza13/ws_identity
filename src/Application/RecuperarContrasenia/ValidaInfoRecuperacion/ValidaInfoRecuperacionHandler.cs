@@ -45,7 +45,7 @@ public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecupa
         string str_operacion = "VALIDAR_INFO_RECUPERACION";
         ResValidaInfoRecuperacion respuesta = new( );
         respuesta.LlenarResHeader(reqValidaInfo);
-        _logs.SaveHeaderLogs(reqValidaInfo, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+        await _logs.SaveHeaderLogs(reqValidaInfo, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
 
         string token = String.Empty;
 
@@ -94,14 +94,18 @@ public class ValidaInfoRecuperacionHandler : IRequestHandler<ReqValidaInfoRecupa
             respuesta.str_res_codigo = resTran.codigo;
             respuesta.str_res_info_adicional = resTran.diccionario["str_error"].ToString( );
 
-            _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
+            await _logs.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase);
             respuesta.str_token = token;
 
             return respuesta;
         }
         catch (Exception exception)
         {
-            _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
+            if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
+            {
+                respuesta.str_res_info_adicional = "ente: " + reqValidaInfo.str_ente + ", id_transaccion: " + reqValidaInfo.str_id_transaccion;
+            }
+            await _logs.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, _clase, exception);
             throw new ArgumentException(respuesta.str_id_transaccion);
         }
     }

@@ -6,6 +6,7 @@ using Application.Common.ISO20022.Models;
 using Application.LoginInvitado;
 using Application.RecuperarReenvio;
 using Application.LogInMegomovil.Megomovil;
+using Application.LoginUsuarioExterno.UsuarioExterno;
 
 namespace WebUI.Controllers
 {
@@ -73,6 +74,13 @@ namespace WebUI.Controllers
             string str_ip_publica = HttpContext.Request.Headers["real_ip"];
             var respuesta = Mediator.Send(new LoginInHuellaCommand(reqValidarLogin, str_identificador, str_secreto, str_id_transaccion, str_ip_publica)).Result;
             return Ok(respuesta);
+        }
+       
+        // Controlador para los usuarios externos. Ejm: "Eclisoft, Transferunion.. etc."
+        [HttpPost("AUTENTICARSE_USUARIO_EXTERNO")]
+        public async Task<ResLoginUsuarioExterno> AutenticarseUsuarioExterno ( ReqLoginUsuarioExterno reqLoginUsuarioExterno )
+        {
+            return await Mediator.Send(reqLoginUsuarioExterno);
         }
     }
 }
