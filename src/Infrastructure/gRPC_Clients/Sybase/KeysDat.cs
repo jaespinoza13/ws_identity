@@ -2,6 +2,7 @@
 using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
+using Application.LoginUsuarioExterno.UsuarioExterno;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -62,7 +63,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase( reqAddKeys, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
                 throw new ArgumentException( reqAddKeys.str_id_transaccion )!;
             }
             return respuesta;
@@ -101,7 +102,8 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "001";
                 respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase( reqGetKeys, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+                _logsService.SaveExcepcionDataBaseSybase(reqGetKeys, reqGetKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
+
                 throw new ArgumentException( reqGetKeys.str_id_transaccion )!;
             }
             return respuesta;

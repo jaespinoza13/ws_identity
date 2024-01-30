@@ -15,6 +15,7 @@ pipeline {
         PUERTO_CONTENEDOR   = '80'
         RUTA_CONFIG           = '/config/wsIdentity/'
     }
+
     
     stages {
 

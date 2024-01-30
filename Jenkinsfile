@@ -7,10 +7,10 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.4.0'
-        VERSION_PRODUCCION  = '1.3.4'
-        NOMBRE_CONTENEDOR   = 'servicio-identity'
-        NOMBRE_IMAGEN       = 'ws_identity'
+        VERSION_DESPLIEGUE  = '1.4.1'
+        VERSION_PRODUCCION  = '1.4.0'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-identity'
+        NOMBRE_IMAGEN       = 'img_ws_identity'
         PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 	    = '/config/wsIdentity/'
@@ -34,7 +34,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning ...'
-                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
+                sh 'docker rm -f servicio-identity'
             }
         }
 

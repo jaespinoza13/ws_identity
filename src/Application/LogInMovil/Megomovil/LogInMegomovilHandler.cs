@@ -61,7 +61,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
 
             string password = reqAutenticarse.str_password;
             reqAutenticarse.str_password = String.Empty;
-            _ = _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            await _logsService.SaveHeaderLogs(reqAutenticarse, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
             reqAutenticarse.str_password = password;
             reqAutenticarse.str_firma_digital = str_huella;
 
@@ -113,7 +113,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
             respuesta.str_res_estado_transaccion = res_tran.codigo.Equals("000") ? "OK" : "ERR";
             respuesta.str_res_info_adicional = res_tran.diccionario["str_error"].ToString( );
             respuesta.dt_fecha_operacion = DateTime.Now;
-            _ = _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
+            await _logsService.SaveResponseLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase);
 
             respuesta.str_token_dispositivo = reqAutenticarse.str_token_dispositivo;
             respuesta.str_token = token;
@@ -139,7 +139,7 @@ public class LogInMegomovilHandler : IRequestHandler<LogInMegomovilCommand, obje
                 str_cod_error = "ERR_CIFRADO";
                 respuesta.str_res_info_adicional = "identificador: " + logInMegomovilCommand.str_identificador + ", id_transaccion: " + logInMegomovilCommand.str_id_transaccion;
             }
-            _ = _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
+            await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
             var result = new
             {
                 trama = Functions.getArmarError(respuesta, str_cod_error),

@@ -10,6 +10,7 @@ using Application.Common.Models;
 
 using Infrastructure.Common.Funciones;
 using Infrastructure.Common.Interfaces;
+using Application.Common.ISO20022.Models;
 
 namespace Infrastructure.gRPC_Clients.Sybase;
 
@@ -69,7 +70,7 @@ internal class OtpDat : IOtpDat
         {
             respuesta.codigo = "003";
             respuesta.diccionario.Add( "str_error", exception.ToString() );
-            _logsService.SaveExcepcionDataBaseSybase( req_get_datos, MethodBase.GetCurrentMethod()!.Name, exception, str_clase );
+            await _logsService.SaveExcepcionDataBaseSybase(req_get_datos, req_get_datos.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
             throw new ArgumentException( req_get_datos.str_id_transaccion )!;
         }
         return respuesta;
