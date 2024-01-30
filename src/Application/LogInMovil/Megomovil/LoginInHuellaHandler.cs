@@ -129,12 +129,20 @@ namespace Application.LogInMegomovil.Megomovil
             }
             catch (Exception exception)
             {
+                string str_cod_error = "001";
                 if (string.IsNullOrEmpty(respuesta.str_nemonico_canal))
                 {
+                    str_cod_error = "ERR_CIFRADO";
                     respuesta.str_res_info_adicional = "identificador: " + loginInHuella.str_identificador + ", id_transaccion: " + loginInHuella.str_id_transaccion;
                 }
                 await _logsService.SaveExceptionLogs(respuesta, str_operacion, MethodBase.GetCurrentMethod( )!.Name, str_clase, exception);
-                throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
+                var result = new
+                {
+                    trama = Functions.getArmarError(respuesta, str_cod_error),
+                    code = str_cod_error,
+                    token = ""
+                };
+                return result;
             }
         }
         private ReqValidarLogin getTramaDesencriptada ( LoginInHuellaCommand logInMegomovil )
