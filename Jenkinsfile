@@ -34,7 +34,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning ...'
-                sh 'docker rm -f servicio-identity'
+                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
