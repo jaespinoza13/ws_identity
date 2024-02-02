@@ -4,7 +4,6 @@ using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogIn;
-using Application.LoginUsuarioExterno.UsuarioExterno;
 using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
@@ -16,28 +15,30 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class AutenticarseDat : IAutenticarseDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public AutenticarseDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
+        public AutenticarseDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType( ).FullName!;
-
-            _objClienteDal = objClienteDal;
         }
 
 
         public async Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse, string claveEncriptada )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
+
                 Funciones.LlenarDatosAuditoria(ds, reqAutenticarse);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = claveEncriptada });
 
@@ -59,10 +60,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-                throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 
@@ -70,11 +71,12 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public async Task<RespuestaTransaccion> SetIntentosFallidos ( ReqAutenticarse reqAutenticarse )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new DatosSolicitud( );
-
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
                 Funciones.LlenarDatosAuditoria(ds, reqAutenticarse);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_login", TipoDato = TipoDato.Integer, ObjValue = reqAutenticarse.str_id_usuario.ToString( ) });
 
@@ -82,7 +84,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "set_intentos_fallidos";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = _objClienteDal.ExecuteDataSet(ds);
+                var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
                 var lst_valores = new List<ParametroSalidaValores>( );
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);
@@ -97,20 +99,22 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-
-                throw new ArgumentException(reqAutenticarse.str_id_transaccion)!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAutenticarse, reqAutenticarse.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
         public async Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 Funciones.LlenarDatosAuditoria(ds, reqAddKeys);
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente });
@@ -124,7 +128,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
                 ds.NombreSP = "add_llaves_cifrado";
                 ds.NombreBD = _settings.DB_meg_servicios;
 
-                var resultado = _objClienteDal.ExecuteDataSet(ds);
+                var resultado = await _objClienteDal.ExecuteDataSetAsync(ds);
                 var lst_valores = new List<ParametroSalidaValores>( );
 
                 foreach (var item in resultado.ListaPSalidaValores) lst_valores.Add(item);
@@ -139,10 +143,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
-                await _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-                throw new ArgumentException(reqAddKeys.str_id_transaccion)!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                await _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 

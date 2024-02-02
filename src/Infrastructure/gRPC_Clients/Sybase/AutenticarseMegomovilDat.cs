@@ -4,6 +4,7 @@ using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.LogInMegomovil.Megomovil;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System;
@@ -15,27 +16,29 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class AutenticarseMegomovilDat : IAutenticarseMegomovilDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
 
-        public AutenticarseMegomovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
+
+        public AutenticarseMegomovilDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType( ).FullName!;
-
-            _objClienteDal = objClienteDal;
         }
 
 
         public async Task<RespuestaTransaccion> getAutenticarCredenciales ( Header header )
         {
             var respuesta = new RespuestaTransaccion( );
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 var ds = new DatosSolicitud( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = header.str_login });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_canal", TipoDato = TipoDato.VarChar, ObjValue = header.str_nemonico_canal });
@@ -70,9 +73,9 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
-                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, str_clase, ex);
-                return respuesta;
+                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, str_clase, ex);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 
@@ -84,9 +87,13 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public async Task<RespuestaTransaccion> getAutenticarHuellaFaceID ( ReqValidarLogin header )
         {
             RespuestaTransaccion respuesta = new RespuestaTransaccion( );
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 var ds = new DatosSolicitud( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = header.str_login });
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_canal", TipoDato = TipoDato.VarChar, ObjValue = header.str_nemonico_canal });
@@ -121,9 +128,9 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 respuesta.codigo = "003";
                 respuesta.diccionario.Add("str_error", "Error inesperado, intenta más tarde.");
-                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, str_clase, ex);
-                return respuesta;
+                await _logsService.SaveExcepcionDataBaseSybase(header, header.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, str_clase, ex);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 

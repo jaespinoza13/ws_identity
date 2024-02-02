@@ -3,6 +3,7 @@ using Application.Common.Cryptography;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Application.LoginUsuarioExterno.UsuarioExterno;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
 using System.Reflection;
@@ -14,26 +15,27 @@ namespace Infrastructure.gRPC_Clients.Sybase
     internal class KeysDat : IKeysDat
     {
         private readonly ApiSettings _settings;
-        private readonly DALClient _objClienteDal;
         private readonly ILogs _logsService;
         private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-        public KeysDat(IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal)
+        public KeysDat(IOptionsMonitor<ApiSettings> options, ILogs logsService)
         {
             _settings = options.CurrentValue;
             _logsService = logsService;
 
             this.str_clase = GetType().FullName!;
-            _objClienteDal = objClienteDal;
         }
 
         public RespuestaTransaccion AddKeys(ReqAddKeys reqAddKeys)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new();
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
 
                 Funciones.LlenarDatosAuditoria( ds, reqAddKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@int_ente", TipoDato = TipoDato.Integer, ObjValue = reqAddKeys.str_ente } );
@@ -62,10 +64,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-                throw new ArgumentException( reqAddKeys.str_id_transaccion )!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                _logsService.SaveExcepcionDataBaseSybase(reqAddKeys, reqAddKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
 
@@ -74,11 +76,12 @@ namespace Infrastructure.gRPC_Clients.Sybase
         public RespuestaTransaccion GetKeys(ReqGetKeys reqGetKeys)
         {
             var respuesta = new RespuestaTransaccion();
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new();
-
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
                 Funciones.LlenarDatosAuditoria( ds, reqGetKeys );
                 ds.ListaPEntrada.Add( new ParametroEntrada { StrNameParameter = "@str_llave_secreta", TipoDato = TipoDato.VarChar, ObjValue = reqGetKeys.str_clave_secreta } );
 
@@ -101,11 +104,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add( "str_error", exception.ToString() );
-                _logsService.SaveExcepcionDataBaseSybase(reqGetKeys, reqGetKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-
-                throw new ArgumentException( reqGetKeys.str_id_transaccion )!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                _logsService.SaveExcepcionDataBaseSybase(reqGetKeys, reqGetKeys.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
     }
