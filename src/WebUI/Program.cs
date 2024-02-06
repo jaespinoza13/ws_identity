@@ -118,7 +118,7 @@ builder.Services.AddOpenTelemetry( )
         })
         .AddOtlpExporter(exporter => {
             //TODO: Colocar la URL de donde esucha OpenTelemetry Collector o recuperar dicha URL de forma Dinamica
-            exporter.Endpoint = new Uri("http://192.168.55.62:9984");
+            exporter.Endpoint = new Uri("http://195.160.2.119:1022");
             exporter.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
         })).WithMetrics(metric => metric
             // Recoleccion de metricas 
@@ -128,7 +128,7 @@ builder.Services.AddOpenTelemetry( )
             .AddProcessInstrumentation( )
             .AddOtlpExporter(exporter => {
                 //TODO: Colocar la URL de donde esucha OpenTelemetry Collector o recuperar dicha URL de forma Dinamica
-                exporter.Endpoint = new Uri("http://192.168.55.62:9984");
+                exporter.Endpoint = new Uri("http://195.160.2.119:1022");
                 exporter.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
             }));
 
