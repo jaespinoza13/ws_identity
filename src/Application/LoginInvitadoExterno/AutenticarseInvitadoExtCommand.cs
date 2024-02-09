@@ -67,7 +67,6 @@ public class AutenticarseInvitadoExtHandler : IRequestHandler<AutenticarseInvita
             string str_token = await _generarToken.ConstruirToken(autenticarInvitadoExterno,
                 operaion,
                 claims,
-
                Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarInvitadoExterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
             if( !String.IsNullOrEmpty (str_token) && _settings.lst_canales_encriptar.Contains(autenticarInvitadoExterno.str_nemonico_canal))
             {
