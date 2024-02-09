@@ -48,6 +48,8 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
                         });
             double tokenTime = _parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarseInvitadoInterno.str_nemonico_canal.ToUpper( )) == null ? _settings.defaultTokenTime :
                            Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarseInvitadoInterno.str_nemonico_canal.ToUpper( )).str_valor_ini);
+            respuesta.str_token = await _generarToken.ConstruirToken(autenticarseInvitadoInterno, operaion, claims, tokenTime);
+
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";
             respuesta.str_res_info_adicional = "Token válido por una vez";
