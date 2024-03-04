@@ -70,7 +70,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
             if (res_tran.codigo.Equals("000"))
             {
-
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
 
