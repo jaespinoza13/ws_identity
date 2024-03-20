@@ -155,4 +155,12 @@ internal static class Functions
 
         return true;
     }
+
+    public static dynamic getArmarError ( ResComun resComun, string str_codigo = "001" )
+    {
+        resComun.str_res_codigo = str_codigo;
+        resComun.str_res_estado_transaccion = "ERR";
+        resComun.str_res_info_adicional = "Presentamos incovenientes, intenta más tarde.";
+        return resComun;
+    }
 }

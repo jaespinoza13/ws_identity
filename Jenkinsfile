@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.4.1'
-        VERSION_PRODUCCION  = '1.4.0'
+        VERSION_DESPLIEGUE  = '1.4.2'
+        VERSION_PRODUCCION  = '1.4.1'
         NOMBRE_CONTENEDOR   = 'cnt-ws-identity'
         NOMBRE_IMAGEN       = 'img_ws_identity'
         PUERTO              = '9010'
@@ -34,7 +34,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning ...'
-                sh 'docker rm -f servicio-identity'
+                sh 'docker rm -f ${NOMBRE_CONTENEDOR}'
             }
         }
 
