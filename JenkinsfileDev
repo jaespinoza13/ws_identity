@@ -1,4 +1,4 @@
-pipeline {
+﻿pipeline {
     
     agent {
         node {
@@ -9,9 +9,9 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-identity-cipher'
-        NOMBRE_IMAGEN       = 'ws_identity_cipher'
-        PUERTO              = '6062'
+        NOMBRE_CONTENEDOR   = 'servicio-identity-enmascara-datos'
+        NOMBRE_IMAGEN       = 'ws_identity_enmascara_datos'
+        PUERTO              = '5316'
         PUERTO_CONTENEDOR   = '80'
         RUTA_CONFIG           = '/config/wsIdentity/'
     }
