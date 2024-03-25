@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '1.4.2'
-        VERSION_PRODUCCION  = '1.4.1'
+        VERSION_DESPLIEGUE  = '1.4.3'
+        VERSION_PRODUCCION  = '1.4.2'
         NOMBRE_CONTENEDOR   = 'cnt-ws-identity'
         NOMBRE_IMAGEN       = 'img_ws_identity'
         PUERTO              = '9010'
