@@ -64,6 +64,7 @@ public static class ConfigureServices
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:Endpoints"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:EndpointsAuth"));
         services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:ControlExcepciones"));
+        services.Configure<ApiSettings>(configuration.GetSection("ApiSettings:ConfigService"));
         services.Configure<Roles>(configuration.GetSection("Roles"));
 
         return services;
