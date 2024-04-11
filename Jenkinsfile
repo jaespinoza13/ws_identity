@@ -7,8 +7,8 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.3.0'
-        VERSION_PRODUCCION  = '0.0.0'
+        VERSION_DESPLIEGUE  = '0.4.0'
+        VERSION_PRODUCCION  = '0.3.0'
         NOMBRE_CONTENEDOR   = 'cnt-ws-identity-bmo-pc'
         NOMBRE_IMAGEN       = 'img_ws_identity'
         PUERTO              = '8026'
