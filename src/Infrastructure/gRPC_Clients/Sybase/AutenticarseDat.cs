@@ -31,7 +31,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
         }
 
 
-        public async Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse, string claveEncriptada )
+        public async Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse )
         {
             var respuesta = new RespuestaTransaccion( );
 
@@ -39,7 +39,7 @@ namespace Infrastructure.gRPC_Clients.Sybase
             {
                 DatosSolicitud ds = new( );
                 Funciones.LlenarDatosAuditoria(ds, reqAutenticarse);
-                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = claveEncriptada });
+                ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_clave", TipoDato = TipoDato.VarChar, ObjValue = "" });
 
                 ds.NombreSP = "get_login_autenticar";
                 ds.NombreBD = _settings.DB_meg_servicios;

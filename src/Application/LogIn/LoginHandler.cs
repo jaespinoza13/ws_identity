@@ -23,7 +23,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
     private readonly ILogs _logsService;
     private readonly string str_clase;
     private readonly IAutenticarseDat _autenticarseDat;
-    private readonly IEncryptMego _encrypt;
     private readonly IGenerarToken _generarToken;
     private readonly IParametersInMemory _parameters;
     private readonly Roles _roles;
@@ -33,7 +32,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
 
     public LoginHandler ( ILogs logsService,
                             IAutenticarseDat autenticarseDat,
-                            IEncryptMego encrypt,
                             IGenerarToken generarToken,
                             IParametersInMemory parameters,
                             IOptionsMonitor<Roles> roles,
@@ -43,7 +41,6 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         _logsService = logsService;
         str_clase = GetType( ).FullName!;
         _autenticarseDat = autenticarseDat;
-        _encrypt = encrypt;
         _generarToken = generarToken;
         _parameters = parameters;
         _settings = options.CurrentValue;
@@ -67,14 +64,12 @@ public class LoginHandler : IRequestHandler<ReqAutenticarse, ResAutenticarse>
         ReqAddKeys reqAddKeys=new();
         try
         {
-            var str_clave_encriptada = await _encrypt.Encrypt(reqAutenticarse.str_login, reqAutenticarse.str_password, reqAutenticarse.str_id_transaccion);
 
-            RespuestaTransaccion res_tran = await _autenticarseDat.LoginDat(reqAutenticarse, str_clave_encriptada);
+            RespuestaTransaccion res_tran = await _autenticarseDat.LoginDat(reqAutenticarse);
             respuesta.str_res_codigo = res_tran.codigo;
 
             if (res_tran.codigo.Equals("000"))
             {
-
                 datosLogin = Conversions.ConvertConjuntoDatosToClass<Login>((ConjuntoDatos)res_tran.cuerpo, 0);
                 datosSocio = Conversions.ConvertConjuntoDatosToClass<Persona>((ConjuntoDatos)res_tran.cuerpo, 1);
 
