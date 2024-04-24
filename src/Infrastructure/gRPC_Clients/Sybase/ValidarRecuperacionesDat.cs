@@ -3,42 +3,40 @@ using Application.Common.Interfaces;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
 using Application.RecuperarReenvio;
+using Grpc.Net.Client;
 using Infrastructure.Common.Funciones;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using static AccesoDatosGrpcAse.Neg.DAL;
 
 namespace Infrastructure.gRPC_Clients.Sybase
 {
-    public class ValidarRecuperacionesDat: IValidarRecuperaciones
+    public class ValidarRecuperacionesDat : IValidarRecuperaciones
     {
-    private readonly ApiSettings _settings;
-    private readonly DALClient _objClienteDal;
-    private readonly ILogs _logsService;
-    private readonly string str_clase;
+        private readonly ApiSettings _settings;
+        private readonly ILogs _logsService;
+        private readonly string str_clase;
+        private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
 
-    public ValidarRecuperacionesDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
-    {
-        _settings = options.CurrentValue;
-        _logsService = logsService;
+        public ValidarRecuperacionesDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService )
+        {
+            _settings = options.CurrentValue;
+            _logsService = logsService;
 
-        this.str_clase = GetType( ).FullName!;
-
-        _objClienteDal = objClienteDal;
-    }
+            this.str_clase = GetType( ).FullName!;
+        }
 
         public RespuestaTransaccion ValidarInfRecupReactiva ( ReqValidarInfRecupReenvio ReqValidarInfRecupReenvio )
         {
             var respuesta = new RespuestaTransaccion( );
-
+            GrpcChannel grpcChannel = null!;
+            DALClient _objClienteDal = null!;
             try
             {
                 DatosSolicitud ds = new( );
+
+                (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
+
                 Funciones.LlenarDatosAuditoria(ds, ReqValidarInfRecupReenvio);
 
                 ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_num_documento", TipoDato = TipoDato.VarChar, ObjValue = ReqValidarInfRecupReenvio.str_num_documento.ToString( ) });
@@ -63,10 +61,10 @@ namespace Infrastructure.gRPC_Clients.Sybase
             catch (Exception exception)
             {
                 respuesta.codigo = "001";
-                respuesta.diccionario.Add("str_error", exception.ToString( ));
-                _logsService.SaveExcepcionDataBaseSybase(ReqValidarInfRecupReenvio, ReqValidarInfRecupReenvio.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-                throw new ArgumentException(ReqValidarInfRecupReenvio.str_id_transaccion)!;
+                respuesta.diccionario.Add("str_error", str_mensaje_error);
+                _logsService.SaveExcepcionDataBaseSybase(ReqValidarInfRecupReenvio, ReqValidarInfRecupReenvio.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
             }
+            Funciones.setCloseConnection(grpcChannel);
             return respuesta;
         }
     }

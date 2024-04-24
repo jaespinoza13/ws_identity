@@ -2,6 +2,8 @@
 using AccesoDatosGrpcAse.Neg;
 using Application.Common.ISO20022.Models;
 using Application.Common.Models;
+using Grpc.Net.Client;
+using static AccesoDatosGrpcAse.Neg.DAL;
 
 namespace Infrastructure.Common.Funciones
 {
@@ -47,6 +49,28 @@ namespace Infrastructure.Common.Funciones
 
             ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@str_o_error", TipoDato = TipoDato.VarChar });
             ds.ListaPSalida.Add(new ParametroSalida { StrNameParameter = "@int_o_error_cod", TipoDato = TipoDato.Integer });
+        }
+
+        /// <summary>
+        /// Abrir conexión hacia el GRPC
+        /// </summary>
+        /// <param name="str_url_grcp"></param>
+        /// <returns></returns>
+
+        public static (GrpcChannel, DALClient) getConnection ( string str_url_grcp )
+        {
+            var httpHandler = new HttpClientHandler( );
+            var grpcChannel = GrpcChannel.ForAddress(str_url_grcp, new GrpcChannelOptions { HttpHandler = httpHandler });
+            return (grpcChannel, new DALClient(grpcChannel));
+        }
+
+        /// <summary>
+        /// Cerrar conexión grpc
+        /// </summary>
+        /// <param name="grpcChannel"></param>
+        public static void setCloseConnection ( GrpcChannel grpcChannel )
+        {
+            grpcChannel.Dispose( );
         }
     }
 }
