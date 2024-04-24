@@ -9,13 +9,13 @@ pipeline {
     environment {
         VERSION_DESPLIEGUE  = '1.0.0'
         VERSION_PRODUCCION  = '0.0.0'
-        NOMBRE_CONTENEDOR   = 'servicio-identity-cipher'
-        NOMBRE_IMAGEN       = 'ws_identity_cipher'
-        PUERTO              = '6062'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-identity-bmo-pc'
+        NOMBRE_IMAGEN       = 'img_ws_identity'
+        PUERTO              = '5316'
         PUERTO_CONTENEDOR   = '80'
-        RUTA_CONFIG           = '/config/wsIdentity/'
+		RUTA_CONFIG			= '/config/wsIdentity/'
+		RUTA_LOGS           = '/app/wsIdentity/'
     }
-
     
     stages {
 
@@ -44,6 +44,7 @@ pipeline {
                 echo 'Deploying ...'
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
+						-v ${RUTA_LOGS}:/app/Logs/ \
                         -v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
@@ -57,7 +58,7 @@ pipeline {
         }
     }
 
-    post {
+	post {
 
         success {
             slackSend color: '#BADA55', message: "Despliegue exitoso - ${env.JOB_NAME} version publicada ${VERSION_DESPLIEGUE}  (<${env.BUILD_URL}|Open>)"

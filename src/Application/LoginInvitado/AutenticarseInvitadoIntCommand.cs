@@ -19,13 +19,16 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
 {
     private readonly IGenerarToken _generarToken;
     private readonly Roles _rol;
+    private readonly ApiSettings _settings;
+
     private readonly IParametersInMemory _parameters;
 
-    public AutenticarseHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IParametersInMemory parameters)
+    public AutenticarseHandler ( IGenerarToken generarToken, IOptionsMonitor<Roles> options, IOptionsMonitor<ApiSettings> settings, IParametersInMemory parameters)
     {
         _generarToken = generarToken;
         _rol = options.CurrentValue;
         _parameters = parameters;
+        _settings = settings.CurrentValue;
 
 
     }
@@ -43,7 +46,9 @@ public class AutenticarseHandler : IRequestHandler<AutenticarseInvitadoIntComman
                         new Claim( ClaimTypes.Role, _rol.InvitadoInterno),
                         new Claim( ClaimTypes.NameIdentifier,   autenticarseInvitadoInterno.str_login)
                         });
-            respuesta.str_token = await _generarToken.ConstruirToken(autenticarseInvitadoInterno, operaion, claims, Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarseInvitadoInterno.str_nemonico_canal.ToUpper( )).str_valor_ini));
+            double tokenTime = _parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarseInvitadoInterno.str_nemonico_canal.ToUpper( )) == null ? _settings.defaultTokenTime :
+                           Convert.ToDouble(_parameters.FindParametro("TIEMPO_MAXIMO_TOKEN_" + autenticarseInvitadoInterno.str_nemonico_canal.ToUpper( )).str_valor_ini);
+            respuesta.str_token = await _generarToken.ConstruirToken(autenticarseInvitadoInterno, operaion, claims, tokenTime);
 
             respuesta.str_res_codigo = "000";
             respuesta.str_res_estado_transaccion = "OK";

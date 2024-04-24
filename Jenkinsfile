@@ -14,7 +14,7 @@ pipeline {
         PUERTO              = '8026'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 	    = '/config/wsIdentity/'
-        RUTA_LOGS           = '/app/wsIdentity'
+        RUTA_LOGS           = '/app/wsIdentity/'
     }
     
     stages {

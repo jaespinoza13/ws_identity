@@ -8,12 +8,10 @@ using OpenTelemetry.Metrics;
 var builder = WebApplication.CreateBuilder(args);
 
 #region Observability
-
 /// <summary>
 /// Observability con OpenTelemetry 
 /// jacarrion1 
 /// 15/Mar/2024
-/// 
 /// 
 /// Paquetes NuGet necesarios:
 /// 
@@ -116,7 +114,6 @@ builder.Services.AddOpenTelemetry( )
                 exporter.Protocol = OpenTelemetry.Exporter.OtlpExportProtocol.Grpc;
             }
         }));
-
 Dictionary<string, string> obtenerHeaders ( System.Net.Http.Headers.HttpHeaders? headers1, IHeaderDictionary? headers2 ) {
     if(headers1 != null) {
         return headers1.ToDictionary(x => x.Key, x => descomponerHeader(x.Key, x.Value.ToList( ))) ?? new( );
@@ -142,16 +139,14 @@ String descomponerHeader ( String key, List<String?> value ) {
         return valores.EndsWith(" | ") ? valores.Substring(0, valores.Length - 3) : "No Data";
     }
 }
-
 #endregion
 
+#region Services
 builder.Services.AddInfrastructureServices( );
 builder.Services.AddApplicationServices( );
 builder.Services.AddWebUIServices(builder.Configuration);
-
 var grpc = builder.Configuration.GetSection("ApiSettings:GrpcSettings");
 var url_mongo = grpc.GetValue<string>("client_grpc_mongo");
-
 builder.Services.AddGrpcClient<DALMongoClient>(o => {
     o.Address = new Uri(url_mongo);
 }).ConfigureChannel(c => {
@@ -162,7 +157,7 @@ builder.Services.AddGrpcClient<DALMongoClient>(o => {
         EnableMultipleHttp2Connections = true
     };
 });
-
+#endregion
 
 var app = builder.Build( );
 

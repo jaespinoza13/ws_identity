@@ -7,7 +7,7 @@ namespace Application.Common.Interfaces
 {
     public interface IAutenticarseDat
     {
-        Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse, string claveEncriptada );
+        Task<RespuestaTransaccion> LoginDat ( ReqAutenticarse reqAutenticarse );
         Task<RespuestaTransaccion> SetIntentosFallidos ( ReqAutenticarse reqAutenticarse );
         Task<RespuestaTransaccion> AddKeys ( ReqAddKeys reqAddKeys );
     }

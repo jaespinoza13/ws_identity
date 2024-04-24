@@ -55,6 +55,9 @@
 
         public int mostrar_descripcion_badrequest { get; set; }
 
+
+        //Config Service
+        public double defaultTokenTime { get; set; }
         public string url_acceso_logs { get; set; } = String.Empty;
 
         #region CollectionsMongo
