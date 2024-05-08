@@ -13,27 +13,28 @@ namespace Infrastructure.gRPC_Clients.Sybase;
 internal class ParametrosDat : IParametrosDat
 {
     private readonly ApiSettings _settings;
-    private readonly DALClient _objClienteDal;
     private readonly ILogs _logsService;
     private readonly string str_clase;
-
-    public ParametrosDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService, DALClient objClienteDal )
+    private const string str_mensaje_error = "Error inesperado, intenta más tarde.";
+    public ParametrosDat ( IOptionsMonitor<ApiSettings> options, ILogs logsService)
     {
         _settings = options.CurrentValue;
         _logsService = logsService;
 
         this.str_clase = GetType( ).FullName!;
-
-        _objClienteDal = objClienteDal;
     }
 
     public RespuestaTransaccion GetParametrosDat ( dynamic req_get_parametros )
     {
         var respuesta = new RespuestaTransaccion( );
-
+        GrpcChannel grpcChannel = null!;
+        DALClient _objClienteDal = null!;
         try
         {
             DatosSolicitud ds = new( );
+
+            (grpcChannel, _objClienteDal) = Funciones.getConnection(_settings.client_grpc_sybase!);
+
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_id_transaccion", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_id_transaccion });
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@int_id_sistema", TipoDato = TipoDato.Integer, ObjValue = req_get_parametros.str_id_sistema });
             ds.ListaPEntrada.Add(new ParametroEntrada { StrNameParameter = "@str_login", TipoDato = TipoDato.VarChar, ObjValue = req_get_parametros.str_login });
@@ -66,10 +67,12 @@ internal class ParametrosDat : IParametrosDat
         catch (Exception exception)
         {
             respuesta.codigo = "001";
-            respuesta.diccionario.Add("str_error", exception.ToString( ));
-            _logsService.SaveExcepcionDataBaseSybase(req_get_parametros, req_get_parametros.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod( )!.Name, GetType( ).FullName!, exception);
-            throw new ArgumentException(req_get_parametros.str_id_transaccion)!;
+            respuesta.diccionario.Add("str_error", str_mensaje_error);
+            _logsService.SaveExcepcionDataBaseSybase(req_get_parametros, req_get_parametros.str_id_servicio!.Replace("REQ_", ""), MethodBase.GetCurrentMethod()!.Name, GetType().FullName!, exception);
         }
+
+        Funciones.setCloseConnection(grpcChannel);
+
         return respuesta;
 
     }
