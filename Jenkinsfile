@@ -7,11 +7,11 @@ pipeline {
     }
 
     environment {
-        VERSION_DESPLIEGUE  = '0.4.0'
-        VERSION_PRODUCCION  = '0.3.0'
-        NOMBRE_CONTENEDOR   = 'cnt-ws-identity-bmo-pc'
+        VERSION_DESPLIEGUE  = '1.5.0'
+        VERSION_PRODUCCION  = '1.4.4'
+        NOMBRE_CONTENEDOR   = 'cnt-ws-identity'
         NOMBRE_IMAGEN       = 'img_ws_identity'
-        PUERTO              = '8026'
+        PUERTO              = '9010'
         PUERTO_CONTENEDOR   = '80'
 		RUTA_CONFIG 	    = '/config/wsIdentity/'
         RUTA_LOGS           = '/app/wsIdentity/'
@@ -44,7 +44,7 @@ pipeline {
                 sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
                         -e TZ=${TZ} \
 			            -v ${RUTA_LOGS}:/app/Logs/ \
-                        -v ${RUTA_CONFIG}appsettings_bmo_mejoras.json:/app/appsettings.json \
+                        -v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
                         ${NOMBRE_IMAGEN}:${VERSION_DESPLIEGUE}
                     '''
             }
@@ -69,7 +69,7 @@ pipeline {
             sh  '''docker run --restart=always -it -dp ${PUERTO}:${PUERTO_CONTENEDOR} --name ${NOMBRE_CONTENEDOR} \
 					-e TZ=${TZ} \
 					-v ${RUTA_LOGS}:/app/Logs/ \
-					-v ${RUTA_CONFIG}appsettings_bmo_mejoras.json:/app/appsettings.json \
+					-v ${RUTA_CONFIG}appsettings.json:/app/appsettings.json \
 					${NOMBRE_IMAGEN}:${VERSION_PRODUCCION}
                 '''
             slackSend color: '#FE2D00', failOnError:true, message:"Despliegue fallido 😬 - ${env.JOB_NAME} he reversado a la versión ${VERSION_PRODUCCION} - (<${env.BUILD_URL}|Open>)"
